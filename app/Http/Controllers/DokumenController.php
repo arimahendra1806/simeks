@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class DokumenController extends Controller
 {
+    protected $title;
+
+    public function __construct()
+    {
+        $this->title = 'Master Dokumen';
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = $this->title;
+        $data = Dokumen::all()->sortByDesc('id');
+
+        return view('admin.dokumen.index', compact('title', 'data'));
     }
 
     /**
@@ -20,7 +30,15 @@ class DokumenController extends Controller
      */
     public function create()
     {
-        //
+        $title = $this->title;
+        return view('admin.dokumen.create', compact('title'));
+    }
+
+    private function validation(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+        ]);
     }
 
     /**
@@ -28,7 +46,11 @@ class DokumenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        Dokumen::create($request->all());
+
+        return redirect()->route('admin.dokumen.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +58,8 @@ class DokumenController extends Controller
      */
     public function show(Dokumen $dokumen)
     {
-        //
+        $title = $this->title;
+        return view('admin.dokumen.show', compact('title', 'dokumen'));
     }
 
     /**
@@ -52,7 +75,11 @@ class DokumenController extends Controller
      */
     public function update(Request $request, Dokumen $dokumen)
     {
-        //
+        $this->validation($request);
+
+        $dokumen->update($request->all());
+
+        return redirect()->route('admin.dokumen.index')->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -60,6 +87,8 @@ class DokumenController extends Controller
      */
     public function destroy(Dokumen $dokumen)
     {
-        //
+        $dokumen->delete();
+
+        return redirect()->route('admin.dokumen.index')->with('success', 'Data berhasil diihapus!');
     }
 }

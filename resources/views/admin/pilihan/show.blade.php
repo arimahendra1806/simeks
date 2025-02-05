@@ -17,7 +17,7 @@
                 @method('PUT')
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="nama" class="form-label">Nama</label>
+                        <label for="nama" class="form-label">Nama <span class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
                             placeholder="Masukkan nama..." id="nama" name="nama"
                             value="{{ old('nama', $pilihan->nama) }}" readonly>
@@ -26,7 +26,7 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="parameter" class="form-label">Parameter</label>
+                        <label for="parameter" class="form-label">Parameter <span class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('parameter') is-invalid @enderror"
                             placeholder="Masukkan parameter..." id="parameter" name="parameter"
                             value="{{ old('parameter', $pilihan->parameter) }}" readonly>
@@ -35,7 +35,7 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="isi" class="form-label">Isi</label>
+                        <label for="isi" class="form-label">Isi <span class="text-danger"><small>*</small></span></label>
                         <textarea class="form-control @error('isi') is-invalid @enderror" placeholder="Masukkan isi..." id="isi"
                             name="isi" readonly>{{ old('isi', $pilihan->isi) }}</textarea>
                         @error('isi')

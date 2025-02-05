@@ -29,17 +29,17 @@
                             ><span class="mtext">Master Data</span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="javascript:void(0);">Pilihan</a></li>
-                            <li><a href="javascript:void(0);">Negara</a></li>
-                            <li><a href="javascript:void(0);">Provinsi</a></li>
-                            <li><a href="javascript:void(0);">Kota</a></li>
-                            <li><a href="javascript:void(0);">Bank</a></li>
-                            <li><a href="javascript:void(0);">Dokumen</a></li>
+                            <li><a href="{{ route('admin.pilihan.index') }}" class="{{ Request::is('admin/pilihan*') ? 'active' : '' }}">Pilihan</a></li>
+                            <li><a href="{{ route('admin.negara.index') }}" class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a></li>
+                            <li><a href="{{ route('admin.provinsi.index') }}" class="{{ Request::is('admin/provinsi*') ? 'active' : '' }}">Provinsi</a></li>
+                            <li><a href="{{ route('admin.kota.index') }}" class="{{ Request::is('admin/kota*') ? 'active' : '' }}">Kota</a></li>
+                            <li><a href="{{ route('admin.bank.index') }}" class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a></li>
+                            <li><a href="{{ route('admin.dokumen.index') }}" class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="{{ route('admin.pemasok.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('admin/pemasok') ? 'active' : '' }}">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Supplier</span>
                         </a>
                     </li>
@@ -50,8 +50,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="{{ route('admin.pembeli.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('admin/pembeli') ? 'active' : '' }}">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Buyer</span>
                         </a>
                     </li>

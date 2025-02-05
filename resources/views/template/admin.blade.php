@@ -36,6 +36,8 @@
         href="<?= asset('assets/lib/deskapp-master/') ?>/src/plugins/datatables/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" type="text/css"
         href="<?= asset('assets/lib/deskapp-master/') ?>/src/plugins/datatables/css/responsive.bootstrap4.min.css" />
+    <link href="<?= asset('assets/css') ?>/select2.min.css" rel="stylesheet">
+    <link href="<?= asset('assets/css') ?>/select2-bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/styles/style.css" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->

@@ -19,7 +19,7 @@ class Provinsi extends Model
 
         $columns = Schema::getColumnListing('provinsis');
         $columns = array_filter($columns, function ($column) {
-            return !str_contains($column, 'id') && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
+            return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
         $this->fillable = array_values($columns);
     }
@@ -27,10 +27,5 @@ class Provinsi extends Model
     public function kota()
     {
         return $this->hasMany(Kota::class);
-    }
-
-    public function pemasok()
-    {
-        return $this->hasMany(Pemasok::class);
     }
 }

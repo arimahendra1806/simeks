@@ -99,7 +99,9 @@ Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
     Route::resource('/user', UserController::class);
 
     Route::resource('/pembeli', PembeliController::class);
-    Route::resource('/supplier', PemasokController::class);
+    Route::get('/pemasok/import', [PemasokController::class, 'import'])->name('pemasok.import');
+    Route::post('/pemasok/import_data', [PemasokController::class, 'import_data'])->name('pemasok.importData');
+    Route::resource('/pemasok', PemasokController::class);
     Route::resource('/pasar', PasarController::class);
     Route::resource('/penjualan/pengiriman', PenjualanByPengiriman::class);
     Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
@@ -124,7 +126,7 @@ Route::middleware('direktur')->name('direktur.')->prefix('direktur')->group(func
     });
 
     Route::resource('/pembeli', PembeliController::class);
-    Route::resource('/supplier', PemasokController::class);
+    Route::resource('/pemasok', PemasokController::class);
     Route::resource('/pasar', PasarController::class);
     Route::resource('/produk', ProdukController::class);
     Route::resource('/penjualan', PenjualanController::class);

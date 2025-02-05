@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class NegaraController extends Controller
 {
+    protected $title;
+
+    public function __construct()
+    {
+        $this->title = 'Master Negara';
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = $this->title;
+        $data = Negara::all()->sortByDesc('id');
+
+        return view('admin.negara.index', compact('title', 'data'));
     }
 
     /**
@@ -20,7 +30,16 @@ class NegaraController extends Controller
      */
     public function create()
     {
-        //
+        $title = $this->title;
+        return view('admin.negara.create', compact('title'));
+    }
+
+    private function validation(Request $request)
+    {
+        $request->validate([
+            'kode' => 'required|max:3',
+            'nama' => 'required',
+        ]);
     }
 
     /**
@@ -28,7 +47,11 @@ class NegaraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        Negara::create($request->all());
+
+        return redirect()->route('admin.negara.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +59,8 @@ class NegaraController extends Controller
      */
     public function show(Negara $negara)
     {
-        //
+        $title = $this->title;
+        return view('admin.negara.show', compact('title', 'negara'));
     }
 
     /**
@@ -52,7 +76,11 @@ class NegaraController extends Controller
      */
     public function update(Request $request, Negara $negara)
     {
-        //
+        $this->validation($request);
+
+        $negara->update($request->all());
+
+        return redirect()->route('admin.negara.index')->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -60,6 +88,8 @@ class NegaraController extends Controller
      */
     public function destroy(Negara $negara)
     {
-        //
+        $negara->delete();
+
+        return redirect()->route('admin.negara.index')->with('success', 'Data berhasil diihapus!');
     }
 }

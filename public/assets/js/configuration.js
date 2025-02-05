@@ -6,9 +6,13 @@ $(document).ready(function() {
         }
     });
 
-    $('.js-select2').select2({
-        theme: 'bootstrap4',
-        width: '100%'
+    $('.js-select2').each(function() {
+        var placeholder = $(this).data('placeholder');
+        $(this).select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            placeholder: placeholder,
+        });
     });
 
     $('.js-currency').on('input', function() {

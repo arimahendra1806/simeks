@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class BankController extends Controller
 {
+    protected $title;
+
+    public function __construct()
+    {
+        $this->title = 'Master Bank';
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = $this->title;
+        $data = Bank::all()->sortByDesc('id');
+
+        return view('admin.bank.index', compact('title', 'data'));
     }
 
     /**
@@ -20,7 +30,15 @@ class BankController extends Controller
      */
     public function create()
     {
-        //
+        $title = $this->title;
+        return view('admin.bank.create', compact('title'));
+    }
+
+    private function validation(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+        ]);
     }
 
     /**
@@ -28,7 +46,11 @@ class BankController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        Bank::create($request->all());
+
+        return redirect()->route('admin.bank.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +58,8 @@ class BankController extends Controller
      */
     public function show(Bank $bank)
     {
-        //
+        $title = $this->title;
+        return view('admin.bank.show', compact('title', 'bank'));
     }
 
     /**
@@ -52,7 +75,11 @@ class BankController extends Controller
      */
     public function update(Request $request, Bank $bank)
     {
-        //
+        $this->validation($request);
+
+        $bank->update($request->all());
+
+        return redirect()->route('admin.bank.index')->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -60,6 +87,8 @@ class BankController extends Controller
      */
     public function destroy(Bank $bank)
     {
-        //
+        $bank->delete();
+
+        return redirect()->route('admin.bank.index')->with('success', 'Data berhasil diihapus!');
     }
 }

@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class ProvinsiController extends Controller
 {
+    protected $title;
+
+    public function __construct()
+    {
+        $this->title = 'Master Provinsi';
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = $this->title;
+        $data = Provinsi::all()->sortByDesc('id');
+
+        return view('admin.provinsi.index', compact('title', 'data'));
     }
 
     /**
@@ -20,7 +30,15 @@ class ProvinsiController extends Controller
      */
     public function create()
     {
-        //
+        $title = $this->title;
+        return view('admin.provinsi.create', compact('title'));
+    }
+
+    private function validation(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+        ]);
     }
 
     /**
@@ -28,7 +46,11 @@ class ProvinsiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        Provinsi::create($request->all());
+
+        return redirect()->route('admin.provinsi.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +58,8 @@ class ProvinsiController extends Controller
      */
     public function show(Provinsi $provinsi)
     {
-        //
+        $title = $this->title;
+        return view('admin.provinsi.show', compact('title', 'provinsi'));
     }
 
     /**
@@ -52,7 +75,11 @@ class ProvinsiController extends Controller
      */
     public function update(Request $request, Provinsi $provinsi)
     {
-        //
+        $this->validation($request);
+
+        $provinsi->update($request->all());
+
+        return redirect()->route('admin.provinsi.index')->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -60,6 +87,8 @@ class ProvinsiController extends Controller
      */
     public function destroy(Provinsi $provinsi)
     {
-        //
+        $provinsi->delete();
+
+        return redirect()->route('admin.provinsi.index')->with('success', 'Data berhasil diihapus!');
     }
 }

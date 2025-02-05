@@ -19,14 +19,9 @@ class Pemasok extends Model
 
         $columns = Schema::getColumnListing('pemasoks');
         $columns = array_filter($columns, function ($column) {
-            return !str_contains($column, 'id') && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
+            return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
         $this->fillable = array_values($columns);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function negara()
@@ -34,18 +29,13 @@ class Pemasok extends Model
         return $this->belongsTo(Negara::class);
     }
 
-    public function provinsi()
-    {
-        return $this->belongsTo(Provinsi::class);
-    }
-
-    public function kota()
-    {
-        return $this->belongsTo(Kota::class);
-    }
-
     public function penjualan()
     {
         return $this->hasMany(Penjualan::class);
+    }
+
+    public function array(array $rows)
+    {
+        return $rows;
     }
 }

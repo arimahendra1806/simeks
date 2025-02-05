@@ -19,7 +19,7 @@ class Penjualan extends Model
 
         $columns = Schema::getColumnListing('penjualans');
         $columns = array_filter($columns, function ($column) {
-            return !str_contains($column, 'id') && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
+            return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
         $this->fillable = array_values($columns);
     }
