@@ -42,7 +42,7 @@ return new class extends Migration
         });
 
         Schema::table('roles', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'deleted_at')) {
+            if (Schema::hasColumn('roles', 'deleted_at')) {
                 $table->dropColumn('deleted_at');
             }
         });

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     /* Ajax Token */
     $.ajaxSetup({
         headers: {
@@ -6,7 +6,7 @@ $(document).ready(function() {
         }
     });
 
-    $('.js-select2').each(function() {
+    $('.js-select2').each(function () {
         var placeholder = $(this).data('placeholder');
         $(this).select2({
             theme: 'bootstrap4',
@@ -15,7 +15,7 @@ $(document).ready(function() {
         });
     });
 
-    $('.js-currency').on('input', function() {
+    $('.js-currency').on('input', function () {
         var input_val = $(this).val();
         $(this).val(format_currency(input_val));
     });
@@ -35,17 +35,17 @@ const Toast = Swal.mixin({
     timer: 3000,
     timerProgressBar: true,
     didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
     }
 });
 
 function notif_success(message = '') {
     var perfData = window.performance.timing
     var EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart)
-    var time = parseInt((EstimatedTime/1000)%60)*30;
+    var time = parseInt((EstimatedTime / 1000) % 60) * 30;
 
-    setTimeout(function(){
+    setTimeout(function () {
         Toast.fire({
             icon: "success",
             title: "Berhasil! " + message
@@ -56,9 +56,9 @@ function notif_success(message = '') {
 function notif_error(message = '') {
     var perfData = window.performance.timing
     var EstimatedTime = -(perfData.loadEventEnd - perfData.navigationStart)
-    var time = parseInt((EstimatedTime/1000)%60)*30;
+    var time = parseInt((EstimatedTime / 1000) % 60) * 30;
 
-    setTimeout(function(){
+    setTimeout(function () {
         Toast.fire({
             icon: "error",
             title: "Terjadi Kesalahan! " + message
@@ -68,7 +68,7 @@ function notif_error(message = '') {
 
 function displayErrors(errors) {
     removeErrors();
-    $.each(errors, function(field, messages) {
+    $.each(errors, function (field, messages) {
         var inputField = $('[name="' + field + '"]');
         inputField.addClass('is-invalid');
         inputField.after('<div class="invalid-feedback">' + messages.join('<br>') + '</div>');
@@ -86,3 +86,16 @@ function format_currency(value) {
 
     return value;
 }
+
+function url_path(part) {
+    let path = window.location.pathname;
+    let segments = path.split('/').filter(segment => segment.length > 0);
+    if (part > 0 && part <= segments.length) {
+        let urlPart = segments.slice(0, part).join('/');
+        return `/${urlPart}`;
+    } else {
+        return '/';
+    }
+}
+
+

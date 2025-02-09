@@ -35,6 +35,8 @@
                             <li><a href="{{ route('admin.kota.index') }}" class="{{ Request::is('admin/kota*') ? 'active' : '' }}">Kota</a></li>
                             <li><a href="{{ route('admin.bank.index') }}" class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a></li>
                             <li><a href="{{ route('admin.dokumen.index') }}" class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a></li>
+                            <li><a href="{{ route('admin.kategori.index') }}" class="{{ Request::is('admin/kategori*') ? 'active' : '' }}">Kategori</a></li>
+                            <li><a href="{{ route('admin.satuan.index') }}" class="{{ Request::is('admin/satuan*') ? 'active' : '' }}">Satuan</a></li>
                         </ul>
                     </li>
                     <li>
@@ -44,8 +46,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="{{ route('admin.produk.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('admin/produk') ? 'active' : '' }}">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Produk</span>
                         </a>
                     </li>

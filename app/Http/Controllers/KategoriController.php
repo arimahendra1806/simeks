@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
+    protected $title;
+
+    public function __construct()
+    {
+        $this->title = 'Master Kategori';
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = $this->title;
+        $data = Kategori::all()->sortByDesc('id');
+
+        return view('admin.kategori.index', compact('title', 'data'));
     }
 
     /**
@@ -20,7 +30,15 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        $title = $this->title;
+        return view('admin.kategori.create', compact('title'));
+    }
+
+    private function validation(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+        ]);
     }
 
     /**
@@ -28,7 +46,11 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        Kategori::create($request->all());
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +58,8 @@ class KategoriController extends Controller
      */
     public function show(Kategori $kategori)
     {
-        //
+        $title = $this->title;
+        return view('admin.kategori.show', compact('title', 'kategori'));
     }
 
     /**
@@ -52,7 +75,11 @@ class KategoriController extends Controller
      */
     public function update(Request $request, Kategori $kategori)
     {
-        //
+        $this->validation($request);
+
+        $kategori->update($request->all());
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -60,6 +87,8 @@ class KategoriController extends Controller
      */
     public function destroy(Kategori $kategori)
     {
-        //
+        $kategori->delete();
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Data berhasil diihapus!');
     }
 }

@@ -21,6 +21,7 @@ use App\Http\Controllers\UserController;
 use App\Models\PenjualanByBayar;
 use App\Models\PenjualanByPengembalian;
 use App\Models\PenjualanByPengiriman;
+use App\Models\Produk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,9 @@ Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
     Route::resource('/kategori', KategoriController::class);
     Route::resource('/kota', KotaController::class);
     Route::resource('/negara', NegaraController::class);
+    Route::get('/produk/import', [ProdukController::class, 'import'])->name('produk.import');
+    Route::post('/produk/import_data', [ProdukController::class, 'import_data'])->name('produk.importData');
+    Route::get('produk/kota/{provinsi}', [ProdukController::class, 'get_kota'])->name('produk.getKota');
     Route::resource('/produk', ProdukController::class);
     Route::resource('/provinsi', ProvinsiController::class);
     Route::resource('/satuan', SatuanController::class);

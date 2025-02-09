@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 
 class SatuanController extends Controller
 {
+    protected $title;
+
+    public function __construct()
+    {
+        $this->title = 'Master Satuan';
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = $this->title;
+        $data = Satuan::all()->sortByDesc('id');
+
+        return view('admin.satuan.index', compact('title', 'data'));
     }
 
     /**
@@ -20,7 +30,15 @@ class SatuanController extends Controller
      */
     public function create()
     {
-        //
+        $title = $this->title;
+        return view('admin.satuan.create', compact('title'));
+    }
+
+    private function validation(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+        ]);
     }
 
     /**
@@ -28,7 +46,11 @@ class SatuanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validation($request);
+
+        Satuan::create($request->all());
+
+        return redirect()->route('admin.satuan.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +58,8 @@ class SatuanController extends Controller
      */
     public function show(Satuan $satuan)
     {
-        //
+        $title = $this->title;
+        return view('admin.satuan.show', compact('title', 'satuan'));
     }
 
     /**
@@ -52,7 +75,11 @@ class SatuanController extends Controller
      */
     public function update(Request $request, Satuan $satuan)
     {
-        //
+        $this->validation($request);
+
+        $satuan->update($request->all());
+
+        return redirect()->route('admin.satuan.index')->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -60,6 +87,8 @@ class SatuanController extends Controller
      */
     public function destroy(Satuan $satuan)
     {
-        //
+        $satuan->delete();
+
+        return redirect()->route('admin.satuan.index')->with('success', 'Data berhasil diihapus!');
     }
 }
