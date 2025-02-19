@@ -16,7 +16,7 @@
                             @csrf
                             <div class="select-role">
                                 <div class="btn-group row">
-                                    <div class="col-md-4" onclick="location.href='{{ route('admin_login') }}'">
+                                    <div class="col-md-6" onclick="location.href='{{ route('admin_login') }}'">
                                         <label class="btn active w-100">
                                             <div class="icon">
                                                 <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/briefcase.svg"
@@ -26,7 +26,7 @@
                                             Admin
                                         </label>
                                     </div>
-                                    <div class="col-md-4" onclick="location.href='{{ route('marketing_login') }}'">
+                                    <div class="col-md-6" onclick="location.href='{{ route('marketing_login') }}'">
                                         <label class="btn active w-100">
                                             <div class="icon">
                                                 <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/briefcase.svg"
@@ -36,7 +36,7 @@
                                             Marketing
                                         </label>
                                     </div>
-                                    <div class="col-md-4" onclick="location.href='{{ route('buyer_login') }}'">
+                                    {{-- <div class="col-md-4" onclick="location.href='{{ route('buyer_login') }}'">
                                         <label class="btn active w-100">
                                             <div class="icon">
                                                 <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/person.svg"
@@ -45,7 +45,7 @@
                                             <span>Saya</span>
                                             Buyer
                                         </label>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="input-group">

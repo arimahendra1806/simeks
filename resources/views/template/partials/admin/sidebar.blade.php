@@ -25,18 +25,45 @@
                     </li>
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle">
-                            <span class="micon bi bi-textarea-resize"></span
-                            ><span class="mtext">Master Data</span>
+                            <span class="micon bi bi-textarea-resize"></span><span class="mtext">Master Data</span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('admin.pilihan.index') }}" class="{{ Request::is('admin/pilihan*') ? 'active' : '' }}">Pilihan</a></li>
-                            <li><a href="{{ route('admin.negara.index') }}" class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a></li>
-                            <li><a href="{{ route('admin.provinsi.index') }}" class="{{ Request::is('admin/provinsi*') ? 'active' : '' }}">Provinsi</a></li>
-                            <li><a href="{{ route('admin.kota.index') }}" class="{{ Request::is('admin/kota*') ? 'active' : '' }}">Kota</a></li>
-                            <li><a href="{{ route('admin.bank.index') }}" class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a></li>
-                            <li><a href="{{ route('admin.dokumen.index') }}" class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a></li>
-                            <li><a href="{{ route('admin.kategori.index') }}" class="{{ Request::is('admin/kategori*') ? 'active' : '' }}">Kategori</a></li>
-                            <li><a href="{{ route('admin.satuan.index') }}" class="{{ Request::is('admin/satuan*') ? 'active' : '' }}">Satuan</a></li>
+                            <li>
+                                <a href="{{ route('admin.pilihan.index') }}"
+                                    class="{{ Request::is('admin/pilihan*') ? 'active' : '' }}">Pilihan</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.negara.index') }}"
+                                    class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.provinsi.index') }}"
+                                    class="{{ Request::is('admin/provinsi*') ? 'active' : '' }}">Provinsi</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.kota.index') }}"
+                                    class="{{ Request::is('admin/kota*') ? 'active' : '' }}">Kota</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.bank.index') }}"
+                                    class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.dokumen.index') }}"
+                                    class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.kategori.index') }}"
+                                    class="{{ Request::is('admin/kategori*') ? 'active' : '' }}">Kategori</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.satuan.index') }}"
+                                    class="{{ Request::is('admin/satuan*') ? 'active' : '' }}">Satuan</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.industri.index') }}"
+                                    class="{{ Request::is('admin/industri*') ? 'active' : '' }}">Industri</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -58,21 +85,20 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Market Research</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Market
+                                Research</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Pembayaran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Transaksi Pengiriman</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Transaksi
+                                Pengiriman</span>
                         </a>
                     </li>
                 @elseif (session('role_id') == 2)
@@ -83,27 +109,25 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Produk</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Buyer</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Market Research</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Data Market
+                                Research</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Transaksi Penjualan</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Transaksi
+                                Penjualan</span>
                         </a>
                     </li>
                 @elseif (session('role_id') == 3)
@@ -114,39 +138,35 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Dokumen Ekspor</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Penjualan</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap
+                                Penjualan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Supplier</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Produk</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Buyer</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Market Research</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Market
+                                Research</span>
                         </a>
                     </li>
                 @elseif (session('role_id') == 4)
@@ -157,15 +177,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap Tranksaksi</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Rekap
+                                Tranksaksi</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"
-                            class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Upload Pembayaran</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-calendar4-week"></span><span class="mtext">Upload
+                                Pembayaran</span>
                         </a>
                     </li>
                 @endif

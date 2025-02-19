@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up() :void
+    public function up(): void
     {
         $tables = DB::select('SHOW TABLES');
         $excludedTables = [
@@ -37,7 +37,7 @@ return new class extends Migration
         }
     }
 
-    public function down() :void
+    public function down(): void
     {
         $tables = DB::select('SHOW TABLES');
         $excludedTables = [
@@ -56,6 +56,12 @@ return new class extends Migration
             }
 
             $columns = Schema::getColumnListing($tableName);
+
+            foreach ($columns as $column) {
+                if (!in_array($column, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                    DB::table($tableName)->whereNull($column)->update([$column => '']);
+                }
+            }
 
             Schema::table($tableName, function (Blueprint $table) use ($columns) {
                 foreach ($columns as $column) {

@@ -43,4 +43,9 @@ class Pembeli extends Model
     {
         return $this->hasMany(Penjualan::class);
     }
+
+    public function industri()
+    {
+        return $this->belongsTo(Industri::class);
+    }
 }

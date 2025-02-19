@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Industri;
 use App\Models\Negara;
 use App\Models\Pembeli;
 use App\Models\User;
@@ -34,14 +35,16 @@ class PembeliController extends Controller
     {
         $title = $this->title;
         $option_negara = Negara::all();
+        $option_industri = Industri::all();
 
-        return view('admin.pembeli.create', compact('title', 'option_negara'));
+        return view('admin.pembeli.create', compact('title', 'option_negara', 'option_industri'));
     }
 
     private function validation(Request $request, $pembeli = 0)
     {
         $request->validate([
             'negara_id' => 'required',
+            'industri_id' => 'required',
             'nama' => 'required',
             'email' => 'required|unique:pemasoks,email,' . $pembeli,
             'telepon' => 'required',
@@ -66,6 +69,7 @@ class PembeliController extends Controller
 
         Pembeli::create([
             'user_id' => $user->id,
+            'industri_id' => $request->industri_id,
             'negara_id' => $request->negara_id,
             'nama' => $request->nama,
             'email' => $request->email,
@@ -83,7 +87,8 @@ class PembeliController extends Controller
     {
         $title = $this->title;
         $option_negara = Negara::all();
-        return view('admin.pembeli.show', compact('title', 'pembeli', 'option_negara'));
+        $option_industri = Industri::all();
+        return view('admin.pembeli.show', compact('title', 'pembeli', 'option_negara', 'option_industri'));
     }
 
     /**

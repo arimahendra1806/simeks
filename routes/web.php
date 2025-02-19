@@ -3,6 +3,7 @@
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\IndustriController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\LoginController;
@@ -47,8 +48,8 @@ Route::get('/', function () {
                 return redirect()->route('marketing.dashboard.index');
             case 3:
                 return redirect()->route('direktur.dashboard.index');
-            case 4:
-                return redirect()->route('buyer.dashboard.index');
+                // case 4:
+                //     return redirect()->route('buyer.dashboard.index');
         }
     }
     return redirect()->route('admin_login');
@@ -64,8 +65,8 @@ Route::get('/home', function () {
                 return redirect()->route('marketing.dashboard.index');
             case 3:
                 return redirect()->route('direktur.dashboard.index');
-            case 4:
-                return redirect()->route('buyer.dashboard.index');
+                // case 4:
+                //     return redirect()->route('buyer.dashboard.index');
         }
     }
     return redirect()->route('admin_login');
@@ -78,8 +79,8 @@ Route::middleware('guest')->group(function () {
     Route::post('marketing/do_log', [LoginController::class, 'do_log_marketing'])->name('do_log_marketing');
     Route::get('direktur/login', [LoginController::class, 'direktur_login'])->name('direktur_login');
     Route::post('direktur/do_log', [LoginController::class, 'do_log_direktur'])->name('do_log_direktur');
-    Route::get('buyer/login', [LoginController::class, 'buyer_login'])->name('buyer_login');
-    Route::post('buyer/do_log', [LoginController::class, 'do_log_buyer'])->name('do_log_buyer');
+    // Route::get('buyer/login', [LoginController::class, 'buyer_login'])->name('buyer_login');
+    // Route::post('buyer/do_log', [LoginController::class, 'do_log_buyer'])->name('do_log_buyer');
 });
 
 Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
@@ -96,6 +97,7 @@ Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
     Route::post('/produk/import_data', [ProdukController::class, 'import_data'])->name('produk.importData');
     Route::get('produk/kota/{provinsi}', [ProdukController::class, 'get_kota'])->name('produk.getKota');
     Route::resource('/produk', ProdukController::class);
+    Route::resource('/industri', IndustriController::class);
     Route::resource('/provinsi', ProvinsiController::class);
     Route::resource('/satuan', SatuanController::class);
     Route::resource('/pilihan', PilihanController::class);
@@ -139,10 +141,10 @@ Route::middleware('direktur')->name('direktur.')->prefix('direktur')->group(func
     Route::resource('/penjualan/dokumen', PenjualanByDokumenController::class);
 });
 
-Route::middleware('buyer')->name('buyer.')->prefix('buyer')->group(function () {
-    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-    Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('/', [DashboardController::class, 'dashboard_buyer'])->name('index');
-    });
-    Route::resource('/pembayaran', PenjualanByBayar::class);
-});
+// Route::middleware('buyer')->name('buyer.')->prefix('buyer')->group(function () {
+//     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+//     Route::prefix('dashboard')->name('dashboard.')->group(function () {
+//         Route::get('/', [DashboardController::class, 'dashboard_buyer'])->name('index');
+//     });
+//     Route::resource('/pembayaran', PenjualanByBayar::class);
+// });
