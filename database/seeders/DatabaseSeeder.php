@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
             MasterSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
-            ProvinsiImportSqlSeeder::class,
-            KotaImportSqlSeeder::class,
+            // ProvinsiImportSqlSeeder::class,
+            // KotaImportSqlSeeder::class,
             NegaraImportSqlSeeder::class
         ]);
     }

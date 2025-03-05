@@ -12,7 +12,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SIMEKS') }}</title>
+    <title>{{ config('app.name', 'ALMEA KAUSA ETERNA') }}</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180"

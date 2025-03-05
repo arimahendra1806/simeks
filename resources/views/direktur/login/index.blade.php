@@ -10,7 +10,7 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="login-box bg-white box-shadow border-radius-10" style="max-width: 600px !important;">
                         <div class="login-title">
-                            <h2 class="text-center text-primary">Masuk Ke Simeks Sebagai Direktur</h2>
+                            <h2 class="text-center text-primary">Masuk Sebagai Direktur</h2>
                         </div>
                         <form action="{{ route('do_log_direktur') }}" method="POST">
                             @csrf

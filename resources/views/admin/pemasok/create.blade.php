@@ -16,7 +16,8 @@
                 @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="negara_id" class="form-label">Negara <span class="text-danger"><small>*</small></span></label>
+                        <label for="negara_id" class="form-label">Negara <span
+                                class="text-danger"><small>*</small></span></label>
                         <select name="negara_id" id="negara_id"
                             class="form-control form-select js-select2 @error('negara_id') is-invalid @enderror"
                             data-placeholder="- Pilih Negara -">
@@ -33,7 +34,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="nama" class="form-label">Nama <span class="text-danger"><small>*</small></span></label>
+                        <label for="nama" class="form-label">Nama <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
                             placeholder="Masukkan nama..." id="nama" name="nama" value="{{ old('nama') }}">
                         @error('nama')
@@ -41,15 +43,18 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="perusahaan" class="form-label">Perusahaan <span class="text-danger"><small>*</small></span></label>
+                        <label for="perusahaan" class="form-label">Perusahaan <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('perusahaan') is-invalid @enderror"
-                            placeholder="Masukkan perusahaan..." id="perusahaan" name="perusahaan" value="{{ old('perusahaan') }}">
+                            placeholder="Masukkan perusahaan..." id="perusahaan" name="perusahaan"
+                            value="{{ old('perusahaan') }}">
                         @error('perusahaan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label">Email <span class="text-danger"><small>*</small></span></label>
+                        <label for="email" class="form-label">Email <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                             placeholder="Masukkan email..." id="email" name="email" value="{{ old('email') }}">
                         @error('email')
@@ -57,7 +62,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="telepon" class="form-label">Nomor WA <span class="text-danger"><small>*</small></span></label>
+                        <label for="telepon" class="form-label">Nomor WA <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('telepon') is-invalid @enderror"
                             placeholder="Masukkan telepon..." id="telepon" name="telepon" value="{{ old('telepon') }}">
                         @error('telepon')
@@ -65,10 +71,10 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="keterangan" class="form-label">Keterangan</label>
-                        <textarea class="form-control @error('keterangan') is-invalid @enderror" placeholder="Masukkan keterangan..."
-                            id="keterangan" name="keterangan">{{ old('keterangan') }}</textarea>
-                        @error('keterangan')
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <textarea class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan alamat..." id="alamat"
+                            name="alamat">{{ old('alamat') }}</textarea>
+                        @error('alamat')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

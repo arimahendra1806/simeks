@@ -22,7 +22,6 @@
                         <th>No</th>
                         <th>Pemasok</th>
                         <th>Nama</th>
-                        <th>Harga</th>
                         <th>Deskripsi</th>
                         <th>Aksi</th>
                     </tr>
@@ -33,7 +32,6 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->pemasok->nama }}</td>
                             <td>{{ $item->nama }}</td>
-                            <td>{{ $item->harga }}</td>
                             <td>{{ $item->deskripsi }}</td>
                             <td>
                                 <a href="{{ route('admin.produk.show', $item->id) }}" class="btn btn-info btn-sm">

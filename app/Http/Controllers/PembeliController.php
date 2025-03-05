@@ -7,6 +7,7 @@ use App\Models\Negara;
 use App\Models\Pembeli;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PembeliController extends Controller
 {
@@ -59,23 +60,32 @@ class PembeliController extends Controller
     {
         $this->validation($request);
 
-        // Membuat user baru
-        $user = User::create([
-            'name' => $request->nama,
-            'email' => $request->email,
-            'password' => bcrypt($request->email),
-            'role_id' => 4,
-        ]);
+        DB::beginTransaction();
+        try {
+            // Membuat user baru
+            $user = User::create([
+                'name' => $request->nama,
+                'email' => $request->email,
+                'password' => bcrypt($request->email),
+                'role_id' => 4,
+            ]);
 
-        Pembeli::create([
-            'user_id' => $user->id,
-            'industri_id' => $request->industri_id,
-            'negara_id' => $request->negara_id,
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'telepon' => $request->telepon,
-            'perusahaan' => $request->perusahaan,
-        ]);
+            Pembeli::create([
+                'user_id' => $user->id,
+                'industri_id' => $request->industri_id,
+                'negara_id' => $request->negara_id,
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'telepon' => $request->telepon,
+                'perusahaan' => $request->perusahaan,
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.pembeli.index')->with('success', 'Data berhasil ditambahkan!');
     }
@@ -116,11 +126,7 @@ class PembeliController extends Controller
      */
     public function destroy(Pembeli $pembeli)
     {
-        $user = $pembeli->user;
-        if ($user) {
-            $user->delete();
-        }
-
+        $pembeli->user()->delete();
         $pembeli->delete();
 
         return redirect()->route('admin.pembeli.index')->with('success', 'Data berhasil diihapus!');

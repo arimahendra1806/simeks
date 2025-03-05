@@ -100,5 +100,122 @@ class MasterSeeder extends Seeder
                 'isi' => 'Lunas',
             ],
         ]);
+
+        DB::table('banks')->insert([
+            [
+                'nama' => 'BRI',
+            ],
+            [
+                'nama' => 'BNI',
+            ],
+            [
+                'nama' => 'BTN',
+            ],
+        ]);
+
+        DB::table('dokumens')->insert([
+            [
+                'nama' => 'KTP',
+            ],
+            [
+                'nama' => 'NPWP',
+            ],
+            [
+                'nama' => 'LEGALITAS',
+            ],
+        ]);
+
+        DB::table('industris')->insert([
+            [
+                'nama' => 'FNB',
+            ],
+            [
+                'nama' => 'SUPERMAERKET',
+            ],
+        ]);
+
+        DB::table('kategoris')->insert([
+            [
+                'nama' => 'PALAWIJA',
+            ],
+        ]);
+
+        DB::table('satuans')->insert([
+            [
+                'nama' => 'GRAM',
+            ],
+            [
+                'nama' => 'KILOGRAM',
+            ],
+            [
+                'nama' => 'KWINTAL',
+            ],
+        ]);
+
+        DB::table('pemasoks')->insert([
+            [
+                'negara_id' => '63',
+                'nama' => 'SANTOSO',
+                'email' => 'cvsentosa@example.com',
+                'telepon' => '08123456789',
+                'perusahaan' => 'CV SENTOSA',
+                'alamat' => 'Jln. Jend. Sudirman No. 20, Jakarta Pusat',
+            ],
+        ]);
+
+        DB::table('pembelis')->insert([
+            [
+                'industri_id' => '1',
+                'negara_id' => '64',
+                'nama' => 'RICHARD',
+                'email' => 'burgersinc@example.com',
+                'telepon' => '08123456789',
+                'perusahaan' => 'BURGERS INC',
+                'alamat' => 'Al-Karada Street, Baghdad',
+            ],
+        ]);
+
+        DB::table('produks')->insert([
+            [
+                'pemasok_id' => '1',
+                'kategori_id' => '1',
+                'nama' => 'Fresh Ginger',
+                'deskripsi' => 'Export Quality Fresh White Ginger from the Land of Indonesia | Fresh Ginger Available in any size starting from 100 gr up, 150 gr up, 200 gr up, and 250 gr up.',
+            ],
+        ]);
+
+        DB::table('produk_by_fotos')->insert([
+            [
+                'produk_id' => '1',
+                'file' => 'IMG_8803.jpg',
+            ],
+        ]);
+
+        DB::table('produk_by_satuans')->insert([
+            [
+                'produk_id' => '1',
+                'satuan_id' => '1',
+                'kuantitas' => '100',
+                'harga' => '20000',
+            ],
+            [
+                'produk_id' => '1',
+                'satuan_id' => '1',
+                'kuantitas' => '150',
+                'harga' => '25000',
+            ],
+            [
+                'produk_id' => '1',
+                'satuan_id' => '1',
+                'kuantitas' => '200',
+                'harga' => '30000',
+            ],
+            [
+                'produk_id' => '1',
+                'satuan_id' => '1',
+                'kuantitas' => '250',
+                'harga' => '35000',
+            ],
+        ]);
     }
 }

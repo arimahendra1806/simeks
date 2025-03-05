@@ -6,9 +6,11 @@ use App\Models\Kategori;
 use App\Models\Kota;
 use App\Models\Pemasok;
 use App\Models\Produk;
+use App\Models\ProdukBySatuan;
 use App\Models\Provinsi;
 use App\Models\Satuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
@@ -39,25 +41,22 @@ class ProdukController extends Controller
         $title = $this->title;
         $option_pemasok = Pemasok::all();
         $option_kategori = Kategori::all();
-        $option_provinsi = Provinsi::all();
-        $option_kota = Kota::all();
         $option_satuan = Satuan::all();
 
-        return view('admin.produk.create', compact('title', 'option_pemasok', 'option_kategori', 'option_provinsi', 'option_kota', 'option_satuan'));
+        return view('admin.produk.create', compact('title', 'option_pemasok', 'option_kategori', 'option_satuan'));
     }
 
     private function validation(Request $request)
     {
         $request->validate([
             'pemasok_id' => 'required',
-            'provinsi_id' => 'required',
-            'kota_id' => 'required',
-            'nama' => 'required',
+            'nama' => 'required|string|max:255',
             'kategori_id' => 'required',
-            'satuan_id' => 'required',
-            'isi' => 'required',
-            'harga' => 'required',
-            'deskripsi' => 'required',
+            'satuan_id' => 'required|array',
+            'kuantitas' => 'required|array',
+            'kuantitas.*' => 'numeric|min:1',
+            'harga' => 'required|array',
+            'harga.*' => 'numeric|min:0',
         ]);
     }
 
@@ -68,7 +67,32 @@ class ProdukController extends Controller
     {
         $this->validation($request);
 
-        Produk::create($request->all());
+        DB::beginTransaction();
+        try {
+            // Simpan data ke tabel `produk`
+            $produk = Produk::create([
+                'pemasok_id' => $request->pemasok_id,
+                'nama' => $request->nama,
+                'kategori_id' => $request->kategori_id,
+                'deskripsi' => $request->deskripsi,
+            ]);
+
+            // Simpan data ke tabel `produk_by_satuans`
+            foreach ($request->satuan_id as $index => $satuan_id) {
+                ProdukBySatuan::create([
+                    'produk_id' => $produk->id,
+                    'satuan_id' => $satuan_id,
+                    'kuantitas' => $request->kuantitas[$index],
+                    'harga' => $request->harga[$index],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.produk.index')->with('success', 'Data berhasil ditambahkan!');
     }
@@ -81,11 +105,11 @@ class ProdukController extends Controller
         $title = $this->title;
         $option_pemasok = Pemasok::all();
         $option_kategori = Kategori::all();
-        $option_provinsi = Provinsi::all();
-        $option_kota = Kota::where('provinsi_id', $produk->provinsi_id)->get();
         $option_satuan = Satuan::all();
 
-        return view('admin.produk.show', compact('title', 'produk', 'option_pemasok', 'option_kategori', 'option_provinsi', 'option_kota', 'option_satuan'));
+        $hargas = ProdukBySatuan::with('satuan', 'produk')->where('produk_id', $produk->id)->get();
+
+        return view('admin.produk.show', compact('title', 'produk', 'option_pemasok', 'option_kategori', 'option_satuan', 'hargas'));
     }
 
     /**
@@ -104,6 +128,33 @@ class ProdukController extends Controller
         $this->validation($request, $produk->id);
 
         $produk->update($request->all());
+        DB::beginTransaction();
+        try {
+            // Simpan data ke tabel `produk`
+            $produk->update([
+                'pemasok_id' => $request->pemasok_id,
+                'nama' => $request->nama,
+                'kategori_id' => $request->kategori_id,
+                'deskripsi' => $request->deskripsi,
+            ]);
+
+            $produk->produkBySatuan()->delete();
+            // Simpan data ke tabel `produk_by_satuans`
+            foreach ($request->satuan_id as $index => $satuan_id) {
+                ProdukBySatuan::create([
+                    'produk_id' => $produk->id,
+                    'satuan_id' => $satuan_id,
+                    'kuantitas' => $request->kuantitas[$index],
+                    'harga' => $request->harga[$index],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.produk.index')->with('success', 'Data berhasil diperbaharui!');
     }
@@ -113,6 +164,7 @@ class ProdukController extends Controller
      */
     public function destroy(Produk $produk)
     {
+        $produk->produkBySatuan()->delete();
         $produk->delete();
 
         return redirect()->route('admin.produk.index')->with('success', 'Data berhasil diihapus!');
@@ -151,11 +203,5 @@ class ProdukController extends Controller
         // }
 
         return redirect()->route('admin.produk.index')->with('success', 'Data produk berhasil diimport!');
-    }
-
-    public function get_kota($provinsi)
-    {
-        $kota = Kota::where('provinsi_id', $provinsi)->get();
-        return response()->json($kota);
     }
 }

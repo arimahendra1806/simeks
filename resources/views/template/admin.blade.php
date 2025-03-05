@@ -12,7 +12,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SIMEKS') }}</title>
+    <title>{{ config('app.name', 'ALMEA KAUSA ETERNA') }}</title>
 
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180"
@@ -83,7 +83,7 @@
                     <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png"
                         alt="" />
                 </div>
-                <h1>SIMEKS</h1>
+                <h1>CV ALMEA KAUSA ETERNA</h1>
             </div>
             <div class="loader-progress" id="progress_div">
                 <div class="bar" id="bar1"></div>

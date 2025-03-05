@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 
-class Produk extends Model
+class ProdukBySatuan extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -17,40 +17,30 @@ class Produk extends Model
     {
         parent::__construct($attributes);
 
-        $columns = Schema::getColumnListing('produks');
+        $columns = Schema::getColumnListing('produk_by_satuans');
         $columns = array_filter($columns, function ($column) {
             return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
         $this->fillable = array_values($columns);
     }
 
-    public function pasar()
+    public function produk()
     {
-        return $this->hasMany(Pasar::class);
+        return $this->belongsTo(Produk::class);
     }
 
-    public function penjualanByProduk()
+    public function satuan()
     {
-        return $this->hasMany(PenjualanByProduk::class);
+        return $this->belongsTo(Satuan::class);
     }
 
-    public function pemasok()
+    public function setKuantitasAttribute($value)
     {
-        return $this->belongsTo(Pemasok::class);
+        $this->attributes['kuantitas'] = str_replace('.', '', $value);
     }
 
-    public function kategori()
+    public function setHargaAttribute($value)
     {
-        return $this->belongsTo(Kategori::class);
-    }
-
-    public function produkByFoto()
-    {
-        return $this->hasMany(ProdukByFoto::class);
-    }
-
-    public function produkBySatuan()
-    {
-        return $this->hasMany(ProdukBySatuan::class);
+        $this->attributes['harga'] = str_replace('.', '', $value);
     }
 }

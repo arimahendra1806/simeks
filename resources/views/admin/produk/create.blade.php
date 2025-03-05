@@ -33,35 +33,6 @@
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="provinsi_id" class="form-label">Provinsi <span
-                                class="text-danger"><small>*</small></span></label>
-                        <select name="provinsi_id" id="provinsi_id"
-                            class="form-control form-select js-select2 @error('provinsi_id') is-invalid @enderror"
-                            data-placeholder="- Pilih Provinsi -">
-                            <option value=""></option>
-                            @foreach ($option_provinsi as $item)
-                                <option value="{{ $item->id }}" {{ old('provinsi_id') == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('provinsi_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="kota_id" class="form-label">Kota <span
-                                class="text-danger"><small>*</small></span></label>
-                        <select name="kota_id" id="kota_id"
-                            class="form-control form-select js-select2 @error('kota_id') is-invalid @enderror"
-                            data-placeholder="- Pilih Kota -" disabled>
-                            <option value=""></option>
-                        </select>
-                        @error('kota_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
                         <label for="nama" class="form-label">Nama Produk<span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
@@ -70,7 +41,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="kategori_id" class="form-label">Kategori <span
                                 class="text-danger"><small>*</small></span></label>
                         <select name="kategori_id" id="kategori_id"
@@ -88,41 +59,6 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="satuan_id" class="form-label">Satuan <span
-                                class="text-danger"><small>*</small></span></label>
-                        <select name="satuan_id" id="satuan_id"
-                            class="form-control form-select js-select2 @error('satuan_id') is-invalid @enderror"
-                            data-placeholder="- Pilih Satuan -">
-                            <option value=""></option>
-                            @foreach ($option_satuan as $item)
-                                <option value="{{ $item->id }}" {{ old('satuan_id') == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('satuan_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="isi" class="form-label">Isi <span
-                                class="text-danger"><small>*</small></span></label>
-                        <input type="number" class="form-control @error('isi') is-invalid @enderror"
-                            placeholder="Masukkan isi..." id="isi" name="isi" value="{{ old('isi') }}">
-                        @error('isi')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="harga" class="form-label">Harga <span
-                                class="text-danger"><small>*</small></span></label>
-                        <input type="text" class="form-control js-currency @error('harga') is-invalid @enderror"
-                            placeholder="Masukkan harga..." id="harga" name="harga" value="{{ old('harga') }}">
-                        @error('harga')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('deskripsi') is-invalid @enderror" placeholder="Masukkan deskripsi..."
@@ -131,9 +67,56 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <label for="deskripsi" class="form-label">Harga</label>
+                            <a href="javascript:void(0)" class="btn btn-info btn-sm btn_add">
+                                <i class="fa fa-plus mr-2"></i> Tambah
+                            </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="data_table" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Satuan</th>
+                                        <th>Kuantitas</th>
+                                        <th>Harga</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="number_input">1</span>
+                                        </td>
+                                        <td>
+                                            <select name="satuan_id[]" class="form-select js-select2">
+                                                @foreach ($option_satuan as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control js-currency" name="kuantitas[]">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control js-currency" name="harga[]">
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn_delete">
+                                                <i class="fa fa-trash mr-2"></i> Hapus
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary float-right"><i
-                                class="fa fa-save mr-2"></i>Simpan</button>
+                        <button type="submit" class="btn btn-primary float-right btn-submit">
+                            <i class="fa fa-save mr-2"></i>Simpan
+                        </button>
                     </div>
                 </div>
             </form>
@@ -144,24 +127,95 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('#provinsi_id').change(function(){
-                var provinsi = $(this).val();
-                if(provinsi){
-                    $.ajax({
-                        url: `${url_path(2)}/kota/` + provinsi,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data){
-                            $('#kota_id').empty().append('<option value="">Pilih Kota</option>');
-                            $.each(data, function(key, kota){
-                                $('#kota_id').append('<option value="'+ kota.id +'">'+ kota.nama +'</option>');
-                            });
-                            $('#kota_id').prop('disabled', false);
-                        }
+            // Fungsi untuk memperbarui nomor urut
+            function updateRowNumbers() {
+                $("#data_table tbody tr").each(function(index) {
+                    $(this).find(".number_input").text(index + 1);
+                });
+            }
+
+            // Event saat tombol "Tambah" ditekan
+            $(".btn_add").click(function() {
+                let newRow = `
+                    <tr>
+                        <td>
+                            <span class="number_input"></span>
+                        </td>
+                        <td>
+                            <select name="satuan_id[]" class="form-select js-select2">
+                                @foreach ($option_satuan as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control js-currency" name="kuantitas[]">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control js-currency" name="harga[]">
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn_delete">
+                                <i class="fa fa-trash mr-2"></i> Hapus
+                            </a>
+                        </td>
+                    </tr>
+                `;
+
+                $("#data_table tbody").append(newRow);
+                updateRowNumbers();
+
+                $('.js-select2').each(function() {
+                    var placeholder = $(this).data('placeholder');
+                    $(this).select2({
+                        theme: 'bootstrap4',
+                        width: '100%',
+                        placeholder: placeholder,
                     });
-                }else{
-                    $('#kota_id').empty().append('<option value="">Pilih Kota</option>');
-                    $('#kota_id').prop('disabled', true);
+                });
+
+                $('.js-currency').on('input', function() {
+                    var input_val = $(this).val();
+                    $(this).val(format_currency(input_val));
+                });
+            });
+
+            // Event saat tombol "Hapus" ditekan
+            $(document).on("click", ".btn_delete", function() {
+                $(this).closest("tr").remove();
+                updateRowNumbers();
+            });
+
+            // Inisialisasi nomor pertama kali
+            updateRowNumbers();
+
+            $("form").on("submit", function(e) {
+                e.preventDefault();
+
+                let isValid = true;
+
+                $("#data_table tbody tr").each(function() {
+                    let satuan = $(this).find("select[name='satuan_id[]']").val();
+                    let kuantitas = $(this).find("input[name='kuantitas[]']").val().trim();
+                    let harga = $(this).find("input[name='harga[]']").val().trim();
+
+                    $(this).find("select, input").removeClass("is-invalid");
+
+                    if (!satuan || !kuantitas || !harga) {
+                        isValid = false;
+                        if (!satuan) $(this).find("select[name='satuan_id[]']").addClass(
+                            "is-invalid");
+                        if (!kuantitas) $(this).find("input[name='kuantitas[]']").addClass(
+                            "is-invalid");
+                        if (!harga) $(this).find("input[name='harga[]']").addClass("is-invalid");
+                    }
+                });
+
+                if (!isValid) {
+                    notif_error("Harap isi semua kolom sebelum menyimpan!");
+                } else {
+                    // Pastikan form hanya dikirim sekali
+                    $(this).off("submit").submit();
                 }
             });
         });

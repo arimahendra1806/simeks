@@ -98,10 +98,10 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="keterangan" class="form-label">Keterangan</label>
-                        <textarea class="form-control @error('keterangan') is-invalid @enderror" placeholder="Masukkan keterangan..."
-                            id="keterangan" name="keterangan" readonly>{{ old('keterangan', $pembeli->keterangan) }}</textarea>
-                        @error('keterangan')
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <textarea class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan alamat..."
+                            id="alamat" name="alamat" readonly>{{ old('alamat', $pembeli->alamat) }}</textarea>
+                        @error('alamat')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

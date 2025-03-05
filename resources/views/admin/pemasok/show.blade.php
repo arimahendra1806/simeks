@@ -34,7 +34,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="nama" class="form-label">Nama <span class="text-danger"><small>*</small></span></label>
+                        <label for="nama" class="form-label">Nama <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
                             placeholder="Masukkan nama..." id="nama" name="nama"
                             value="{{ old('nama', $pemasok->nama) }}" readonly>
@@ -43,7 +44,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="perusahaan" class="form-label">Perusahaan <span class="text-danger"><small>*</small></span></label>
+                        <label for="perusahaan" class="form-label">Perusahaan <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('perusahaan') is-invalid @enderror"
                             placeholder="Masukkan perusahaan..." id="perusahaan" name="perusahaan"
                             value="{{ old('perusahaan', $pemasok->perusahaan) }}" readonly>
@@ -52,7 +54,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label">Email <span class="text-danger"><small>*</small></span></label>
+                        <label for="email" class="form-label">Email <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                             placeholder="Masukkan email..." id="email" name="email"
                             value="{{ old('email', $pemasok->email) }}" readonly>
@@ -61,7 +64,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="telepon" class="form-label">Nomor WA <span class="text-danger"><small>*</small></span></label>
+                        <label for="telepon" class="form-label">Nomor WA <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('telepon') is-invalid @enderror"
                             placeholder="Masukkan telepon..." id="telepon" name="telepon"
                             value="{{ old('telepon', $pemasok->telepon) }}" readonly>
@@ -70,10 +74,10 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="keterangan" class="form-label">Keterangan</label>
-                        <textarea class="form-control @error('keterangan') is-invalid @enderror" placeholder="Masukkan keterangan..."
-                            id="keterangan" name="keterangan" readonly>{{ old('keterangan', $pemasok->keterangan) }}</textarea>
-                        @error('keterangan')
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <textarea class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan alamat..." id="alamat"
+                            name="alamat" readonly>{{ old('alamat', $pemasok->alamat) }}</textarea>
+                        @error('alamat')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
