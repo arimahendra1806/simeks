@@ -33,14 +33,16 @@ return new class extends Migration
         // Ubah kolom keterangan menjadi alamat di tabel pemasoks jika ada
         if (Schema::hasColumn('pemasoks', 'keterangan')) {
             Schema::table('pemasoks', function (Blueprint $table) {
-                $table->renameColumn('keterangan', 'alamat');
+                $table->dropColumn('keterangan');
+                $table->text('alamat');
             });
         }
 
         // Ubah kolom keterangan menjadi alamat di tabel pembelis jika ada
         if (Schema::hasColumn('pembelis', 'keterangan')) {
             Schema::table('pembelis', function (Blueprint $table) {
-                $table->renameColumn('keterangan', 'alamat');
+                $table->dropColumn('keterangan');
+                $table->text('alamat');
             });
         }
     }
@@ -53,14 +55,16 @@ return new class extends Migration
         // Kembalikan nama kolom alamat menjadi keterangan di tabel pemasoks jika ada
         if (Schema::hasColumn('pemasoks', 'alamat')) {
             Schema::table('pemasoks', function (Blueprint $table) {
-                $table->renameColumn('alamat', 'keterangan');
+                $table->dropColumn('alamat');
+                $table->text('keterangan');
             });
         }
 
         // Kembalikan nama kolom alamat menjadi keterangan di tabel pembelis jika ada
         if (Schema::hasColumn('pembelis', 'alamat')) {
             Schema::table('pembelis', function (Blueprint $table) {
-                $table->renameColumn('alamat', 'keterangan');
+                $table->dropColumn('alamat');
+                $table->text('keterangan');
             });
         }
     }

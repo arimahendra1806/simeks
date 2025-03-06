@@ -50,7 +50,8 @@ return new class extends Migration
         // Mengubah nama kolom kode_transaksi menjadi kode_bayar di tabel penjualan_by_bayars
         Schema::table('penjualan_by_bayars', function (Blueprint $table) {
             if (Schema::hasColumn('penjualan_by_bayars', 'kode_transaksi')) {
-                $table->renameColumn('kode_transaksi', 'kode_bayar');
+                $table->dropColumn('kode_transaksi');
+                $table->string('kode_bayar');
             }
         });
     }
@@ -77,7 +78,8 @@ return new class extends Migration
         // Mengubah nama kolom kode_bayar kembali menjadi kode_transaksi di tabel penjualan_by_bayars
         Schema::table('penjualan_by_bayars', function (Blueprint $table) {
             if (Schema::hasColumn('penjualan_by_bayars', 'kode_bayar')) {
-                $table->renameColumn('kode_bayar', 'kode_transaksi');
+                $table->dropColumn('kode_bayar');
+                $table->string('kode_transaksi');
             }
         });
     }
