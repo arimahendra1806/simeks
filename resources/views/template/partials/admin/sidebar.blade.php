@@ -18,14 +18,10 @@
             <ul id="accordion-menu">
                 @if (session('role_id') == 1)
                     <li>
-                        <a href="javascript:void(0)"
+                        <a href="{{ route('admin.dashboard.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('admin/dashboard*') ? 'active' : '' }}">
                             <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
                         </a>
-                        {{-- <a href="{{ route('admin.dashboard.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/dashboard*') ? 'active' : '' }}">
-                            <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
-                        </a> --}}
                     </li>
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle">
@@ -33,78 +29,38 @@
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.pilihan.index') }}"
                                     class="{{ Request::is('admin/pilihan*') ? 'active' : '' }}">Pilihan</a>
                             </li>
                             <li>
-                                {{-- <a href="{{ route('admin.pilihan.index') }}"
-                                    class="{{ Request::is('admin/pilihan*') ? 'active' : '' }}">Pilihan</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.negara.index') }}"
                                     class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a>
                             </li>
                             <li>
-                                {{-- <a href="{{ route('admin.negara.index') }}"
-                                    class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
-                                    class="{{ Request::is('admin/provinsi*') ? 'active' : '' }}">Provinsi</a>
-                            </li>
-                            <li>
-                                {{-- <a href="{{ route('admin.provinsi.index') }}"
-                                    class="{{ Request::is('admin/provinsi*') ? 'active' : '' }}">Provinsi</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
-                                    class="{{ Request::is('admin/kota*') ? 'active' : '' }}">Kota</a>
-                            </li>
-                            <li>
-                                {{-- <a href="{{ route('admin.kota.index') }}"
-                                    class="{{ Request::is('admin/kota*') ? 'active' : '' }}">Kota</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.bank.index') }}"
                                     class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a>
                             </li>
                             <li>
-                                {{-- <a href="{{ route('admin.bank.index') }}"
-                                    class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.dokumen.index') }}"
                                     class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a>
                             </li>
                             <li>
-                                {{-- <a href="{{ route('admin.dokumen.index') }}"
-                                    class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.kategori.index') }}"
                                     class="{{ Request::is('admin/kategori*') ? 'active' : '' }}">Kategori</a>
                             </li>
                             <li>
-                                {{-- <a href="{{ route('admin.kategori.index') }}"
-                                    class="{{ Request::is('admin/kategori*') ? 'active' : '' }}">Kategori</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.satuan.index') }}"
                                     class="{{ Request::is('admin/satuan*') ? 'active' : '' }}">Satuan</a>
                             </li>
                             <li>
-                                {{-- <a href="{{ route('admin.satuan.index') }}"
-                                    class="{{ Request::is('admin/satuan*') ? 'active' : '' }}">Satuan</a>
-                            </li>
-                            <li> --}}
-                                <a href="javascript:void(0)"
+                                <a href="{{ route('admin.industri.index') }}"
                                     class="{{ Request::is('admin/industri*') ? 'active' : '' }}">Industri</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.user.index') }}"
+                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">User</a>
                             </li>
                         </ul>
-                        {{-- <a href="{{ route('admin.industri.index') }}"
-                                    class="{{ Request::is('admin/industri*') ? 'active' : '' }}">Industri</a>
-                            </li>
-                        </ul> --}}
                     </li>
                     <li>
                         <a href="javascript:void(0)"
@@ -156,22 +112,22 @@
                     </li>
                 @elseif (session('role_id') == 2)
                     <li>
-                        <a href="javascript:void(0)"
+                        <a href="{{ route('marketing.dashboard.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('marketing/dashboard*') ? 'active' : '' }}">
                             <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
                         </a>
-                        {{-- <a href="{{ route('marketing.dashboard.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('marketing/dashboard*') ? 'active' : '' }}">
-                            <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
+                        </a>
+                        {{-- <a href="{{ route('marketing.produk.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('marketing/produk*') ? 'active' : '' }}">
+                            <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
                         </a> --}}
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                        <a href="javascript:void(0)" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-people"></span><span class="mtext">Data Buyer</span>
                         </a>
                     </li>
@@ -189,14 +145,10 @@
                     </li>
                 @elseif (session('role_id') == 3)
                     <li>
-                        <a href="javascript:void(0)"
+                        <a href="{{ route('direktur.dashboard.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('direktur/dashboard*') ? 'active' : '' }}">
                             <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
                         </a>
-                        {{-- <a href="{{ route('direktur.dashboard.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('direktur/dashboard*') ? 'active' : '' }}">
-                            <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
-                        </a> --}}
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
@@ -232,14 +184,10 @@
                     </li>
                 @elseif (session('role_id') == 4)
                     <li>
-                        <a href="javascript:void(0)"
+                        <a href="{{ route('buyer.dashboard.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('buyer/dashboard*') ? 'active' : '' }}">
                             <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
                         </a>
-                        {{-- <a href="{{ route('buyer.dashboard.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('buyer/dashboard*') ? 'active' : '' }}">
-                            <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
-                        </a> --}}
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">

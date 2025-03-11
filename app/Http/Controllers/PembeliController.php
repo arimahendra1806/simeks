@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\DB;
 class PembeliController extends Controller
 {
     protected $title;
+    protected $prefix;
 
     public function __construct()
     {
         $this->title = 'Data Pembeli';
+        $this->prefix = request()->segment(1);
     }
 
     /**
@@ -26,7 +28,7 @@ class PembeliController extends Controller
         $title = $this->title;
         $data = Pembeli::with('negara')->orderBy('id', 'desc')->get();
 
-        return view('admin.pembeli.index', compact('title', 'data'));
+        return view("admin.pembeli.index", compact('title', 'data'));
     }
 
     /**
@@ -38,7 +40,7 @@ class PembeliController extends Controller
         $option_negara = Negara::all();
         $option_industri = Industri::all();
 
-        return view('admin.pembeli.create', compact('title', 'option_negara', 'option_industri'));
+        return view("admin.pembeli.create", compact('title', 'option_negara', 'option_industri'));
     }
 
     private function validation(Request $request, $pembeli = 0)
@@ -81,13 +83,13 @@ class PembeliController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil disimpan!');
+            return redirect()->route("$this->prefix.produk.index")->with('success', 'Produk berhasil disimpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.pembeli.index')->with('success', 'Data berhasil ditambahkan!');
+        return redirect()->route("$this->prefix.pembeli.index")->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -98,7 +100,7 @@ class PembeliController extends Controller
         $title = $this->title;
         $option_negara = Negara::all();
         $option_industri = Industri::all();
-        return view('admin.pembeli.show', compact('title', 'pembeli', 'option_negara', 'option_industri'));
+        return view("admin.pembeli.show", compact('title', 'pembeli', 'option_negara', 'option_industri'));
     }
 
     /**
@@ -118,7 +120,7 @@ class PembeliController extends Controller
 
         $pembeli->update($request->all());
 
-        return redirect()->route('admin.pembeli.index')->with('success', 'Data berhasil diperbaharui!');
+        return redirect()->route("$this->prefix.pembeli.index")->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -129,6 +131,6 @@ class PembeliController extends Controller
         $pembeli->user()->delete();
         $pembeli->delete();
 
-        return redirect()->route('admin.pembeli.index')->with('success', 'Data berhasil diihapus!');
+        return redirect()->route("$this->prefix.pembeli.index")->with('success', 'Data berhasil diihapus!');
     }
 }

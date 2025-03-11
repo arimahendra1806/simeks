@@ -18,12 +18,14 @@
                 <h2 class="text-blue mb-4">Detail Data {{ $title }}</h2>
             </div>
             <div class="pull-right">
-                <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary mr-2 float-right"><i
-                        class="fa fa-arrow-left mr-2"></i>Kembali</a>
+                <a href="{{ route(request()->segment(1) . '.produk.index') }}" class="btn btn-secondary mr-2 float-right"><i
+                        class="fa fa-arrow-left mr-2"></i>Kembali
+                </a>
             </div>
         </div>
         <div>
-            <form action="{{ route('admin.produk.update', $produk->id) }}" method="POST">
+            <form action="{{ route(request()->segment(1) . '.produk.update', $produk->id) }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -73,6 +75,17 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    @if (session('role_id') == 1)
+                        <div class="col-md-12 mb-3">
+                            <label for="file" class="form-label">Foto Produk </label>
+                            <input type="file" class="form-control input-file @error('file') is-invalid @enderror"
+                                placeholder="Masukkan file..." id="file" name="file[]" accept="image/*" disabled
+                                multiple>
+                            @error('file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @endif
                     <div class="col-md-12 mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('deskripsi') is-invalid @enderror" placeholder="Masukkan deskripsi..." readonly
@@ -84,9 +97,11 @@
                     <div class="col-md-12 mb-3">
                         <div class="d-flex justify-content-between mb-2">
                             <label for="deskripsi" class="form-label">Harga</label>
-                            <a href="javascript:void(0)" class="btn btn-info btn-sm btn_add disabled_btn">
-                                <i class="fa fa-plus mr-2"></i> Tambah
-                            </a>
+                            @if (session('role_id') == 1)
+                                <a href="javascript:void(0)" class="btn btn-info btn-sm btn_add disabled_btn">
+                                    <i class="fa fa-plus mr-2"></i> Tambah
+                                </a>
+                            @endif
                         </div>
                         <div class="table-responsive">
                             <table id="data_table" class="table table-striped">
@@ -96,7 +111,9 @@
                                         <th>Satuan</th>
                                         <th>Kuantitas</th>
                                         <th>Harga</th>
-                                        <th>Aksi</th>
+                                        @if (session('role_id') == 1)
+                                            <th>Aksi</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,25 +140,30 @@
                                                 <input type="text" class="form-control js-currency" name="harga[]"
                                                     value="{{ number_format($data->harga, 0, '.', '.') }}" readonly>
                                             </td>
-                                            <td>
-                                                <a href="javascript:void(0)"
-                                                    class="btn btn-danger btn-sm btn_delete disabled_btn">
-                                                    <i class="fa fa-trash mr-2"></i> Hapus
-                                                </a>
-                                            </td>
+                                            @if (session('role_id') == 1)
+                                                <td>
+                                                    <a href="javascript:void(0)"
+                                                        class="btn btn-danger btn-sm btn_delete disabled_btn">
+                                                        <i class="fa fa-trash mr-2"></i> Hapus
+                                                    </a>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary float-right d-none btn_save"><i
-                                class="fa fa-save mr-2"></i>Simpan</button>
-                        <button class="btn btn-danger float-right d-none btn_cancel mr-2"><i
-                                class="fa fa-trash mr-2"></i>Batal</button>
-                        <button class="btn btn-warning float-right btn_edit"><i class="fa fa-edit mr-2"></i>Edit</button>
-                    </div>
+                    @if (session('role_id') == 1)
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary float-right d-none btn_save"><i
+                                    class="fa fa-save mr-2"></i>Simpan</button>
+                            <button class="btn btn-danger float-right d-none btn_cancel mr-2"><i
+                                    class="fa fa-trash mr-2"></i>Batal</button>
+                            <button class="btn btn-warning float-right btn_edit"><i
+                                    class="fa fa-edit mr-2"></i>Edit</button>
+                        </div>
+                    @endif
                 </div>
             </form>
         </div>
@@ -222,6 +244,7 @@
                 $('.btn_delete').removeClass('disabled_btn');
                 $('.btn_add').removeClass('disabled_btn');
                 $('.form-control.form-select').attr('disabled', false);
+                $('.input-file').attr('disabled', false);
             });
 
             $('.btn_cancel').on('click', function(e) {
@@ -233,6 +256,7 @@
                 $('.btn_delete').addClass('disabled_btn');
                 $('.btn_add').addClass('disabled_btn');
                 $('.form-control.form-select').attr('disabled', true);
+                $('.input-file').attr('disabled', true);
             });
 
             $("form").on("submit", function(e) {

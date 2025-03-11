@@ -6,6 +6,7 @@ use App\Models\Kategori;
 use App\Models\Kota;
 use App\Models\Pemasok;
 use App\Models\Produk;
+use App\Models\ProdukByFoto;
 use App\Models\ProdukBySatuan;
 use App\Models\Provinsi;
 use App\Models\Satuan;
@@ -16,10 +17,12 @@ use Maatwebsite\Excel\Facades\Excel;
 class ProdukController extends Controller
 {
     protected $title;
+    protected $prefix;
 
     public function __construct()
     {
         $this->title = 'Data Produk';
+        $this->prefix = request()->segment(1);
     }
 
     /**
@@ -30,7 +33,7 @@ class ProdukController extends Controller
         $title = $this->title;
         $data = Produk::with('pemasok')->orderBy('id', 'desc')->get();
 
-        return view('admin.produk.index', compact('title', 'data'));
+        return view("admin.produk.index", compact('title', 'data'));
     }
 
     /**
@@ -43,7 +46,7 @@ class ProdukController extends Controller
         $option_kategori = Kategori::all();
         $option_satuan = Satuan::all();
 
-        return view('admin.produk.create', compact('title', 'option_pemasok', 'option_kategori', 'option_satuan'));
+        return view("admin.produk.create", compact('title', 'option_pemasok', 'option_kategori', 'option_satuan'));
     }
 
     private function validation(Request $request)
@@ -77,6 +80,19 @@ class ProdukController extends Controller
                 'deskripsi' => $request->deskripsi,
             ]);
 
+            // Simpan file ke folder assets/produk dan database produk_by_fotos
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('assets/uploads/produk'), $filename); // Simpan file ke folder
+
+                    ProdukByFoto::create([
+                        'produk_id' => $produk->id,
+                        'file' => $filename,
+                    ]);
+                }
+            }
+
             // Simpan data ke tabel `produk_by_satuans`
             foreach ($request->satuan_id as $index => $satuan_id) {
                 ProdukBySatuan::create([
@@ -88,13 +104,13 @@ class ProdukController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil disimpan!');
+            return redirect()->route("$this->prefix.produk.index")->with('success', 'Produk berhasil disimpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.produk.index')->with('success', 'Data berhasil ditambahkan!');
+        return redirect()->route("$this->prefix.produk.index")->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -109,7 +125,7 @@ class ProdukController extends Controller
 
         $hargas = ProdukBySatuan::with('satuan', 'produk')->where('produk_id', $produk->id)->get();
 
-        return view('admin.produk.show', compact('title', 'produk', 'option_pemasok', 'option_kategori', 'option_satuan', 'hargas'));
+        return view("admin.produk.show", compact('title', 'produk', 'option_pemasok', 'option_kategori', 'option_satuan', 'hargas'));
     }
 
     /**
@@ -138,6 +154,20 @@ class ProdukController extends Controller
                 'deskripsi' => $request->deskripsi,
             ]);
 
+            // Simpan file ke folder assets/produk dan database produk_by_fotos
+            if ($request->hasFile('file')) {
+                $produk->produkByFoto()->delete();
+                foreach ($request->file('file') as $file) {
+                    $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('assets/uploads/produk'), $filename); // Simpan file ke folder
+
+                    ProdukByFoto::create([
+                        'produk_id' => $produk->id,
+                        'file' => $filename,
+                    ]);
+                }
+            }
+
             $produk->produkBySatuan()->delete();
             // Simpan data ke tabel `produk_by_satuans`
             foreach ($request->satuan_id as $index => $satuan_id) {
@@ -150,13 +180,13 @@ class ProdukController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil disimpan!');
+            return redirect()->route("$this->prefix.produk.index")->with('success', 'Produk berhasil disimpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.produk.index')->with('success', 'Data berhasil diperbaharui!');
+        return redirect()->route("$this->prefix.produk.index")->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -167,41 +197,6 @@ class ProdukController extends Controller
         $produk->produkBySatuan()->delete();
         $produk->delete();
 
-        return redirect()->route('admin.produk.index')->with('success', 'Data berhasil diihapus!');
-    }
-
-    public function import()
-    {
-        $title = $this->title;
-
-        return view('admin.produk.import', compact('title'));
-    }
-
-    public function import_data(Request $request)
-    {
-        $request->validate([
-            'excel_file' => 'required|mimes:xlsx,xls',
-        ]);
-
-        $importData = Excel::toArray(new Produk, $request->file('excel_file'));
-
-        // foreach ($importData[0] as $key => $row) {
-        //     if ($key == 0) {
-        //         continue;
-        //     }
-        //     $negara = Negara::where('kode', $row['0'])->first();
-
-        //     if ($negara) {
-        //         Produk::create([
-        //             'negara_id' => $negara->id,
-        //             'nama' => $row['1'],
-        //             'email' => $row['2'],
-        //             'telepon' => $row['3'],
-        //             'perusahaan' => $row['4'],
-        //         ]);
-        //     }
-        // }
-
-        return redirect()->route('admin.produk.index')->with('success', 'Data produk berhasil diimport!');
+        return redirect()->route("$this->prefix.produk.index")->with('success', 'Data berhasil diihapus!');
     }
 }

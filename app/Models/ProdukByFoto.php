@@ -17,7 +17,7 @@ class ProdukByFoto extends Model
     {
         parent::__construct($attributes);
 
-        $columns = Schema::getColumnListing('produk_by_foto');
+        $columns = Schema::getColumnListing('produk_by_fotos');
         $columns = array_filter($columns, function ($column) {
             return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });

@@ -6,14 +6,14 @@
             <div class="pull-left">
                 <h2 class="text-blue mb-4">{{ $title }}</h2>
             </div>
-            @if (session('role_id') == 1)
-                <div class="pull-right">
-                    <a href="{{ route(request()->segment(1) . '.pembeli.create') }}"
-                        class="btn btn-primary btn-sm float-right">
+            <div class="pull-right">
+                @if (session('role_id') == 2)
+                    <a href="{{ route(request()->segment(1) . '.pasar.create') }}"
+                        class="btn btn-primary btn-sm ml-2 float-right">
                         <i class="fa fa-plus mr-2"></i> Tambah Data
                     </a>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
         <div class="table-responsive">
             <table id="data_table" class="table table-striped mt-4">
@@ -21,9 +21,9 @@
                     <tr>
                         <th>No</th>
                         <th>Negara</th>
-                        <th>Nama</th>
-                        <th>Perusahaan</th>
-                        <th>Email</th>
+                        <th>Industri</th>
+                        <th>Pembeli</th>
+                        <th>Produk</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -31,18 +31,19 @@
                     @foreach ($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->negara->kode }}</td>
-                            <td>{{ $item->nama }}</td>
-                            <td>{{ $item->perusahaan }}</td>
-                            <td>{{ $item->email }}</td>
+                            <td>{{ $item->negara->nama }}</td>
+                            <td>{{ $item->industri->nama }}</td>
+                            <td>{{ $item->pembeli->nama }}</td>
+                            <td>{{ $item->produk->nama }}</td>
                             <td>
-                                <a href="{{ route(request()->segment(1) . '.pembeli.show', $item->id) }}"
+                                <a href="{{ route(request()->segment(1) . '.pasar.show', $item->id) }}"
                                     class="btn btn-info btn-sm">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
-                                @if (session('role_id') == 1)
-                                    <form action="{{ route('admin.pembeli.destroy', $item->id) }}" method="POST"
-                                        style="display:inline;" id="delete-form-{{ $item->id }}">
+
+                                @if (session('role_id') == 2)
+                                    <form action="{{ route(request()->segment(1) . '.pasar.destroy', $item->id) }}"
+                                        method="POST" style="display:inline;" id="delete-form-{{ $item->id }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm"

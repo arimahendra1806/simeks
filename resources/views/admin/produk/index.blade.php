@@ -6,14 +6,14 @@
             <div class="pull-left">
                 <h2 class="text-blue mb-4">{{ $title }}</h2>
             </div>
-            <div class="pull-right">
-                <a href="{{ route('admin.produk.create') }}" class="btn btn-primary btn-sm ml-2 float-right">
-                    <i class="fa fa-plus mr-2"></i> Tambah Data
-                </a>
-                {{-- <a href="{{ route('admin.produk.import') }}" class="btn btn-primary btn-sm float-right">
-                    <i class="fa fa-file mr-2"></i> Import Data
-                </a> --}}
-            </div>
+            @if (session('role_id') == 1)
+                <div class="pull-right">
+                    <a href="{{ route(request()->segment(1) . '.produk.create') }}"
+                        class="btn btn-primary btn-sm ml-2 float-right">
+                        <i class="fa fa-plus mr-2"></i> Tambah Data
+                    </a>
+                </div>
+            @endif
         </div>
         <div class="table-responsive">
             <table id="data_table" class="table table-striped mt-4">
@@ -34,18 +34,40 @@
                             <td>{{ $item->nama }}</td>
                             <td>{{ $item->deskripsi }}</td>
                             <td>
-                                <a href="{{ route('admin.produk.show', $item->id) }}" class="btn btn-info btn-sm">
+                                @if ($item->produkByFoto->isNotEmpty())
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm open-gallery"
+                                        data-id="{{ $item->id }}"><i class="fa fa-image mr-2"></i> Foto Produk</a>
+
+                                    <!-- Hidden div untuk menyimpan semua gambar produk -->
+                                    <div class="product-gallery-{{ $item->id }}" style="display: none;">
+                                        @foreach ($item->produkByFoto as $image)
+                                            <a href="{{ asset('assets/uploads/produk/' . $image->file) }}" class="glightbox"
+                                                data-gallery="gallery-{{ $item->id }}"
+                                                data-title="{{ $item->name }}">
+                                                <img src="{{ asset('assets/uploads/produk/' . $image->file) }}"
+                                                    width="50" style="display: none;">
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <button class="btn btn-primary btn-sm" disabled><i class="fa fa-image mr-2"></i> Foto
+                                        Produk</button>
+                                @endif
+                                <a href="{{ route(request()->segment(1) . '.produk.show', $item->id) }}"
+                                    class="btn btn-info btn-sm mt-1">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
-                                <form action="{{ route('admin.produk.destroy', $item->id) }}" method="POST"
-                                    style="display:inline;" id="delete-form-{{ $item->id }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirm_delete({{ $item->id }})">
-                                        <i class="fa fa-trash mr-2"></i> Hapus
-                                    </button>
-                                </form>
+                                @if (session('role_id') == 1)
+                                    <form action="{{ route('admin.produk.destroy', $item->id) }}" method="POST"
+                                        style="display:inline;" id="delete-form-{{ $item->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm mt-1"
+                                            onclick="confirm_delete({{ $item->id }})">
+                                            <i class="fa fa-trash mr-2"></i> Hapus
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -63,6 +85,20 @@
                     sUrl: "/assets/js/datatable_id.json"
                 }
             })
+
+            const lightbox = GLightbox({
+                selector: '.glightbox'
+            });
+
+            // Event untuk membuka gallery saat tombol diklik
+            document.querySelectorAll('.open-gallery').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = this.getAttribute('data-id');
+                    document.querySelectorAll(`.product-gallery-${productId} a`)[0]
+                        .click(); // Membuka gambar pertama dari galeri
+                });
+            });
         });
 
         function confirm_delete(id) {

@@ -7,12 +7,12 @@
                 <h2 class="text-blue mb-4">Tambah Data {{ $title }}</h2>
             </div>
             <div class="pull-right">
-                <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary mr-2 float-right"><i
+                <a href="{{ route(request()->segment(1) . '.produk.index') }}" class="btn btn-secondary mr-2 float-right"><i
                         class="fa fa-arrow-left mr-2"></i>Kembali</a>
             </div>
         </div>
         <div>
-            <form action="{{ route('admin.produk.store') }}" method="POST">
+            <form action="{{ route(request()->segment(1) . '.produk.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -56,6 +56,14 @@
                             @endforeach
                         </select>
                         @error('kategori_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="file" class="form-label">Foto Produk</label>
+                        <input type="file" class="form-control @error('file') is-invalid @enderror"
+                            placeholder="Masukkan file..." id="file" name="file[]" multiple accept="image/*">
+                        @error('file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

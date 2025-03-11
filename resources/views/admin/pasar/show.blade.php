@@ -7,31 +7,25 @@
                 <h2 class="text-blue mb-4">Detail Data {{ $title }}</h2>
             </div>
             <div class="pull-right">
-                <a href="{{ route(request()->segment(1) . '.pembeli.index') }}" class="btn btn-secondary mr-2 float-right"><i
+                <a href="{{ route(request()->segment(1) . '.pasar.index') }}" class="btn btn-secondary mr-2 float-right"><i
                         class="fa fa-arrow-left mr-2"></i>Kembali</a>
             </div>
         </div>
         <div>
-            <form action="{{ route(request()->segment(1) . '.pembeli.update', $pembeli->id) }}" method="POST">
+            <form action="{{ route(request()->segment(1) . '.pasar.update', $pasar->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="row">
-                    {{-- <div class="col-md-12 mb-3">
-                        <small class="text-danger">
-                            <ul>
-                                <li>*Username dan password akun pembeli tidak otomatis ganti ketika ubah email </li>
-                            </ul>
-                        </small>
-                    </div> --}}
-                    <div class="col-md-6 mb-3">
-                        <label for="negara_id" class="form-label">Negara</label>
+                    <div class="col-md-12 mb-3">
+                        <label for="negara_id" class="form-label">Negara <span
+                                class="text-danger"><small>*</small></span></label>
                         <select name="negara_id" id="negara_id"
                             class="form-control form-select js-select2 @error('negara_id') is-invalid @enderror"
                             data-placeholder="- Pilih Negara -" disabled>
                             <option value=""></option>
                             @foreach ($option_negara as $item)
                                 <option value="{{ $item->id }}"
-                                    {{ old('negara_id', $pembeli->negara_id) == $item->id ? 'selected' : '' }}>
+                                    {{ old('negara_id', $pasar->negara_id) == $item->id ? 'selected' : '' }}>
                                     {{ $item->nama . ' (' . $item->kode . ')' }}
                                 </option>
                             @endforeach
@@ -40,15 +34,16 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="industri_id" class="form-label">Industri</label>
+                    <div class="col-md-12 mb-3">
+                        <label for="industri_id" class="form-label">Industri <span
+                                class="text-danger"><small>*</small></span></label>
                         <select name="industri_id" id="industri_id"
                             class="form-control form-select js-select2 @error('industri_id') is-invalid @enderror"
-                            data-placeholder="- Pilih Negara -" disabled>
+                            data-placeholder="- Pilih Industri -" disabled>
                             <option value=""></option>
                             @foreach ($option_industri as $item)
                                 <option value="{{ $item->id }}"
-                                    {{ old('industri_id', $pembeli->industri_id) == $item->id ? 'selected' : '' }}>
+                                    {{ old('industri_id', $pasar->industri_id) == $item->id ? 'selected' : '' }}>
                                     {{ $item->nama }}
                                 </option>
                             @endforeach
@@ -57,55 +52,59 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="nama" class="form-label">Nama <span
+                    <div class="col-md-12 mb-3">
+                        <label for="pembeli_id" class="form-label">Pembeli <span
                                 class="text-danger"><small>*</small></span></label>
-                        <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                            placeholder="Masukkan nama..." id="nama" name="nama"
-                            value="{{ old('nama', $pembeli->nama) }}" readonly>
-                        @error('nama')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="perusahaan" class="form-label">Perusahaan <span
-                                class="text-danger"><small>*</small></span></label>
-                        <input type="text" class="form-control @error('perusahaan') is-invalid @enderror"
-                            placeholder="Masukkan perusahaan..." id="perusahaan" name="perusahaan"
-                            value="{{ old('perusahaan', $pembeli->perusahaan) }}" readonly>
-                        @error('perusahaan')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label">Email <span
-                                class="text-danger"><small>*</small></span></label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror"
-                            placeholder="Masukkan email..." id="email" name="email"
-                            value="{{ old('email', $pembeli->email) }}" readonly>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="telepon" class="form-label">Nomor WA <span
-                                class="text-danger"><small>*</small></span></label>
-                        <input type="text" class="form-control @error('telepon') is-invalid @enderror"
-                            placeholder="Masukkan telepon..." id="telepon" name="telepon"
-                            value="{{ old('telepon', $pembeli->telepon) }}" readonly>
-                        @error('telepon')
+                        <select name="pembeli_id" id="pembeli_id"
+                            class="form-control form-select js-select2 @error('pembeli_id') is-invalid @enderror"
+                            data-placeholder="- Pilih Pembeli -" disabled>
+                            <option value=""></option>
+                            @foreach ($option_pembeli as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('pembeli_id', $pasar->pembeli_id) == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('pembeli_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="alamat" class="form-label">Alamat</label>
-                        <textarea class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan alamat..." id="alamat"
-                            name="alamat" readonly>{{ old('alamat', $pembeli->alamat) }}</textarea>
-                        @error('alamat')
+                        <label for="produk_id" class="form-label">Produk <span
+                                class="text-danger"><small>*</small></span></label>
+                        <select name="produk_id" id="produk_id"
+                            class="form-control form-select js-select2 @error('produk_id') is-invalid @enderror"
+                            data-placeholder="- Pilih Produk -" disabled>
+                            <option value=""></option>
+                            @foreach ($option_produk as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('produk_id', $pasar->produk_id) == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('produk_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    @if (session('role_id') == 1)
+                    <div class="col-md-12 mb-3">
+                        <label for="regulasi" class="form-label">Regulasi</label>
+                        <textarea class="form-control @error('regulasi') is-invalid @enderror" placeholder="Masukkan regulasi..." id="regulasi"
+                            name="regulasi" readonly>{{ old('regulasi', $pasar->regulasi) }}</textarea>
+                        @error('regulasi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="kompetitor" class="form-label">Kompetitor</label>
+                        <textarea class="form-control @error('kompetitor') is-invalid @enderror" placeholder="Masukkan kompetitor..."
+                            id="kompetitor" name="kompetitor" readonly>{{ old('kompetitor', $pasar->kompetitor) }}</textarea>
+                        @error('kompetitor')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    @if (session('role_id') == 2)
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-primary float-right d-none btn_save"><i
                                     class="fa fa-save mr-2"></i>Simpan</button>

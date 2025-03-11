@@ -6,23 +6,19 @@
             <div class="pull-left">
                 <h2 class="text-blue mb-4">{{ $title }}</h2>
             </div>
-            @if (session('role_id') == 1)
-                <div class="pull-right">
-                    <a href="{{ route(request()->segment(1) . '.pembeli.create') }}"
-                        class="btn btn-primary btn-sm float-right">
-                        <i class="fa fa-plus mr-2"></i> Tambah Data
-                    </a>
-                </div>
-            @endif
+            <div class="pull-right">
+                <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-sm float-right">
+                    <i class="fa fa-plus mr-2"></i> Tambah Data
+                </a>
+            </div>
         </div>
         <div class="table-responsive">
             <table id="data_table" class="table table-striped mt-4">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Negara</th>
+                        <th>Posisi</th>
                         <th>Nama</th>
-                        <th>Perusahaan</th>
                         <th>Email</th>
                         <th>Aksi</th>
                     </tr>
@@ -31,26 +27,22 @@
                     @foreach ($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->negara->kode }}</td>
-                            <td>{{ $item->nama }}</td>
-                            <td>{{ $item->perusahaan }}</td>
+                            <td>{{ $item->role->nama }}</td>
+                            <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
                             <td>
-                                <a href="{{ route(request()->segment(1) . '.pembeli.show', $item->id) }}"
-                                    class="btn btn-info btn-sm">
+                                <a href="{{ route('admin.user.show', $item->id) }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
-                                @if (session('role_id') == 1)
-                                    <form action="{{ route('admin.pembeli.destroy', $item->id) }}" method="POST"
-                                        style="display:inline;" id="delete-form-{{ $item->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm"
-                                            onclick="confirm_delete({{ $item->id }})">
-                                            <i class="fa fa-trash mr-2"></i> Hapus
-                                        </button>
-                                    </form>
-                                @endif
+                                <form action="{{ route('admin.user.destroy', $item->id) }}" method="POST"
+                                    style="display:inline;" id="delete-form-{{ $item->id }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirm_delete({{ $item->id }})">
+                                        <i class="fa fa-trash mr-2"></i> Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
