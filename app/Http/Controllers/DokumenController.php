@@ -56,9 +56,10 @@ class DokumenController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Dokumen $dokumen)
+    public function show(Dokumen $dokuman)
     {
         $title = $this->title;
+        $dokumen = $dokuman;
         return view('admin.dokumen.show', compact('title', 'dokumen'));
     }
 
@@ -73,11 +74,11 @@ class DokumenController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Dokumen $dokumen)
+    public function update(Request $request, Dokumen $dokuman)
     {
         $this->validation($request);
 
-        $dokumen->update($request->all());
+        $dokuman->update($request->all());
 
         return redirect()->route('admin.dokumen.index')->with('success', 'Data berhasil diperbaharui!');
     }
@@ -85,9 +86,9 @@ class DokumenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Dokumen $dokumen)
+    public function destroy(Dokumen $dokuman)
     {
-        $dokumen->delete();
+        $dokuman->delete();
 
         return redirect()->route('admin.dokumen.index')->with('success', 'Data berhasil diihapus!');
     }
