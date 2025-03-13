@@ -28,10 +28,10 @@
                             <span class="micon bi bi-textarea-resize"></span><span class="mtext">Master Data</span>
                         </a>
                         <ul class="submenu">
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('admin.pilihan.index') }}"
                                     class="{{ Request::is('admin/pilihan*') ? 'active' : '' }}">Pilihan</a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="{{ route('admin.negara.index') }}"
                                     class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a>
@@ -60,38 +60,38 @@
                                 <a href="{{ route('admin.user.index') }}"
                                     class="{{ Request::is('admin/user*') ? 'active' : '' }}">User</a>
                             </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Supplier</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Produk</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Buyer</a>
+                            </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="javascript:void(0)"
+                    {{-- <li>
+                        <a href="{{ route('admin.pemasok.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('admin/pemasok') ? 'active' : '' }}">
                             <span class="micon bi bi-shop-window"></span><span class="mtext">Data Supplier</span>
                         </a>
-                        {{-- <a href="{{ route('admin.pemasok.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/pemasok') ? 'active' : '' }}">
-                            <span class="micon bi bi-shop-window"></span><span class="mtext">Data Supplier</span>
-                        </a> --}}
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"
+                    </li> --}}
+                    {{-- <li>
+                        <a href="{{ route('admin.produk.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('admin/produk') ? 'active' : '' }}">
                             <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
                         </a>
-                        {{-- <a href="{{ route('admin.produk.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/produk') ? 'active' : '' }}">
-                            <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
-                        </a> --}}
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"
+                    </li> --}}
+                    {{-- <li>
+                        <a href="{{ route('admin.pembeli.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('admin/pembeli') ? 'active' : '' }}">
                             <span class="micon bi bi-people"></span><span class="mtext">Data Buyer</span>
                         </a>
-                        {{-- <a href="{{ route('admin.pembeli.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/pembeli') ? 'active' : '' }}">
-                            <span class="micon bi bi-people"></span><span class="mtext">Data Buyer</span>
-                        </a> --}}
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-building"></span><span class="mtext">Rekap Market
