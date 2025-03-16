@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -10,6 +12,9 @@ class LandingController extends Controller
     {
         $title = 'SIPA';
 
-        return view('template.landing', compact('title'));
+        $categories = Kategori::all();
+        $products = Produk::with('kategori', 'produkByFoto', 'produkBySatuan')->get();
+
+        return view('landing.index', compact('title', 'categories', 'products'));
     }
 }

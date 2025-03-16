@@ -6,6 +6,7 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\IndustriController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KotaController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NegaraController;
 use App\Http\Controllers\PasarController;
@@ -37,39 +38,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', [LandingController::class, 'index']);
-Route::get('/', function () {
+Route::get('/', [LandingController::class, 'index']);
+
+Route::get('/admin', function () {
     if (Auth::check()) {
-        $user = Auth::user();
-        switch ($user->role_id) {
-            case 1:
-                return redirect()->route('admin.dashboard.index');
-            case 2:
-                return redirect()->route('marketing.dashboard.index');
-            case 3:
-                return redirect()->route('direktur.dashboard.index');
-                // case 4:
-                //     return redirect()->route('buyer.dashboard.index');
-        }
+        return redirect()->route('admin.dashboard.index');
     }
+
     return redirect()->route('admin_login');
 });
 
-Route::get('/home', function () {
+Route::get('/marketing', function () {
     if (Auth::check()) {
-        $user = Auth::user();
-        switch ($user->role_id) {
-            case 1:
-                return redirect()->route('admin.dashboard.index');
-            case 2:
-                return redirect()->route('marketing.dashboard.index');
-            case 3:
-                return redirect()->route('direktur.dashboard.index');
-                // case 4:
-                //     return redirect()->route('buyer.dashboard.index');
-        }
+        return redirect()->route('marketing.dashboard.index');
     }
-    return redirect()->route('admin_login');
+
+    return redirect()->route('marketing_login');
+});
+
+Route::get('/direktur', function () {
+    if (Auth::check()) {
+        return redirect()->route('direktur.dashboard.index');
+    }
+
+    return redirect()->route('direktur_login');
 });
 
 Route::middleware('guest')->group(function () {
@@ -83,7 +75,7 @@ Route::middleware('guest')->group(function () {
     // Route::post('buyer/do_log', [LoginController::class, 'do_log_buyer'])->name('do_log_buyer');
 });
 
-Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'dashboard_admin'])->name('index');
@@ -112,7 +104,7 @@ Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
     Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
 });
 
-Route::middleware('marketing')->name('marketing.')->prefix('marketing')->group(function () {
+Route::middleware(['auth', 'marketing'])->name('marketing.')->prefix('marketing')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'dashboard_marketing'])->name('index');
@@ -124,7 +116,7 @@ Route::middleware('marketing')->name('marketing.')->prefix('marketing')->group(f
     Route::resource('/penjualan', PenjualanController::class);
 });
 
-Route::middleware('direktur')->name('direktur.')->prefix('direktur')->group(function () {
+Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'dashboard_direktur'])->name('index');

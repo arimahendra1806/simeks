@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             // ProvinsiImportSqlSeeder::class,
             // KotaImportSqlSeeder::class,
-            NegaraImportSqlSeeder::class
+            NegaraImportSqlSeeder::class,
+            ProductSeeder::class
         ]);
     }
 }
