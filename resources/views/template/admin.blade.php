@@ -15,12 +15,9 @@
     <title>{{ config('app.name', 'ALMEA KAUSA ETERNA') }}</title>
 
     <!-- Site favicon -->
-    <link rel="apple-touch-icon" sizes="180x180"
-        href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16"
-        href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= asset('assets') ?>/image/logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= asset('assets') ?>/image/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= asset('assets') ?>/image/logo.png" />
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -83,10 +80,9 @@
         <div class="pre-loader-box">
             <div class="d-flex">
                 <div class="loader-logo mr-2">
-                    <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png"
-                        alt="" />
+                    <img src="<?= asset('assets') ?>/image/logo.png" alt="" />
                 </div>
-                <h1>CV ALMEA KAUSA ETERNA</h1>
+                <h1>ALMEA KAUSA ETERNA</h1>
             </div>
             <div class="loader-progress" id="progress_div">
                 <div class="bar" id="bar1"></div>

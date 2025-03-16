@@ -2,12 +2,10 @@
     <div class="brand-logo">
         <div class="d-flex">
             <a href="javascript:void(0);" class="mt-3">
-                <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png" alt=""
-                    class="dark-logo" />
-                <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png" alt=""
-                    class="light-logo" />
+                <img src="<?= asset('assets') ?>/image/logo.png" alt="" class="dark-logo" />
+                <img src="<?= asset('assets') ?>/image/logo.png" alt="" class="light-logo" />
             </a>
-            <h4 class="mt-1">CV ALMEA KAUSA ETERNA</h4>
+            <h4 class="mt-1">ALMEA KAUSA ETERNA</h4>
         </div>
         <div class="close-sidebar" data-toggle="left-sidebar-close">
             <i class="ion-close-round"></i>

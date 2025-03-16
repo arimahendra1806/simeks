@@ -17,10 +17,8 @@
     <!-- Site favicon -->
     <link rel="apple-touch-icon" sizes="180x180"
         href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16"
-        href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= asset('assets') ?>/image/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= asset('assets') ?>/image/logo.png" />
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -75,8 +73,7 @@
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div class="brand-logo">
                 <a href="javascript:void(0)" class="text-dark">
-                    <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/favicon-32x32.png"
-                        class="mr-4" />
+                    <img src="<?= asset('assets') ?>/image/logo.png" class="mr-4" />
                     SISTEM INFORMASI MANAJEMEN EKSPOR
                 </a>
             </div>
