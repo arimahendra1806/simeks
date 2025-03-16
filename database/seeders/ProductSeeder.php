@@ -147,13 +147,13 @@ class ProductSeeder extends Seeder
             // Jahe Kering
             [
                 'produk_id' => 1,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '50000',
             ],
             [
                 'produk_id' => 1,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '10000',
             ],
@@ -161,13 +161,13 @@ class ProductSeeder extends Seeder
             // Jahe Segar
             [
                 'produk_id' => 2,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '60000',
             ],
             [
                 'produk_id' => 2,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '8000',
             ],
@@ -175,13 +175,13 @@ class ProductSeeder extends Seeder
             // Kunyit Kering
             [
                 'produk_id' => 3,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '70000',
             ],
             [
                 'produk_id' => 3,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '15000',
             ],
@@ -189,13 +189,13 @@ class ProductSeeder extends Seeder
             // Jari Kunyit
             [
                 'produk_id' => 4,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '75000',
             ],
             [
                 'produk_id' => 4,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '12000',
             ],
@@ -203,13 +203,13 @@ class ProductSeeder extends Seeder
             // Lada Hitam
             [
                 'produk_id' => 5,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '200000',
             ],
             [
                 'produk_id' => 5,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '25000',
             ],
@@ -217,13 +217,13 @@ class ProductSeeder extends Seeder
             // Lada Putih
             [
                 'produk_id' => 6,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '220000',
             ],
             [
                 'produk_id' => 6,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '28000',
             ],
@@ -231,13 +231,13 @@ class ProductSeeder extends Seeder
             // Pinang
             [
                 'produk_id' => 7,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '100000',
             ],
             [
                 'produk_id' => 7,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '15000',
             ],
@@ -245,13 +245,13 @@ class ProductSeeder extends Seeder
             // Kapulaga
             [
                 'produk_id' => 8,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '300000',
             ],
             [
                 'produk_id' => 8,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '35000',
             ],
@@ -259,13 +259,13 @@ class ProductSeeder extends Seeder
             // Lengkuas
             [
                 'produk_id' => 9,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '60000',
             ],
             [
                 'produk_id' => 9,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '10000',
             ],
@@ -273,13 +273,13 @@ class ProductSeeder extends Seeder
             // Kayu Manis
             [
                 'produk_id' => 10,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '120000',
             ],
             [
                 'produk_id' => 10,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '15000',
             ],
@@ -287,13 +287,13 @@ class ProductSeeder extends Seeder
             // Pala
             [
                 'produk_id' => 11,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '180000',
             ],
             [
                 'produk_id' => 11,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '22000',
             ],
@@ -301,13 +301,13 @@ class ProductSeeder extends Seeder
             // Cengkeh
             [
                 'produk_id' => 12,
-                'satuan_id' => 1, // Satuan Kilogram
+                'satuan_id' => 2, // Satuan Kilogram
                 'kuantitas' => '1',
                 'harga' => '250000',
             ],
             [
                 'produk_id' => 12,
-                'satuan_id' => 2, // Satuan Gram
+                'satuan_id' => 1, // Satuan Gram
                 'kuantitas' => '100',
                 'harga' => '30000',
             ],
