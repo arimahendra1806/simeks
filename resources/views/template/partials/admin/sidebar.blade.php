@@ -59,12 +59,12 @@
                                     class="{{ Request::is('admin/user*') ? 'active' : '' }}">User</a>
                             </li>
                             <li>
-                                <a href="javascript:void(0);"
-                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Supplier</a>
+                                <a href="{{ route('admin.produk.index') }}"
+                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Produk</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);"
-                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Produk</a>
+                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Supplier</a>
                             </li>
                             <li>
                                 <a href="javascript:void(0);"

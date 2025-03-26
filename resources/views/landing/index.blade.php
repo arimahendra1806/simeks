@@ -859,8 +859,8 @@
                                     <img src="{{ asset('assets/uploads/produk/') }}/{{ $item->produkByFoto->first()->file }}"
                                         class="img-fluid produk-img" alt="">
                                     <div class="portfolio-info">
-                                        <h4>{{ $item->nama }}</h4>
-                                        <p>{{ $item->kategori->nama }}</p>
+                                        <h4>{{ $item->kategori->nama }}</h4>
+                                        <p>{{ $item->nama }}</p>
                                         <!-- Menambahkan gambar-gambar tambahan untuk lightbox -->
                                         @foreach ($item->produkByFoto as $image)
                                             <div class="text-center ms-3">
