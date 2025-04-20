@@ -105,7 +105,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    @if (session('role_id') == 1)
+                    @if (session('role_id') != 3)
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-primary float-right d-none btn_save"><i
                                     class="fa fa-save mr-2"></i>Simpan</button>

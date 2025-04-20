@@ -7,12 +7,12 @@
                 <h2 class="text-blue mb-4">Detail Data {{ $title }}</h2>
             </div>
             <div class="pull-right">
-                <a href="{{ route('admin.pemasok.index') }}" class="btn btn-secondary mr-2 float-right"><i
+                <a href="{{ route(request()->segment(1) . '.pemasok.index') }}" class="btn btn-secondary mr-2 float-right"><i
                         class="fa fa-arrow-left mr-2"></i>Kembali</a>
             </div>
         </div>
         <div>
-            <form action="{{ route('admin.pemasok.update', $pemasok->id) }}" method="POST">
+            <form action="{{ route(request()->segment(1) . '.pemasok.update', $pemasok->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -81,13 +81,16 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary float-right d-none btn_save"><i
-                                class="fa fa-save mr-2"></i>Simpan</button>
-                        <button class="btn btn-danger float-right d-none btn_cancel mr-2"><i
-                                class="fa fa-trash mr-2"></i>Batal</button>
-                        <button class="btn btn-warning float-right btn_edit"><i class="fa fa-edit mr-2"></i>Edit</button>
-                    </div>
+                    @if (session('role_id') == 1)
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary float-right d-none btn_save"><i
+                                    class="fa fa-save mr-2"></i>Simpan</button>
+                            <button class="btn btn-danger float-right d-none btn_cancel mr-2"><i
+                                    class="fa fa-trash mr-2"></i>Batal</button>
+                            <button class="btn btn-warning float-right btn_edit"><i
+                                    class="fa fa-edit mr-2"></i>Edit</button>
+                        </div>
+                    @endif
                 </div>
             </form>
         </div>

@@ -29,11 +29,6 @@ class Penjualan extends Model
         return $this->belongsTo(Pembeli::class);
     }
 
-    public function pemasok()
-    {
-        return $this->belongsTo(Pemasok::class);
-    }
-
     public function penjualanByBayar()
     {
         return $this->hasMany(PenjualanByBayar::class);
@@ -62,5 +57,55 @@ class Penjualan extends Model
     public function penjualanByRiwayat()
     {
         return $this->hasMany(PenjualanByRiwayat::class);
+    }
+
+    public function statusPenjualan()
+    {
+        return $this->belongsTo(Pilihan::class, 'status', 'parameter')->where('nama', 'status');
+    }
+
+    public function setTotalPembelianAttribute($value)
+    {
+        $this->attributes['total_pembelian'] = str_replace('.', '', $value);
+    }
+
+    public function setPpnAttribute($value)
+    {
+        $this->attributes['ppn'] = str_replace('.', '', $value);
+    }
+
+    public function setPphAttribute($value)
+    {
+        $this->attributes['pph'] = str_replace('.', '', $value);
+    }
+
+    public function setDiskonNominalAttribute($value)
+    {
+        $this->attributes['diskon_nominal'] = str_replace('.', '', $value);
+    }
+
+    public function setDiskonPersenAttribute($value)
+    {
+        $this->attributes['diskon_persen'] = str_replace('.', '', $value);
+    }
+
+    public function setBiayaPengirimaanAttribute($value)
+    {
+        $this->attributes['biaya_pengiriman'] = str_replace('.', '', $value);
+    }
+
+    public function setTotalPembayaranAttribute($value)
+    {
+        $this->attributes['total_pembayaran'] = str_replace('.', '', $value);
+    }
+
+    public function setTotalTerbayarAttribute($value)
+    {
+        $this->attributes['total_terbayar'] = str_replace('.', '', $value);
+    }
+
+    public function setSisaPembayaranAttribute($value)
+    {
+        $this->attributes['sisa_pembayaran'] = str_replace('.', '', $value);
     }
 }

@@ -7,12 +7,16 @@
                 <h2 class="text-blue mb-4">{{ $title }}</h2>
             </div>
             <div class="pull-right">
-                <a href="{{ route('admin.pemasok.create') }}" class="btn btn-primary btn-sm ml-2 float-right">
-                    <i class="fa fa-plus mr-2"></i> Tambah Data
-                </a>
-                <a href="{{ route('admin.pemasok.import') }}" class="btn btn-primary btn-sm float-right">
-                    <i class="fa fa-file mr-2"></i> Import Data
-                </a>
+                @if (session('role_id') == 1)
+                    <a href="{{ route(request()->segment(1) . '.pemasok.create') }}"
+                        class="btn btn-primary btn-sm ml-2 float-right">
+                        <i class="fa fa-plus mr-2"></i> Tambah Data
+                    </a>
+                    <a href="{{ route(request()->segment(1) . '.pemasok.import') }}"
+                        class="btn btn-primary btn-sm float-right">
+                        <i class="fa fa-file mr-2"></i> Import Data
+                    </a>
+                @endif
             </div>
         </div>
         <div class="table-responsive">
@@ -36,19 +40,21 @@
                             <td>{{ $item->perusahaan }}</td>
                             <td>{{ $item->email }}</td>
                             <td>
-                                <a href="{{ route('admin.pemasok.show', $item->id) }}" class="btn btn-info btn-sm">
+                                <a href="{{ route(request()->segment(1) . '.pemasok.show', $item->id) }}"
+                                    class="btn btn-info btn-sm">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
-                                <form action="{{ route('admin.pemasok.destroy', $item->id) }}" method="POST"
-                                    style="display:inline;" id="delete-form-{{ $item->id }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirm_delete({{ $item->id }})">
-                                        <i class="fa fa-trash mr-2"></i> Hapus
-                                    </button>
-                                </form>
-                            </td>
+                                @if (session('role_id') == 1)
+                                    <form action="{{ route(request()->segment(1) . '.pemasok.destroy', $item->id) }}"
+                                        method="POST" style="display:inline;" id="delete-form-{{ $item->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="confirm_delete({{ $item->id }})">
+                                            <i class="fa fa-trash mr-2"></i> Hapus
+                                        </button>
+                                    </form>
+                                @endif
                         </tr>
                     @endforeach
                 </tbody>

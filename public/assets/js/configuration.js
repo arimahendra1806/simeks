@@ -20,11 +20,14 @@ $(document).ready(function () {
         $(this).val(format_currency(input_val));
     });
 
-    $(".js-datepicker").datepicker({
-        format: "dd/mm/yyyy",
-        autoclose: true,
-        orientation: "auto",
-        todayHighlight: true
+    $('.preview_file').on('click', function () {
+        var pdfUrl = $(this).data('pdf');
+        $('#pdfViewer').attr('src', pdfUrl);
+        $('#modal_preview').modal('show');
+    });
+
+    $('.close_modal_preview').on('click', function () {
+        $('#modal_preview').modal('hide');
     });
 })
 
@@ -81,10 +84,16 @@ function removeErrors() {
 }
 
 function format_currency(value) {
+    value = value.toString();
     value = value.replace(/[^0-9]/g, '');
     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
     return value;
+}
+
+function remove_currency(numberString) {
+    numberString = numberString.toString();
+    return numberString.replace(/\./g, '');
 }
 
 function url_path(part) {
@@ -97,5 +106,3 @@ function url_path(part) {
         return '/';
     }
 }
-
-

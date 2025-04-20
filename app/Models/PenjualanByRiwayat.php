@@ -17,7 +17,7 @@ class PenjualanByRiwayat extends Model
     {
         parent::__construct($attributes);
 
-        $columns = Schema::getColumnListing('penjualans_by_riwayats');
+        $columns = Schema::getColumnListing('penjualan_by_riwayats');
         $columns = array_filter($columns, function ($column) {
             return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
@@ -26,6 +26,30 @@ class PenjualanByRiwayat extends Model
 
     public function penjualan()
     {
-        return $this->belongsTo(Penjualan::class);
+        return $this->belongsTo(Penjualan::class, 'references_id', 'id');
+    }
+
+    public function pengiriman()
+    {
+        return $this->belongsTo(PenjualanByPengiriman::class, 'references_id', 'id');
+    }
+
+    public function bayar()
+    {
+        return $this->belongsTo(PenjualanByBayar::class, 'references_id', 'id');
+    }
+
+    public function status_penjualan()
+    {
+        return Pilihan::where('nama', 'status')
+            ->where('parameter', $this->status)
+            ->first();
+    }
+
+    public function status_pengiriman()
+    {
+        return Pilihan::where('nama', 'status_pengiriman')
+            ->where('parameter', $this->status)
+            ->first();
     }
 }

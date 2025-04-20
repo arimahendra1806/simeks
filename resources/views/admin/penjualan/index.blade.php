@@ -6,9 +6,9 @@
             <div class="pull-left">
                 <h2 class="text-blue mb-4">{{ $title }}</h2>
             </div>
-            @if (session('role_id') == 1)
+            @if (session('role_id') != 1)
                 <div class="pull-right">
-                    <a href="{{ route(request()->segment(1) . '.produk.create') }}"
+                    <a href="{{ route(request()->segment(1) . '.penjualan.create') }}"
                         class="btn btn-primary btn-sm ml-2 float-right">
                         <i class="fa fa-plus mr-2"></i> Tambah Data
                     </a>
@@ -20,9 +20,12 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Pemasok</th>
-                        <th>Nama</th>
-                        <th>Deskripsi</th>
+                        <th>Kode Transaksi</th>
+                        <th>Nama Pembeli</th>
+                        <th>Tanggal</th>
+                        <th>Total Pembelian</th>
+                        <th>Total Produk</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -30,35 +33,33 @@
                     @foreach ($data as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->pemasok->nama . ' (' . $item->pemasok->perusahaan . ')' }}</td>
-                            <td>{{ $item->nama }}</td>
-                            <td>{{ $item->deskripsi }}</td>
+                            <td>{{ $item->kode_transaksi }}</td>
+                            <td>{{ $item->pembeli->nama . ' (' . $item->pembeli->perusahaan . ')' }}</td>
                             <td>
-                                @if ($item->produkByFoto->isNotEmpty())
-                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm open-gallery"
-                                        data-id="{{ $item->id }}"><i class="fa fa-image mr-2"></i> Foto Produk</a>
-
-                                    <!-- Hidden div untuk menyimpan semua gambar produk -->
-                                    <div class="product-gallery-{{ $item->id }}" style="display: none;">
-                                        @foreach ($item->produkByFoto as $image)
-                                            <a href="{{ asset('assets/uploads/produk/' . $image->file) }}" class="glightbox"
-                                                data-gallery="gallery-{{ $item->id }}"
-                                                data-title="{{ $item->name }}">
-                                                <img src="{{ asset('assets/uploads/produk/' . $image->file) }}"
-                                                    width="50" style="display: none;">
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <button class="btn btn-primary btn-sm" disabled><i class="fa fa-image mr-2"></i> Foto
-                                        Produk</button>
+                                Negosiasi : {{ date_to_indo($item->tanggal_negosiasi) }} <br>
+                                Pembelian : {{ date_to_indo($item->tanggal_pembelian) }}
+                            </td>
+                            <td>{{ format_currency($item->total_pembelian) }}</td>
+                            <td>{{ $item->penjualanByProduk->count() }}</td>
+                            <td>{{ $item->statusPenjualan->isi }}</td>
+                            <td>
+                                @if (session('role_id') == 3 && $item->status == 1)
+                                    <form action="{{ route(request()->segment(1) . '.penjualan.konfirmasi', $item->id) }}"
+                                        method="POST" style="display:inline;" id="konfirmasi-form-{{ $item->id }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="button" class="btn btn-success btn-sm mt-1"
+                                            onclick="confirm_konfirmasi({{ $item->id }})">
+                                            <i class="fa fa-check mr-2"></i> Konfirmasi
+                                        </button>
+                                    </form>
                                 @endif
-                                <a href="{{ route(request()->segment(1) . '.produk.show', $item->id) }}"
+                                <a href="{{ route(request()->segment(1) . '.penjualan.show', $item->id) }}"
                                     class="btn btn-info btn-sm mt-1">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
-                                @if (session('role_id') == 1)
-                                    <form action="{{ route(request()->segment(1) . '.produk.destroy', $item->id) }}"
+                                @if (session('role_id') != 1)
+                                    <form action="{{ route(request()->segment(1) . '.penjualan.destroy', $item->id) }}"
                                         method="POST" style="display:inline;" id="delete-form-{{ $item->id }}">
                                         @csrf
                                         @method('DELETE')
@@ -85,20 +86,6 @@
                     sUrl: "/assets/js/datatable_id.json"
                 }
             })
-
-            const lightbox = GLightbox({
-                selector: '.glightbox'
-            });
-
-            // Event untuk membuka gallery saat tombol diklik
-            document.querySelectorAll('.open-gallery').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const productId = this.getAttribute('data-id');
-                    document.querySelectorAll(`.product-gallery-${productId} a`)[0]
-                        .click(); // Membuka gambar pertama dari galeri
-                });
-            });
         });
 
         function confirm_delete(id) {
@@ -113,6 +100,22 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('#delete-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirm_konfirmasi(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dikonfirmasi dan lanjut ke dokumen ekspor!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Lanjut!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#konfirmasi-form-' + id).submit();
                 }
             });
         }

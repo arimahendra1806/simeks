@@ -60,51 +60,28 @@
                             </li>
                             <li>
                                 <a href="{{ route('admin.produk.index') }}"
-                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Produk</a>
+                                    class="{{ Request::is('admin/produk*') ? 'active' : '' }}">Data Produk</a>
                             </li>
                             <li>
-                                <a href="javascript:void(0);"
-                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Supplier</a>
+                                <a href="{{ route('admin.pemasok.index') }}"
+                                    class="{{ Request::is('admin/pemasok*') ? 'active' : '' }}">Data Supplier</a>
                             </li>
                             <li>
-                                <a href="javascript:void(0);"
-                                    class="{{ Request::is('admin/user*') ? 'active' : '' }}">Data Buyer</a>
+                                <a href="{{ route('admin.pembeli.index') }}"
+                                    class="{{ Request::is('admin/pembeli*') ? 'active' : '' }}">Data Buyer</a>
                             </li>
                         </ul>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('admin.pemasok.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/pemasok') ? 'active' : '' }}">
-                            <span class="micon bi bi-shop-window"></span><span class="mtext">Data Supplier</span>
-                        </a>
-                    </li> --}}
-                    {{-- <li>
-                        <a href="{{ route('admin.produk.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/produk') ? 'active' : '' }}">
-                            <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
-                        </a>
-                    </li> --}}
-                    {{-- <li>
-                        <a href="{{ route('admin.pembeli.index') }}"
-                            class="dropdown-toggle no-arrow {{ Request::is('admin/pembeli') ? 'active' : '' }}">
-                            <span class="micon bi bi-people"></span><span class="mtext">Data Buyer</span>
-                        </a>
-                    </li> --}}
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('admin.pasar.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('admin/pasar*') ? 'active' : '' }}">
                             <span class="micon bi bi-building"></span><span class="mtext">Rekap Market
                                 Research</span>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-journal-bookmark"></span><span class="mtext">Rekap
-                                Pembayaran</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-wallet2"></span><span class="mtext">Transaksi
+                            <span class="micon bi bi-truck"></span><span class="mtext">Transaksi
                                 Pengiriman</span>
                         </a>
                     </li>
@@ -116,28 +93,28 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
-                        </a>
-                        {{-- <a href="{{ route('marketing.produk.index') }}"
+                        <a href="{{ route('marketing.produk.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('marketing/produk*') ? 'active' : '' }}">
                             <span class="micon bi bi-bag"></span><span class="mtext">Data Produk</span>
-                        </a> --}}
+                        </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('marketing.pembeli.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('marketing/pembeli*') ? 'active' : '' }}">
                             <span class="micon bi bi-people"></span><span class="mtext">Data Buyer</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('marketing.pasar.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('marketing/pasar*') ? 'active' : '' }}">
                             <span class="micon bi bi-building"></span><span class="mtext">Data Market
                                 Research</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-wallet2"></span><span class="mtext">Transaksi
+                        <a href="{{ route('marketing.penjualan.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('marketing/penjualan*') ? 'active' : '' }}">
+                            <span class="micon bi bi-basket"></span><span class="mtext">Transaksi
                                 Penjualan</span>
                         </a>
                     </li>
@@ -149,34 +126,57 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-file-break"></span><span class="mtext">Dokumen Ekspor</span>
+                        <a href="{{ route('direktur.penjualan.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/penjualan*') ? 'active' : '' }}">
+                            <span class="micon bi bi-basket"></span><span class="mtext">
+                                Transaksi Penjualan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('direktur.dokumen_penjualan.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/dokumen_penjualan*') ? 'active' : '' }}">
+                            <span class="micon bi bi-file-break"></span><span class="mtext">Dokumen
+                                Ekspor</span>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-wallet2"></span><span class="mtext">Rekap
-                                Penjualan</span>
+                            <span class="micon bi bi-wallet2"></span><span class="mtext">
+                                Transaksi Pembayaran</span>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-shop-window"></span><span class="mtext">Rekap Supplier</span>
+                            <span class="micon bi bi-truck"></span><span class="mtext">
+                                Transaksi Pengiriman</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-bag"></span><span class="mtext">Rekap Produk</span>
+                        <a href="{{ route('direktur.pemasok.index') }}" class="dropdown-toggle no-arrow">
+                            <span
+                                class="micon bi bi-shop-window {{ Request::is('direktur/pemasok*') ? 'active' : '' }}"></span><span
+                                class="mtext">Rekap Supplier</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-people"></span><span class="mtext">Rekap Buyer</span>
+                        <a href="{{ route('direktur.produk.index') }}" class="dropdown-toggle no-arrow">
+                            <span
+                                class="micon bi bi-bag {{ Request::is('direktur/produk*') ? 'active' : '' }}"></span><span
+                                class="mtext">Rekap Produk</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-building"></span><span class="mtext">Rekap Market
+                        <a href="{{ route('direktur.pembeli.index') }}" class="dropdown-toggle no-arrow">
+                            <span
+                                class="micon bi bi-people {{ Request::is('direktur/pembeli*') ? 'active' : '' }}"></span><span
+                                class="mtext">Rekap Buyer</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('direktur.pasar.index') }}" class="dropdown-toggle no-arrow">
+                            <span
+                                class="micon bi bi-building {{ Request::is('direktur/pasar*') ? 'active' : '' }}"></span><span
+                                class="mtext">Rekap Market
                                 Research</span>
                         </a>
                     </li>

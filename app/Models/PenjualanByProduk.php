@@ -17,7 +17,7 @@ class PenjualanByProduk extends Model
     {
         parent::__construct($attributes);
 
-        $columns = Schema::getColumnListing('penjualans_by_produks');
+        $columns = Schema::getColumnListing('penjualan_by_produks');
         $columns = array_filter($columns, function ($column) {
             return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
@@ -32,5 +32,40 @@ class PenjualanByProduk extends Model
     public function produk()
     {
         return $this->belongsTo(Produk::class);
+    }
+
+    public function satuan()
+    {
+        return $this->belongsTo(Satuan::class);
+    }
+
+    public function setKuantitasAttribute($value)
+    {
+        $this->attributes['kuantitas'] = str_replace('.', '', $value);
+    }
+
+    public function setHargaAttribute($value)
+    {
+        $this->attributes['harga'] = str_replace('.', '', $value);
+    }
+
+    public function setQtyAttribute($value)
+    {
+        $this->attributes['qty'] = str_replace('.', '', $value);
+    }
+
+    public function setTotalAttribute($value)
+    {
+        $this->attributes['total'] = str_replace('.', '', $value);
+    }
+
+    public function setDiskonNominalAttribute($value)
+    {
+        $this->attributes['diskon_nominal'] = str_replace('.', '', $value);
+    }
+
+    public function setDiskonPersenAttribute($value)
+    {
+        $this->attributes['diskon_persen'] = str_replace('.', '', $value);
     }
 }

@@ -10,10 +10,12 @@ use Maatwebsite\Excel\Facades\Excel;
 class PemasokController extends Controller
 {
     protected $title;
+    protected $prefix;
 
     public function __construct()
     {
         $this->title = 'Data Pemasok';
+        $this->prefix = request()->segment(1);
     }
 
     /**
@@ -58,7 +60,7 @@ class PemasokController extends Controller
 
         Pemasok::create($request->all());
 
-        return redirect()->route('admin.pemasok.index')->with('success', 'Data berhasil ditambahkan!');
+        return redirect()->route("$this->prefix.pemasok.index")->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -88,7 +90,7 @@ class PemasokController extends Controller
 
         $pemasok->update($request->all());
 
-        return redirect()->route('admin.pemasok.index')->with('success', 'Data berhasil diperbaharui!');
+        return redirect()->route("$this->prefix.pemasok.index")->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**
@@ -98,7 +100,7 @@ class PemasokController extends Controller
     {
         $pemasok->delete();
 
-        return redirect()->route('admin.pemasok.index')->with('success', 'Data berhasil diihapus!');
+        return redirect()->route("$this->prefix.pemasok.index")->with('success', 'Data berhasil diihapus!');
     }
 
     public function import()
@@ -133,6 +135,6 @@ class PemasokController extends Controller
             }
         }
 
-        return redirect()->route('admin.pemasok.index')->with('success', 'Data pemasok berhasil diimport!');
+        return redirect()->route("$this->prefix.pemasok.index")->with('success', 'Data pemasok berhasil diimport!');
     }
 }

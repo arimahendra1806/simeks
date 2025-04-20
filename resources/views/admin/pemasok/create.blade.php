@@ -7,12 +7,12 @@
                 <h2 class="text-blue mb-4">Tambah Data {{ $title }}</h2>
             </div>
             <div class="pull-right">
-                <a href="{{ route('admin.pemasok.index') }}" class="btn btn-secondary mr-2 float-right"><i
+                <a href="{{ route(request()->segment(1) . '.pemasok.index') }}" class="btn btn-secondary mr-2 float-right"><i
                         class="fa fa-arrow-left mr-2"></i>Kembali</a>
             </div>
         </div>
         <div>
-            <form action="{{ route('admin.pemasok.store') }}" method="POST">
+            <form action="{{ route(request()->segment(1) . '.pemasok.store') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-12 mb-3">

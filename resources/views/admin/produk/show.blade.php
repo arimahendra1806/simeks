@@ -39,7 +39,7 @@
                             @foreach ($option_pemasok as $item)
                                 <option value="{{ $item->id }}"
                                     {{ old('pemasok_id', $produk->pemasok_id) == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
+                                    {{ $item->nama . ' (' . $item->perusahaan . ')' }}
                                 </option>
                             @endforeach
                         </select>

@@ -62,7 +62,7 @@
                             @foreach ($option_pembeli as $item)
                                 <option value="{{ $item->id }}"
                                     {{ old('pembeli_id', $pasar->pembeli_id) == $item->id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
+                                    {{ $item->nama . ' (' . $item->perusahaan . ')' }}
                                 </option>
                             @endforeach
                         </select>

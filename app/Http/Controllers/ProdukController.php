@@ -60,6 +60,7 @@ class ProdukController extends Controller
             'kuantitas.*' => 'numeric|min:1',
             'harga' => 'required|array',
             'harga.*' => 'numeric|min:0',
+            'file' => 'required',
         ]);
     }
 
@@ -109,8 +110,6 @@ class ProdukController extends Controller
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return redirect()->route("$this->prefix.produk.index")->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -143,7 +142,6 @@ class ProdukController extends Controller
     {
         $this->validation($request, $produk->id);
 
-        $produk->update($request->all());
         DB::beginTransaction();
         try {
             // Simpan data ke tabel `produk`
@@ -185,8 +183,6 @@ class ProdukController extends Controller
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return redirect()->route("$this->prefix.produk.index")->with('success', 'Data berhasil diperbaharui!');
     }
 
     /**

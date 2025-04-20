@@ -6,7 +6,7 @@
             <div class="pull-left">
                 <h2 class="text-blue mb-4">{{ $title }}</h2>
             </div>
-            @if (session('role_id') == 1)
+            @if (session('role_id') != 3)
                 <div class="pull-right">
                     <a href="{{ route(request()->segment(1) . '.pembeli.create') }}"
                         class="btn btn-primary btn-sm float-right">
@@ -40,7 +40,7 @@
                                     class="btn btn-info btn-sm">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
-                                @if (session('role_id') == 1)
+                                @if (session('role_id') != 3)
                                     <form action="{{ route('admin.pembeli.destroy', $item->id) }}" method="POST"
                                         style="display:inline;" id="delete-form-{{ $item->id }}">
                                         @csrf

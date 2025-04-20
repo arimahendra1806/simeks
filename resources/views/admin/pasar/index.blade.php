@@ -33,7 +33,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->negara->nama }}</td>
                             <td>{{ $item->industri->nama }}</td>
-                            <td>{{ $item->pembeli->nama }}</td>
+                            <td>{{ $item->pembeli->nama . ' (' . $item->pembeli->perusahaan . ')' }}</td>
                             <td>{{ $item->produk->nama }}</td>
                             <td>
                                 <a href="{{ route(request()->segment(1) . '.pasar.show', $item->id) }}"

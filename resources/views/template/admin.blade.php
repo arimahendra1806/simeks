@@ -36,6 +36,10 @@
     <link href="<?= asset('assets/css') ?>/select2.min.css" rel="stylesheet">
     <link href="<?= asset('assets/css') ?>/select2-bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/styles/style.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/css/glightbox.min.css"
         integrity="sha512-T+KoG3fbDoSnlgEXFQqwcTC9AdkFIxhBlmoaFqYaIjq2ShhNwNao9AKaLUPMfwiBPL0ScxAtc+UYbHAgvd+sjQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -71,7 +75,6 @@
         })(window, document, "script", "dataLayer", "GTM-NXZMQSS");
     </script>
     <link href="<?= asset('assets/css') ?>/custom.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -102,6 +105,8 @@
     @include('template.partials.admin.sidebar')
     <!-- End of Sidebar -->
 
+    @include('template.partials.modal_preview')
+
     <div class="main-container">
         <div class="xs-pd-20-10 pd-ltr-20">
             <div style="min-height: calc(100vh - 200px);">
@@ -124,6 +129,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <script src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/scripts/core.js"></script>
     <script src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/scripts/script.min.js"></script>
@@ -144,9 +150,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"
-        integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/js/glightbox.min.js"
         integrity="sha512-RBWI5Qf647bcVhqbEnRoL4KuUT+Liz+oG5jtF+HP05Oa5088M9G0GxG0uoHR9cyq35VbjahcI+Hd1xwY8E1/Kg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

@@ -17,7 +17,7 @@ class PenjualanByBayar extends Model
     {
         parent::__construct($attributes);
 
-        $columns = Schema::getColumnListing('penjualans_by_bayars');
+        $columns = Schema::getColumnListing('penjualan_by_bayars');
         $columns = array_filter($columns, function ($column) {
             return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });
@@ -32,5 +32,19 @@ class PenjualanByBayar extends Model
     public function bank()
     {
         return $this->belongsTo(Bank::class);
+    }
+
+    public function kategori()
+    {
+        return Pilihan::where('nama', 'kategori_pembayaran')
+            ->where('parameter', $this->kategori_pembayaran)
+            ->first();
+    }
+
+    public function tipe()
+    {
+        return Pilihan::where('nama', 'tipe_pembayaran')
+            ->where('parameter', $this->tipe_pembayaran)
+            ->first();
     }
 }

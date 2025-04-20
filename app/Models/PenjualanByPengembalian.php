@@ -17,7 +17,7 @@ class PenjualanByPengembalian extends Model
     {
         parent::__construct($attributes);
 
-        $columns = Schema::getColumnListing('penjualans_by_pengembalians');
+        $columns = Schema::getColumnListing('penjualan_by_pengembalians');
         $columns = array_filter($columns, function ($column) {
             return $column != 'id' && !in_array($column, ['created_at', 'updated_at', 'deleted_at']);
         });

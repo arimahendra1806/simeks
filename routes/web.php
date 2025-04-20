@@ -40,6 +40,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index']);
 
+Route::get('/login', function () {
+    if (Auth::check()) {
+        return redirect()->route('admin.dashboard.index');
+    }
+
+    return redirect()->route('admin_login');
+});
+
 Route::get('/admin', function () {
     if (Auth::check()) {
         return redirect()->route('admin.dashboard.index');
@@ -85,8 +93,6 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
     Route::resource('/kategori', KategoriController::class);
     Route::resource('/kota', KotaController::class);
     Route::resource('/negara', NegaraController::class);
-    // Route::get('/produk/import', [ProdukController::class, 'import'])->name('produk.import');
-    // Route::post('/produk/import_data', [ProdukController::class, 'import_data'])->name('produk.importData');
     Route::resource('/produk', ProdukController::class);
     Route::resource('/industri', IndustriController::class);
     Route::resource('/provinsi', ProvinsiController::class);
@@ -126,10 +132,13 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
     Route::resource('/pemasok', PemasokController::class);
     Route::resource('/pasar', PasarController::class);
     Route::resource('/produk', ProdukController::class);
+    Route::get('/penjualan/satuan/{id}', [PenjualanController::class, 'get_satuan'])->name('penjualan.satuan');
+    Route::put('/penjualan/konfirmasi/{penjualan}', [PenjualanController::class, 'konfirmasi'])->name('penjualan.konfirmasi');
     Route::resource('/penjualan', PenjualanController::class);
     Route::resource('/penjualan/pengiriman', PenjualanByPengiriman::class);
     Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
-    Route::resource('/penjualan/dokumen', PenjualanByDokumenController::class);
+    Route::put('/dokumen_penjualan/konfirmasi/{id}', [PenjualanByDokumenController::class, 'konfirmasi'])->name('dokumen_penjualan.konfirmasi');
+    Route::resource('/dokumen_penjualan', PenjualanByDokumenController::class);
 });
 
 // Route::middleware('buyer')->name('buyer.')->prefix('buyer')->group(function () {
