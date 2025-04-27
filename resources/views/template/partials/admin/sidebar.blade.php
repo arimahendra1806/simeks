@@ -80,7 +80,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('admin.pengiriman.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('admin/pengiriman*') ? 'active' : '' }}">
                             <span class="micon bi bi-truck"></span><span class="mtext">Transaksi
                                 Pengiriman</span>
                         </a>
@@ -140,13 +141,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('direktur.pembayaran.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/pembayaran*') ? 'active' : '' }}">
                             <span class="micon bi bi-wallet2"></span><span class="mtext">
                                 Transaksi Pembayaran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('direktur.pengiriman.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/pengiriman*') ? 'active' : '' }}">
                             <span class="micon bi bi-truck"></span><span class="mtext">
                                 Transaksi Pengiriman</span>
                         </a>

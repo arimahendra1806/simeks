@@ -34,17 +34,13 @@ class PenjualanByBayar extends Model
         return $this->belongsTo(Bank::class);
     }
 
-    public function kategori()
+    public function statusKategori()
     {
-        return Pilihan::where('nama', 'kategori_pembayaran')
-            ->where('parameter', $this->kategori_pembayaran)
-            ->first();
+        return $this->belongsTo(Pilihan::class, 'kategori_pembayaran', 'parameter')->where('nama', 'kategori_pembayaran');
     }
 
     public function tipe()
     {
-        return Pilihan::where('nama', 'tipe_pembayaran')
-            ->where('parameter', $this->tipe_pembayaran)
-            ->first();
+        return $this->belongsTo(Pilihan::class, 'tipe_pembayaran', 'parameter')->where('nama', 'tipe_pembayaran');
     }
 }

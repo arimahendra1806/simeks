@@ -16,7 +16,7 @@
                         <th>Nama Pembeli</th>
                         <th>Tanggal</th>
                         <th>Total Pembelian</th>
-                        <th>Total Produk</th>
+                        <th>Total Pembayaran</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -32,23 +32,14 @@
                                 Pembelian : {{ date_to_indo($item->tanggal_pembelian) }}
                             </td>
                             <td>{{ format_currency($item->total_pembayaran) }}</td>
-                            <td>{{ $item->penjualanByProduk->count() }} Produk</td>
+                            <td>
+                                Total Bayar : <br> {{ format_currency($item->total_terbayar) }} <br>
+                                Sisa Bayar : <br> {{ format_currency($item->sisa_pembayaran) }}
+                            </td>
                             <td>{{ $item->statusPenjualan->isi }}</td>
                             <td>
-                                @if (session('role_id') == 3 && $item->status == 2 && $item->penjualanByDokumen->count() > 0)
-                                    <form
-                                        action="{{ route(request()->segment(1) . '.dokumen_penjualan.konfirmasi', $item->id) }}"
-                                        method="POST" style="display:inline;" id="konfirmasi-form-{{ $item->id }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="button" class="btn btn-success btn-sm mt-1"
-                                            onclick="confirm_konfirmasi({{ $item->id }})">
-                                            <i class="fa fa-check mr-2"></i> Konfirmasi
-                                        </button>
-                                    </form>
-                                @endif
-                                <a href="{{ route(request()->segment(1) . '.dokumen_penjualan.show', $item->id) }}"
-                                    class="btn btn-info btn-sm mt-1">
+                                <a href="{{ route(request()->segment(1) . '.pembayaran.show', $item->id) }}"
+                                    class="btn btn-info btn-sm w-100 mt-1">
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
                             </td>
@@ -69,21 +60,5 @@
                 }
             })
         });
-
-        function confirm_konfirmasi(id) {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data ini akan dikonfirmasi dan lanjut ke pembayaran!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Lanjut!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#konfirmasi-form-' + id).submit();
-                }
-            });
-        }
     </script>
 @endpush

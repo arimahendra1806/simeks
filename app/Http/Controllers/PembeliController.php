@@ -78,7 +78,7 @@ class PembeliController extends Controller
                 'negara_id' => $request->negara_id,
                 'nama' => $request->nama,
                 'email' => $request->email,
-                'telepon' => $request->telepon,
+                'telepon' => normalize_phone_number($request->telepon),
                 'perusahaan' => $request->perusahaan,
             ]);
 

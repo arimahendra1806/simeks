@@ -15,7 +15,7 @@
     <div class="pd-20 card-box mb-30">
         <div class="clearfix mb-4">
             <div class="pull-left">
-                <h2 class="text-blue mb-4">Detail Data {{ $title }}</h2>
+                <h2 class="text-blue mb-4">Detail {{ $title }}</h2>
             </div>
             <div class="pull-right">
                 <a href="{{ route(request()->segment(1) . '.dokumen_penjualan.index') }}"
@@ -48,7 +48,7 @@
                                     <td>
                                         <div class="row">
                                             @foreach ($dokumens as $item)
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 mt-2">
                                                     <div class="card-box height-100-p widget-style3">
                                                         <div class="d-flex flex-wrap">
                                                             <div class="widget-data">

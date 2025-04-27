@@ -12,6 +12,7 @@ class PenjualanByPengiriman extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [];
+    protected $table = 'penjualan_by_pengirimans';
 
     public function __construct(array $attributes = [])
     {
@@ -29,10 +30,8 @@ class PenjualanByPengiriman extends Model
         return $this->belongsTo(Penjualan::class);
     }
 
-    public function status()
+    public function statusPengiriman()
     {
-        return Pilihan::where('nama', 'status_pengiriman')
-            ->where('parameter', $this->status_pengiriman)
-            ->first();
+        return $this->belongsTo(Pilihan::class, 'status_pengiriman', 'parameter')->where('nama', 'status_pengiriman');
     }
 }

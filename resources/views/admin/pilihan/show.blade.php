@@ -4,7 +4,7 @@
     <div class="pd-20 card-box mb-30">
         <div class="clearfix mb-4">
             <div class="pull-left">
-                <h2 class="text-blue mb-4">Detail Data {{ $title }}</h2>
+                <h2 class="text-blue mb-4">Detail {{ $title }}</h2>
             </div>
             <div class="pull-right">
                 <a href="{{ route('admin.pilihan.index') }}" class="btn btn-secondary mr-2 float-right"><i
@@ -17,7 +17,8 @@
                 @method('PUT')
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="nama" class="form-label">Nama <span class="text-danger"><small>*</small></span></label>
+                        <label for="nama" class="form-label">Nama <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
                             placeholder="Masukkan nama..." id="nama" name="nama"
                             value="{{ old('nama', $pilihan->nama) }}" readonly>
@@ -26,7 +27,8 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="parameter" class="form-label">Parameter <span class="text-danger"><small>*</small></span></label>
+                        <label for="parameter" class="form-label">Parameter <span
+                                class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('parameter') is-invalid @enderror"
                             placeholder="Masukkan parameter..." id="parameter" name="parameter"
                             value="{{ old('parameter', $pilihan->parameter) }}" readonly>
@@ -35,7 +37,8 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="isi" class="form-label">Isi <span class="text-danger"><small>*</small></span></label>
+                        <label for="isi" class="form-label">Isi <span
+                                class="text-danger"><small>*</small></span></label>
                         <textarea class="form-control @error('isi') is-invalid @enderror" placeholder="Masukkan isi..." id="isi"
                             name="isi" readonly>{{ old('isi', $pilihan->isi) }}</textarea>
                         @error('isi')

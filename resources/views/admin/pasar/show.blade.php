@@ -4,7 +4,7 @@
     <div class="pd-20 card-box mb-30">
         <div class="clearfix mb-4">
             <div class="pull-left">
-                <h2 class="text-blue mb-4">Detail Data {{ $title }}</h2>
+                <h2 class="text-blue mb-4">Detail {{ $title }}</h2>
             </div>
             <div class="pull-right">
                 <a href="{{ route(request()->segment(1) . '.pasar.index') }}" class="btn btn-secondary mr-2 float-right"><i

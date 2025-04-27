@@ -102,3 +102,25 @@ function date_to_indo($date)
 
     return "$day $month $year";
 }
+
+function encrypt_64($string)
+{
+    return base64_encode($string);
+}
+
+function decrypt_64($string)
+{
+    return base64_decode($string);
+}
+
+function normalize_phone_number($phone)
+{
+    $phone = preg_replace('/[^0-9]/', '', $phone);
+    if (substr($phone, 0, 1) === '0') {
+        $phone = '62' . substr($phone, 1);
+    }
+    if (substr($phone, 0, 2) === '62') {
+        return $phone;
+    }
+    return '62' . $phone;
+}

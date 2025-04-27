@@ -39,7 +39,7 @@
                                 Negosiasi : {{ date_to_indo($item->tanggal_negosiasi) }} <br>
                                 Pembelian : {{ date_to_indo($item->tanggal_pembelian) }}
                             </td>
-                            <td>{{ format_currency($item->total_pembelian) }}</td>
+                            <td>{{ format_currency($item->total_pembayaran) }}</td>
                             <td>{{ $item->penjualanByProduk->count() }}</td>
                             <td>{{ $item->statusPenjualan->isi }}</td>
                             <td>

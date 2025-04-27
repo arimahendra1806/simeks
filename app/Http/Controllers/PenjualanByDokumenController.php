@@ -63,7 +63,7 @@ class PenjualanByDokumenController extends Controller
 
         $title = $this->title;
         $option_dokumen = Dokumen::all();
-        $penjualan = Penjualan::where('id', $id)->first();
+        $penjualan = Penjualan::with('pembeli')->where('id', $id)->first();
         $dokumens = PenjualanByDokumen::with('dokumen')->where('penjualan_id', $id)->get();
 
         return view("admin.penjualan_dokumen.show", compact('title', 'penjualan', 'option_dokumen', 'dokumens'));
