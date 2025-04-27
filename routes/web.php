@@ -12,7 +12,9 @@ use App\Http\Controllers\NegaraController;
 use App\Http\Controllers\PasarController;
 use App\Http\Controllers\PemasokController;
 use App\Http\Controllers\PembeliController;
+use App\Http\Controllers\PenjualanByBayarController;
 use App\Http\Controllers\PenjualanByDokumenController;
+use App\Http\Controllers\PenjualanByPengirimanController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PilihanController;
 use App\Http\Controllers\ProdukController;
@@ -39,6 +41,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LandingController::class, 'index']);
+Route::get('/invoice_pay/{params}', [LandingController::class, 'invoice_pay'])->name('invoice_pay');
+Route::get('/invoice_pay_success/{params}', [LandingController::class, 'invoice_pay_success'])->name('invoice_pay_success');
+Route::post('/invoice_pay/now', [LandingController::class, 'invoice_pay_now'])->name('invoice_pay_now');
+Route::post('/update_status_invoice_pay', [LandingController::class, 'update_status_invoice_pay'])->name('update_status_invoice_pay');
+Route::get('/status_shipment/{params}', [LandingController::class, 'status_shipment'])->name('status_shipment');
+Route::post('/status_shipment_update', [LandingController::class, 'status_shipment_update'])->name('status_shipment_update');
 
 Route::get('/login', function () {
     if (Auth::check()) {
@@ -106,8 +114,10 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
     Route::post('/pemasok/import_data', [PemasokController::class, 'import_data'])->name('pemasok.importData');
     Route::resource('/pemasok', PemasokController::class);
     Route::resource('/pasar', PasarController::class);
-    Route::resource('/penjualan/pengiriman', PenjualanByPengiriman::class);
-    Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
+    Route::post('/pengiriman/generate_kirim', [PenjualanByPengirimanController::class, 'generate_kirim'])->name('pengiriman.generate_kirim');
+    Route::delete('/pengiriman/destroy/{id}', [PenjualanByPengirimanController::class, 'destroy'])->name('pengiriman.destroy');
+    Route::resource('/pengiriman', PenjualanByPengirimanController::class);
+    // Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
 });
 
 Route::middleware(['auth', 'marketing'])->name('marketing.')->prefix('marketing')->group(function () {
@@ -135,10 +145,14 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
     Route::get('/penjualan/satuan/{id}', [PenjualanController::class, 'get_satuan'])->name('penjualan.satuan');
     Route::put('/penjualan/konfirmasi/{penjualan}', [PenjualanController::class, 'konfirmasi'])->name('penjualan.konfirmasi');
     Route::resource('/penjualan', PenjualanController::class);
-    Route::resource('/penjualan/pengiriman', PenjualanByPengiriman::class);
-    Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
     Route::put('/dokumen_penjualan/konfirmasi/{id}', [PenjualanByDokumenController::class, 'konfirmasi'])->name('dokumen_penjualan.konfirmasi');
     Route::resource('/dokumen_penjualan', PenjualanByDokumenController::class);
+    Route::post('/pembayaran/generate_tagihan', [PenjualanByBayarController::class, 'generate_tagihan'])->name('pembayaran.generate_tagihan');
+    Route::resource('/pembayaran', PenjualanByBayarController::class);
+    Route::post('/pengiriman/generate_kirim', [PenjualanByPengirimanController::class, 'generate_kirim'])->name('pengiriman.generate_kirim');
+    Route::delete('/pengiriman/destroy/{id}', [PenjualanByPengirimanController::class, 'destroy'])->name('pengiriman.destroy');
+    Route::resource('/pengiriman', PenjualanByPengirimanController::class);
+    // Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
 });
 
 // Route::middleware('buyer')->name('buyer.')->prefix('buyer')->group(function () {
