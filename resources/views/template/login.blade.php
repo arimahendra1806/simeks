@@ -99,9 +99,11 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS" height="0" width="0"
             style="display: none; visibility: hidden"></iframe></noscript>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= asset('assets/js') ?>/configuration.js"></script>
 
     @stack('js')
+    @include('template.partials.flash_message')
 
 </body>
 
