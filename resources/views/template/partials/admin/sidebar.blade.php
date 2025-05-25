@@ -114,8 +114,7 @@
                         </a>
                     </li>
                     <li>
-                        {{-- <a href="{{ route('marketing.penjualan.index') }}" --}}
-                        <a href="javascript:void(0);"
+                        <a href="{{ route('marketing.penjualan.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('marketing/penjualan*') ? 'active' : '' }}">
                             <span class="micon bi bi-basket"></span><span class="mtext">Transaksi
                                 Penjualan</span>
