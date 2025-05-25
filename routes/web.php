@@ -129,6 +129,10 @@ Route::middleware(['auth', 'marketing'])->name('marketing.')->prefix('marketing'
     Route::resource('/produk', ProdukController::class);
     Route::resource('/pembeli', PembeliController::class);
     Route::resource('/pasar', PasarController::class);
+    Route::get('/penjualan/satuan/{id}', [PenjualanController::class, 'get_satuan'])->name('penjualan.satuan');
+    Route::put('/penjualan/konfirmasi/{penjualan}', [PenjualanController::class, 'konfirmasi'])->name('penjualan.konfirmasi');
+    Route::resource('/penjualan', PenjualanController::class);
+    Route::put('/dokumen_penjualan/konfirmasi/{id}', [PenjualanByDokumenController::class, 'konfirmasi'])->name('dokumen_penjualan.konfirmasi');
     Route::resource('/penjualan', PenjualanController::class);
 });
 

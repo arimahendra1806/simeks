@@ -80,7 +80,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.pengiriman.index') }}"
+                        {{-- <a href="{{ route('admin.pengiriman.index') }}" --}}
+                        <a href="javascript:void(0);"
                             class="dropdown-toggle no-arrow {{ Request::is('admin/pengiriman*') ? 'active' : '' }}">
                             <span class="micon bi bi-truck"></span><span class="mtext">Transaksi
                                 Pengiriman</span>
@@ -113,7 +114,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('marketing.penjualan.index') }}"
+                        {{-- <a href="{{ route('marketing.penjualan.index') }}" --}}
+                        <a href="javascript:void(0);"
                             class="dropdown-toggle no-arrow {{ Request::is('marketing/penjualan*') ? 'active' : '' }}">
                             <span class="micon bi bi-basket"></span><span class="mtext">Transaksi
                                 Penjualan</span>
@@ -141,14 +143,16 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('direktur.pembayaran.index') }}"
+                        {{-- <a href="{{ route('direktur.pembayaran.index') }}" --}}
+                        <a href="javascript:void(0);"
                             class="dropdown-toggle no-arrow {{ Request::is('direktur/pembayaran*') ? 'active' : '' }}">
                             <span class="micon bi bi-wallet2"></span><span class="mtext">
                                 Transaksi Pembayaran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('direktur.pengiriman.index') }}"
+                        {{-- <a href="{{ route('direktur.pengiriman.index') }}" --}}
+                        <a href="javascript:void(0);"
                             class="dropdown-toggle no-arrow {{ Request::is('direktur/pengiriman*') ? 'active' : '' }}">
                             <span class="micon bi bi-truck"></span><span class="mtext">
                                 Transaksi Pengiriman</span>
