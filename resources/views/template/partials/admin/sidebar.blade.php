@@ -34,10 +34,10 @@
                                 <a href="{{ route('admin.negara.index') }}"
                                     class="{{ Request::is('admin/negara*') ? 'active' : '' }}">Negara</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('admin.bank.index') }}"
                                     class="{{ Request::is('admin/bank*') ? 'active' : '' }}">Bank</a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="{{ route('admin.dokumen.index') }}"
                                     class="{{ Request::is('admin/dokumen*') ? 'active' : '' }}">Dokumen</a>
@@ -158,31 +158,27 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('direktur.pemasok.index') }}" class="dropdown-toggle no-arrow">
-                            <span
-                                class="micon bi bi-shop-window {{ Request::is('direktur/pemasok*') ? 'active' : '' }}"></span><span
-                                class="mtext">Rekap Supplier</span>
+                        <a href="{{ route('direktur.pemasok.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/pemasok*') ? 'active' : '' }}">
+                            <span class="micon bi bi-shop-window"></span><span class="mtext">Rekap Supplier</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('direktur.produk.index') }}" class="dropdown-toggle no-arrow">
-                            <span
-                                class="micon bi bi-bag {{ Request::is('direktur/produk*') ? 'active' : '' }}"></span><span
-                                class="mtext">Rekap Produk</span>
+                        <a href="{{ route('direktur.produk.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/produk*') ? 'active' : '' }}">
+                            <span class="micon bi bi-bag"></span><span class="mtext">Rekap Produk</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('direktur.pembeli.index') }}" class="dropdown-toggle no-arrow">
-                            <span
-                                class="micon bi bi-people {{ Request::is('direktur/pembeli*') ? 'active' : '' }}"></span><span
-                                class="mtext">Rekap Buyer</span>
+                        <a href="{{ route('direktur.pembeli.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/pembeli*') ? 'active' : '' }}">
+                            <span class="micon bi bi-people"></span><span class="mtext">Rekap Buyer</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('direktur.pasar.index') }}" class="dropdown-toggle no-arrow">
-                            <span
-                                class="micon bi bi-building {{ Request::is('direktur/pasar*') ? 'active' : '' }}"></span><span
-                                class="mtext">Rekap Market
+                        <a href="{{ route('direktur.pasar.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/pasar*') ? 'active' : '' }}">
+                            <span class="micon bi bi-building"></span><span class="mtext">Rekap Market
                                 Research</span>
                         </a>
                     </li>

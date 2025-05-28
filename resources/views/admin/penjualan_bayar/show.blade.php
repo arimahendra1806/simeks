@@ -168,7 +168,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             Tutup
                         </button>
-                        <button type="submit" onclick="generate()" class="btn btn-primary">
+                        <button type="button" onclick="generate()" class="btn btn-primary">
                             Tambahkan
                         </button>
                     </div>

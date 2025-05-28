@@ -56,8 +56,8 @@ class LandingController extends Controller
         $params = [
             'transaction_details' => [
                 'order_id' => 'INV-' . date('YmdHis'),
-                'gross_amount' => 1,
-                // 'gross_amount' => $request->nominal,
+                // 'gross_amount' => 1,
+                'gross_amount' => $request->nominal,
             ],
             'customer_details' => [
                 'first_name' => $request->nama,

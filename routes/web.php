@@ -123,7 +123,7 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
 Route::middleware(['auth', 'marketing'])->name('marketing.')->prefix('marketing')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('/', [DashboardController::class, 'dashboard_marketing'])->name('index');
+        Route::get('/', [DashboardController::class, 'dashboard_admin'])->name('index');
     });
 
     Route::resource('/produk', ProdukController::class);
@@ -139,7 +139,7 @@ Route::middleware(['auth', 'marketing'])->name('marketing.')->prefix('marketing'
 Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('/', [DashboardController::class, 'dashboard_direktur'])->name('index');
+        Route::get('/', [DashboardController::class, 'dashboard_admin'])->name('index');
     });
 
     Route::resource('/pembeli', PembeliController::class);

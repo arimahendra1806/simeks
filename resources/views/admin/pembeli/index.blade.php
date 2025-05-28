@@ -24,7 +24,7 @@
                         <th>Nama</th>
                         <th>Perusahaan</th>
                         <th>Email</th>
-                        <th>Aksi</th>
+                        <th class="no-export">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +66,44 @@
             var table = $('#data_table').DataTable({
                 oLanguage: {
                     sUrl: "/assets/js/datatable_id.json"
-                }
+                },
+                @if (session('role_id') == 3)
+                    dom: 'Bfrtip',
+                    // columnDefs: [{
+                    //         targets: [0, 1],
+                    //         visible: false
+                    //     }
+                    // ],
+                    buttons: [{
+                            extend: 'excelHtml5',
+                            title: 'Data Produk',
+                            exportOptions: {
+                                columns: ':not(.no-export)'
+                            }
+                        },
+                        // {
+                        //     extend: 'pdfHtml5',
+                        //     title: 'Data Produk',
+                        //     exportOptions: {
+                        //         columns: ':not(.no-export)'
+                        //     }
+                        // },
+                        // {
+                        //     extend: 'csvHtml5',
+                        //     title: 'Data Produk',
+                        //     exportOptions: {
+                        //         columns: ':not(.no-export)'
+                        //     }
+                        // },
+                        // {
+                        //     extend: 'print',
+                        //     title: 'Data Produk',
+                        //     exportOptions: {
+                        //         columns: ':not(.no-export)'
+                        //     }
+                        // }
+                    ]
+                @endif
             })
         });
 
