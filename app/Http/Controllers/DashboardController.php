@@ -30,7 +30,10 @@ class DashboardController extends Controller
         $dataJumlah = $arrDataJumlah;
         $dataNominal = $arrDataNominal;
 
-        return view('admin.dashboard.index', compact('title', 'total_produk', 'total_pemasok', 'total_pembeli', 'total_transaksi', 'labelJumlah', 'dataJumlah', 'dataNominal'));
+        $produk = Produk::with('pemasok')->orderBy('id', 'desc')->get();
+        $penjualan = Penjualan::with('pembeli', 'statusPenjualan')->orderBy('id', 'desc')->get();
+
+        return view('admin.dashboard.index', compact('title', 'total_produk', 'total_pemasok', 'total_pembeli', 'total_transaksi', 'labelJumlah', 'dataJumlah', 'dataNominal', 'produk', 'penjualan'));
     }
 
     public function dashboard_direktur()

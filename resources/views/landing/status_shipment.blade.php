@@ -118,10 +118,37 @@
                                             <h5 class="text-muted mb-0"><strong>Status Saat Ini:</strong> <br>
                                                 {{ $pengiriman->statusPengiriman->isi }}</h5><br>
                                             <h5 class="text-muted mb-1"><strong>Keterangan:</strong> <br>
-                                                {{ $pengiriman->keterangan }}</h5>
+                                                {{ $pengiriman->keterangan }}</h5><br>
+                                        </div>
+                                        <div class="col-md-6 text-md-start mt-3 mt-md-0">
+                                            <h5
+                                                class="text-muted mb-3 pb-2 border-bottom border-2 border-primary d-inline-block">
+                                                <i class="bi bi-receipt me-2"></i> Alamat Awal
+                                            </h5>
+                                            <h5 class="text-muted mb-1">
+                                                {{ $pengiriman->alamat_mulai ?? '-' }}
+                                            </h5>
+                                        </div>
+                                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                                            <h5
+                                                class="text-muted mb-3 pb-2 border-bottom border-2 border-primary d-inline-block">
+                                                <i class="bi bi-receipt me-2"></i> Alamat Tujuan
+                                            </h5>
+                                            <h5 class="text-muted mb-1">
+                                                {{ $pengiriman->alamat_selesai ?? '-' }}
+                                            </h5>
+                                        </div>
+                                        <div class="col-md-12 text-md-end mt-3 mt-md-0">
+                                            <?php
+                                            $is_alamat = $pengiriman->alamat_mulai && $pengiriman->alamat_selesai ? true : false;
+                                            ?>
+                                            <a href="{{ $is_alamat ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($pengiriman->alamat_mulai) . '&destination=' . urlencode($pengiriman->alamat_selesai) : 'javascript:void(0)' }}"
+                                                {{ $is_alamat ? 'target="_blank"' : '' }}
+                                                class="btn btn-dark btn-sm w-100 mt-1">
+                                                <i class="fa fa-map mr-2"></i> Cek Lokasi
+                                            </a>
                                         </div>
                                     </div>
-
                                     <h5
                                         class="text-muted mb-3 pb-2 border-bottom border-2 border-primary d-inline-block">
                                         <i class="bi bi-bag me-2"></i> Daftar Produk

@@ -80,8 +80,7 @@
                         </a>
                     </li>
                     <li>
-                        {{-- <a href="{{ route('admin.pengiriman.index') }}" --}}
-                        <a href="javascript:void(0);"
+                        <a href="{{ route('admin.pengiriman.index') }}" {{-- <a href="javascript:void(0);" --}}
                             class="dropdown-toggle no-arrow {{ Request::is('admin/pengiriman*') ? 'active' : '' }}">
                             <span class="micon bi bi-truck"></span><span class="mtext">Transaksi
                                 Pengiriman</span>
@@ -150,8 +149,7 @@
                         </a>
                     </li>
                     <li>
-                        {{-- <a href="{{ route('direktur.pengiriman.index') }}" --}}
-                        <a href="javascript:void(0);"
+                        <a href="{{ route('direktur.pengiriman.index') }}" {{-- <a href="javascript:void(0);" --}}
                             class="dropdown-toggle no-arrow {{ Request::is('direktur/pengiriman*') ? 'active' : '' }}">
                             <span class="micon bi bi-truck"></span><span class="mtext">
                                 Transaksi Pengiriman</span>

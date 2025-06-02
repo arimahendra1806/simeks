@@ -74,8 +74,9 @@
                                     <th>Tanggal</th>
                                     <th>Driver</th>
                                     <th>Status</th>
-                                    <th style="width: 30%">Keterangan</th>
-                                    <th>Link Status</th>
+                                    <th style="width: 20%">Alamat</th>
+                                    <th style="width: 20%">Keterangan</th>
+                                    <th style="width: 20%">Link Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,6 +90,10 @@
                                             Telepon : {{ $item->telepon_driver }}
                                         </td>
                                         <td>{{ $item->statusPengiriman->isi }}</td>
+                                        <td>
+                                            <b>Alamat Awal</b> : <br> {{ $item->alamat_mulai ?? '-' }} <br>
+                                            <b>Alamat Tujuan</b> : <br> {{ $item->alamat_selesai ?? '-' }}
+                                        </td>
                                         <td style="width: 30%">{{ $item->keterangan ?? '-' }}</td>
                                         @if ($item->transaction_midtrans_status != 9)
                                             <td>
@@ -100,6 +105,14 @@
                                                 <a href="javascript:void(0)"
                                                     class="btn btn-success btn-sm w-100 mt-1 copy-btn">
                                                     <i class="fa fa-whatsapp mr-2"></i> Kirim Wa
+                                                </a>
+                                                <?php
+                                                $is_alamat = $item->alamat_mulai && $item->alamat_selesai ? true : false;
+                                                ?>
+                                                <a href="{{ $is_alamat ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($item->alamat_mulai) . '&destination=' . urlencode($item->alamat_selesai) : 'javascript:void(0)' }}"
+                                                    {{ $is_alamat ? 'target="_blank"' : '' }}
+                                                    class="btn btn-dark btn-sm w-100 mt-1">
+                                                    <i class="fa fa-map mr-2"></i> Cek Lokasi
                                                 </a>
                                                 <form
                                                     action="{{ route(request()->segment(1) . '.pengiriman.destroy', $item->id) }}"
@@ -197,6 +210,24 @@
                                     placeholder="Masukkan telepon_driver..." id="telepon_driver" name="telepon_driver"
                                     value="{{ old('telepon_driver') }}">
                                 @error('telepon_driver')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="alamat_mulai" class="form-label">Alamat Awal <span
+                                        class="text-danger"><small>*</small></span></label>
+                                <textarea class="form-control @error('alamat_mulai') is-invalid @enderror" placeholder="Masukkan alamat awal..."
+                                    id="alamat_mulai" name="alamat_mulai" cols="1" rows="5">{{ old('alamat_mulai') }}</textarea>
+                                @error('alamat_mulai')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="alamat_selesai" class="form-label">Alamat Tujuan <span
+                                        class="text-danger"><small>*</small></span></label>
+                                <textarea class="form-control @error('alamat_selesai') is-invalid @enderror" placeholder="Masukkan alamat tujuan..."
+                                    id="alamat_selesai" name="alamat_selesai" cols="1" rows="5">{{ old('alamat_selesai') }}</textarea>
+                                @error('alamat_selesai')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

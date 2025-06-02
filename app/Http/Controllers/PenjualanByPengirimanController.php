@@ -93,6 +93,8 @@ class PenjualanByPengirimanController extends Controller
             'tanggal_pengiriman' => 'required',
             'nama_driver' => 'required',
             'telepon_driver' => 'required',
+            'alamat_mulai' => 'required',
+            'alamat_selesai' => 'required',
             'keterangan' => 'required',
         ]);
 
@@ -111,6 +113,8 @@ class PenjualanByPengirimanController extends Controller
                 'nama_driver' => $request->nama_driver,
                 'telepon_driver' => normalize_phone_number($request->telepon_driver),
                 'keterangan' => $request->keterangan,
+                'alamat_mulai' => $request->alamat_mulai,
+                'alamat_selesai' => $request->alamat_selesai,
                 'status_pengiriman' => 7
             ]);
 
