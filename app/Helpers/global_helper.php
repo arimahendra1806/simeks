@@ -55,6 +55,18 @@ function generate_code($prefix = 'UNK', $last_code)
     return $prefix . $date_now . str_pad($incrementBaru, 4, '0', STR_PAD_LEFT);
 }
 
+function formate_date($date)
+{
+    $dt = DateTime::createFromFormat('d-m-Y', $date);
+    return $dt ? $dt->format('Y-m-d') : null;
+}
+
+function formate_date_w_bs($date)
+{
+    $dt = DateTime::createFromFormat('Y-m-d', $date);
+    return $dt ? $dt->format('d-m-Y') : null;
+}
+
 function indo_to_date($indoDate)
 {
     $bulan = [

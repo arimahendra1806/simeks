@@ -109,7 +109,7 @@ class PenjualanByPengirimanController extends Controller
             PenjualanByPengiriman::create([
                 'penjualan_id' => $request->id_penjualan,
                 'ekspedisi' => $request->ekspedisi,
-                'tanggal_pengiriman' => indo_to_date($request->tanggal_pengiriman),
+                'tanggal_pengiriman' => formate_date($request->tanggal_pengiriman),
                 'nama_driver' => $request->nama_driver,
                 'telepon_driver' => normalize_phone_number($request->telepon_driver),
                 'keterangan' => $request->keterangan,

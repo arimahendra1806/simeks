@@ -24,8 +24,8 @@ class DashboardController extends Controller
         $arrDataJumlah = [];
         $arrDataNominal = [];
         foreach ($labelJumlah as $key => $value) {
-            $arrDataJumlah[] = Penjualan::whereMonth('created_at', $key + 1)->whereYear('created_at', date('Y'))->count();
-            $arrDataNominal[] = Penjualan::whereMonth('created_at', $key + 1)->whereYear('created_at', date('Y'))->sum('total_pembelian');
+            $arrDataJumlah[] = Penjualan::whereMonth('tanggal_pembelian', $key + 1)->whereYear('tanggal_pembelian', date('Y'))->count();
+            $arrDataNominal[] = Penjualan::whereMonth('tanggal_pembelian', $key + 1)->whereYear('tanggal_pembelian', date('Y'))->sum('total_pembelian');
         }
         $dataJumlah = $arrDataJumlah;
         $dataNominal = $arrDataNominal;

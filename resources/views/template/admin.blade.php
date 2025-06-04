@@ -169,6 +169,14 @@
     <script src="<?= asset('assets/js') ?>/configuration.js"></script>
     @stack('js')
     @include('template.partials.flash_message')
+
+    <script>
+        $(".date-pickers").datepicker({
+            language: "en",
+            autoClose: true,
+            dateFormat: "dd-mm-yyyy",
+        });
+    </script>
 </body>
 
 </html>

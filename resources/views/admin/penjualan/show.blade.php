@@ -50,10 +50,10 @@
                         <label for="tanggal_negosiasi" class="form-label">Tanggal Negosiasi<span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="text"
-                            class="form-control date-picker input-date @error('tanggal_negosiasi') is-invalid @enderror"
+                            class="form-control date-pickers input-date @error('tanggal_negosiasi') is-invalid @enderror"
                             placeholder="Pilih Tanggal..." id="tanggal_negosiasi" name="tanggal_negosiasi"
-                            value="{{ old('tanggal_negosiasi', date_to_indo($penjualan->tanggal_negosiasi)) }}" readonly
-                            disabled>
+                            value="{{ old('tanggal_negosiasi', formate_date_w_bs($penjualan->tanggal_negosiasi)) }}"
+                            readonly disabled>
                         @error('tanggal_negosiasi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -62,10 +62,10 @@
                         <label for="tanggal_pembelian" class="form-label">Tanggal Pembelian<span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="text"
-                            class="form-control date-picker input-date @error('tanggal_pembelian') is-invalid @enderror"
+                            class="form-control date-pickers input-date @error('tanggal_pembelian') is-invalid @enderror"
                             placeholder="Pilih Tanggal..." id="tanggal_pembelian" name="tanggal_pembelian"
-                            value="{{ old('tanggal_pembelian', date_to_indo($penjualan->tanggal_pembelian)) }}" readonly
-                            disabled>
+                            value="{{ old('tanggal_pembelian', formate_date_w_bs($penjualan->tanggal_pembelian)) }}"
+                            readonly disabled>
                         @error('tanggal_pembelian')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

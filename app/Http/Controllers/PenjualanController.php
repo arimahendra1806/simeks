@@ -88,8 +88,8 @@ class PenjualanController extends Controller
             $penjualan = Penjualan::create([
                 'kode_transaksi' => generate_code("TRX", (Penjualan::orderBy('id', 'desc')->first()->kode_transaksi ?? '')),
                 'pembeli_id' => $request->pembeli_id,
-                'tanggal_negosiasi' => indo_to_date($request->tanggal_negosiasi),
-                'tanggal_pembelian' => indo_to_date($request->tanggal_pembelian),
+                'tanggal_negosiasi' => formate_date($request->tanggal_negosiasi),
+                'tanggal_pembelian' => formate_date($request->tanggal_pembelian),
                 'hasil_negosiasi' => $request->hasil_negosiasi,
                 'permintaan' => $request->permintaan,
             ]);
@@ -177,8 +177,8 @@ class PenjualanController extends Controller
         try {
             $penjualan->update([
                 'pembeli_id' => $request->pembeli_id,
-                'tanggal_negosiasi' => indo_to_date($request->tanggal_negosiasi),
-                'tanggal_pembelian' => indo_to_date($request->tanggal_pembelian),
+                'tanggal_negosiasi' => formate_date($request->tanggal_negosiasi),
+                'tanggal_pembelian' => formate_date($request->tanggal_pembelian),
                 'hasil_negosiasi' => $request->hasil_negosiasi,
                 'permintaan' => $request->permintaan,
             ]);

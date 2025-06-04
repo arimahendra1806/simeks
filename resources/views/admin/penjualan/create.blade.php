@@ -36,7 +36,7 @@
                         <label for="tanggal_negosiasi" class="form-label">Tanggal Negosiasi<span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="text"
-                            class="form-control date-picker @error('tanggal_negosiasi') is-invalid @enderror"
+                            class="form-control date-pickers @error('tanggal_negosiasi') is-invalid @enderror"
                             placeholder="Pilih Tanggal..." id="tanggal_negosiasi" name="tanggal_negosiasi"
                             value="{{ old('tanggal_negosiasi') }}" readonly>
                         @error('tanggal_negosiasi')
@@ -47,7 +47,7 @@
                         <label for="tanggal_pembelian" class="form-label">Tanggal Pembelian<span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="text"
-                            class="form-control date-picker @error('tanggal_pembelian') is-invalid @enderror"
+                            class="form-control date-pickers @error('tanggal_pembelian') is-invalid @enderror"
                             placeholder="Pilih Tanggal..." id="tanggal_pembelian" name="tanggal_pembelian"
                             value="{{ old('tanggal_pembelian') }}" readonly>
                         @error('tanggal_pembelian')

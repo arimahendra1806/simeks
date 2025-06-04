@@ -84,7 +84,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->ekspedisi }}</td>
-                                        <td>{{ date('d-m-Y', strtotime($item->tanggal_pengiriman)) }}</td>
+                                        <td>{{ date_to_indo($item->tanggal_pengiriman) }}</td>
                                         <td>
                                             Nama : {{ $item->nama_driver }} <br>
                                             Telepon : {{ $item->telepon_driver }}
@@ -186,7 +186,7 @@
                                 <label for="tanggal_pengiriman" class="form-label">Tanggal <span
                                         class="text-danger"><small>*</small></span></label>
                                 <input type="text"
-                                    class="form-control date-picker @error('tanggal_pengiriman') is-invalid @enderror"
+                                    class="form-control date-pickers @error('tanggal_pengiriman') is-invalid @enderror"
                                     placeholder="Masukkan tanggal_pengiriman..." id="tanggal_pengiriman"
                                     name="tanggal_pengiriman" value="{{ old('tanggal_pengiriman') }}" readonly>
                                 @error('tanggal_pengiriman')
