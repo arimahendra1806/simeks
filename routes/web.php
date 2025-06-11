@@ -47,6 +47,7 @@ Route::post('/invoice_pay/now', [LandingController::class, 'invoice_pay_now'])->
 Route::post('/update_status_invoice_pay', [LandingController::class, 'update_status_invoice_pay'])->name('update_status_invoice_pay');
 Route::get('/status_shipment/{params}', [LandingController::class, 'status_shipment'])->name('status_shipment');
 Route::post('/status_shipment_update', [LandingController::class, 'status_shipment_update'])->name('status_shipment_update');
+Route::post('/pengiriman_darurat', [LandingController::class, 'pengiriman_darurat'])->name('pengiriman_darurat');
 
 Route::get('/login', function () {
     if (Auth::check()) {
@@ -116,6 +117,7 @@ Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(fun
     Route::resource('/pasar', PasarController::class);
     Route::post('/pengiriman/generate_kirim', [PenjualanByPengirimanController::class, 'generate_kirim'])->name('pengiriman.generate_kirim');
     Route::delete('/pengiriman/destroy/{id}', [PenjualanByPengirimanController::class, 'destroy'])->name('pengiriman.destroy');
+    Route::put('/pengiriman/confirm_wa/{id}', [PenjualanByPengirimanController::class, 'confirm_wa'])->name('pengiriman.confirm_wa');
     Route::resource('/pengiriman', PenjualanByPengirimanController::class);
     // Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
 });
@@ -155,6 +157,7 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
     Route::resource('/pembayaran', PenjualanByBayarController::class);
     Route::post('/pengiriman/generate_kirim', [PenjualanByPengirimanController::class, 'generate_kirim'])->name('pengiriman.generate_kirim');
     Route::delete('/pengiriman/destroy/{id}', [PenjualanByPengirimanController::class, 'destroy'])->name('pengiriman.destroy');
+    Route::put('/pengiriman/confirm_wa/{id}', [PenjualanByPengirimanController::class, 'confirm_wa'])->name('pengiriman.confirm_wa');
     Route::resource('/pengiriman', PenjualanByPengirimanController::class);
     // Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
 });

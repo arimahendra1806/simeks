@@ -154,7 +154,7 @@
             data: {
                 labels: labelJumlah,
                 datasets: [{
-                    label: 'Total Penjualan (Jumlah)',
+                    label: 'Total Penjualan (Jumlah Tahun ' + new Date().getFullYear() + ')',
                     data: dataJumlah,
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -183,7 +183,7 @@
             data: {
                 labels: labelNominal,
                 datasets: [{
-                    label: 'Total Penjualan (Nominal)',
+                    label: 'Total Penjualan (Nominal Tahun ' + new Date().getFullYear() + ')',
                     data: dataNominal,
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderColor: 'rgba(255, 99, 132, 1)',

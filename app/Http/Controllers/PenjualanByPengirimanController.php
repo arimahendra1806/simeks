@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
 use App\Models\PenjualanByPengiriman;
+use App\Models\PenjualanByProduk;
 use App\Models\PenjualanByRiwayat;
+use App\Models\Pilihan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -59,8 +62,10 @@ class PenjualanByPengirimanController extends Controller
 
         $penjualan = Penjualan::with('pembeli')->where('id', $id)->first();
         $pengiriman = PenjualanByPengiriman::with('statusPengiriman')->where('penjualan_id', $id)->orderBy('id', 'desc')->get();
+        $data_pemasok = PenjualanByProduk::with('produk.pemasok')->where('penjualan_id', $id)->first();
+        $data_alamat = $data_pemasok ? $data_pemasok->produk->pemasok->alamat : '';
 
-        return view("admin.penjualan_pengiriman.show", compact('title', 'penjualan', 'pengiriman'));
+        return view("admin.penjualan_pengiriman.show", compact('title', 'penjualan', 'pengiriman', 'data_alamat'));
     }
 
     /**
@@ -115,7 +120,8 @@ class PenjualanByPengirimanController extends Controller
                 'keterangan' => $request->keterangan,
                 'alamat_mulai' => $request->alamat_mulai,
                 'alamat_selesai' => $request->alamat_selesai,
-                'status_pengiriman' => 7
+                'status_pengiriman' => 7,
+                'id_user' => auth()->user()->id,
             ]);
 
             PenjualanByRiwayat::create([
@@ -132,5 +138,38 @@ class PenjualanByPengirimanController extends Controller
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function confirm_wa($id)
+    {
+        $data_pengiriman = PenjualanByPengiriman::where('id', $id)->first();
+        $data_token = Pilihan::where('nama', 'token_wa')->first();
+        $data_admin = User::where('id', $data_pengiriman->id_user)->first();
+
+        if (!$data_token) {
+            return back()->with('error', 'Token WhatsApp tidak ditemukan!');
+        }
+
+        if (!$data_pengiriman) {
+            return back()->with('error', 'Data pengiriman tidak ditemukan!');
+        }
+
+        $phone = 'Belum ada nomor telepon yang terdaftar';
+        if ($data_admin && $data_admin->phone) {
+            $phone = $data_admin->phone;
+        }
+
+        $message = 'Berikut link pembaruan status pengiriman: ' . "\n";
+        $message .= route('status_shipment', encrypt_64($data_pengiriman->id)) . "\n\n";
+        $message .= 'Silahkan klik link diatas untuk melihat status pengiriman. Jika ada kendala, silahkan hubungi admin : ' . "\n" . $phone . "\n\n";
+        $message .= 'Terima kasih. @CV ALMEA KAUSA ETERNA';
+
+        $response = send_wa(($data_token->isi ?? ""), ($data_pengiriman->telepon_driver ?? ""), $message);
+
+        if ($response['error']) {
+            return back()->with('error', 'Gagal mengirim pesan WhatsApp: ' . $response['error_msg']);
+        }
+
+        return back()->with('success', 'Pesan Berhasil Dikirim');
     }
 }

@@ -20,6 +20,7 @@
                         <th>Posisi</th>
                         <th>Nama</th>
                         <th>Email</th>
+                        <th>Telepon</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -30,6 +31,7 @@
                             <td>{{ $item->role->nama }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
+                            <td>{{ $item->phone }}</td>
                             <td>
                                 <a href="{{ route('admin.user.show', $item->id) }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-info mr-2"></i> Detail

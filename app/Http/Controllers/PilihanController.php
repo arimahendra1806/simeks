@@ -20,7 +20,7 @@ class PilihanController extends Controller
     public function index()
     {
         $title = $this->title;
-        $data = Pilihan::all()->sortByDesc('id');
+        $data = Pilihan::where('nama', '!=', 'dump')->get()->sortByDesc('id');
 
         return view('admin.pilihan.index', compact('title', 'data'));
     }

@@ -136,3 +136,45 @@ function normalize_phone_number($phone)
     }
     return '62' . $phone;
 }
+
+function send_wa($token, $phone, $message)
+{
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.fonnte.com/send',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => array(
+            'target' => ($phone ?? ''),
+            'message' => $message,
+            'countryCode' => '62',
+        ),
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: ' . $token,
+        ),
+    ));
+
+    $response = curl_exec($curl);
+    if (curl_errno($curl)) {
+        $error_msg = curl_error($curl);
+    }
+    curl_close($curl);
+
+    if (isset($error_msg)) {
+        return [
+            'error' => true,
+            'error_msg' => $error_msg,
+        ];
+    } else {
+        return [
+            'error' => false,
+            'error_msg' => '',
+        ];
+    }
+}

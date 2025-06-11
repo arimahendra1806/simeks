@@ -141,8 +141,7 @@
                         </a>
                     </li>
                     <li>
-                        {{-- <a href="{{ route('direktur.pembayaran.index') }}" --}}
-                        <a href="javascript:void(0);"
+                        <a href="{{ route('direktur.pembayaran.index') }}" {{-- <a href="javascript:void(0);" --}}
                             class="dropdown-toggle no-arrow {{ Request::is('direktur/pembayaran*') ? 'active' : '' }}">
                             <span class="micon bi bi-wallet2"></span><span class="mtext">
                                 Transaksi Pembayaran</span>

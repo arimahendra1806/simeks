@@ -32,7 +32,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="name" class="form-label">Nama User <span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror"
@@ -41,12 +41,21 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="email" class="form-label">Email <span
                                 class="text-danger"><small>*</small></span></label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                             placeholder="Masukkan email..." id="email" name="email" value="{{ old('email') }}">
                         @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="phone" class="form-label">Telepon <span
+                                class="text-danger"><small>*</small></span></label>
+                        <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                            placeholder="Masukkan telepon..." id="phone" name="phone" value="{{ old('phone') }}">
+                        @error('phone')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

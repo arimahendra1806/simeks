@@ -42,6 +42,7 @@ class UserController extends Controller
         $request->validate([
             'role_id' => 'required',
             'name' => 'required|string|max:255',
+            'phone' => 'required|max:15',
             'email' => [
                 'required',
                 'email',

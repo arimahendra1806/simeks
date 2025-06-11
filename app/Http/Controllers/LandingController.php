@@ -7,10 +7,14 @@ use App\Models\Kategori;
 use App\Models\Penjualan;
 use App\Models\PenjualanByBayar;
 use App\Models\PenjualanByPengiriman;
+use App\Models\PenjualanByPengirimanDarurat;
 use App\Models\PenjualanByProduk;
 use App\Models\PenjualanByRiwayat;
+use App\Models\Pilihan;
 use App\Models\Produk;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Midtrans\Notification;
 use Midtrans\Snap;
 
@@ -178,16 +182,30 @@ class LandingController extends Controller
 
         $penjualan = Penjualan::with('pembeli')->where('id', $data_penjualan->penjualan_id)->first();
         $produk = PenjualanByProduk::with('satuan', 'produk')->where('penjualan_id', $data_penjualan->penjualan_id)->get();
-        $pengiriman = PenjualanByPengiriman::with('statusPengiriman')->where('id', $id)->first();
+        $pengiriman = PenjualanByPengiriman::with('statusPengiriman', 'adminPengiriman')->where('id', $id)->first();
+        $laporan = PenjualanByPengirimanDarurat::where('pengiriman_id', $id)->get();
 
-        return view('landing.status_shipment', compact('penjualan', 'produk', 'pengiriman'));
+        return view('landing.status_shipment', compact('penjualan', 'produk', 'pengiriman', 'laporan'));
     }
 
     public function status_shipment_update(Request $request)
     {
+        if ($request->status > 7) {
+            $validator = Validator::make($request->all(), [
+                'keterangan_kirim' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->with('error', 'Tidak boleh ada yang kosong!');
+            }
+        }
+
         PenjualanByPengiriman::where('id', $request->id)
             ->update([
-                'status_pengiriman' => $request->status
+                'status_pengiriman' => $request->status,
+                'keterangan_kirim' => $request->keterangan_kirim,
             ]);
 
         PenjualanByRiwayat::create([
@@ -199,5 +217,48 @@ class LandingController extends Controller
         ]);
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function pengiriman_darurat(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'keterangan' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->with('error', 'Tidak boleh ada yang kosong!');
+        }
+
+        PenjualanByPengirimanDarurat::create([
+            'pengiriman_id' => $request->pengiriman_id,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        $data_pengiriman = PenjualanByPengiriman::where('id', $request->pengiriman_id)->first();
+
+        $message = "Laporan Darurat Pengiriman\n";
+        $message .= "Driver: " . $data_pengiriman->nama_driver . "\n";
+        $message .= "Keterangan: " . $request->keterangan . "\n\n";
+        $message .= "Silakan cek di status pengiriman untuk detail lebih lanjut." . "\n";
+        $message .= route('status_shipment', encrypt_64($request->pengiriman_id)) . "\n\n";
+        $message .= "Terima kasih. @CV ALMEA KAUSA ETERNA";
+
+        $data_pengiriman = PenjualanByPengiriman::where('id', $request->pengiriman_id)->first();
+        $data_token = Pilihan::where('nama', 'token_wa')->first();
+        $data_admin = User::where('id', $data_pengiriman->id_user)->first();
+
+        if (!$data_token) {
+            return back()->with('error', 'Token WhatsApp tidak ditemukan!');
+        }
+
+        if (!$data_pengiriman) {
+            return back()->with('error', 'Data pengiriman tidak ditemukan!');
+        }
+
+        $response = send_wa(($data_token->isi ?? ""), ($data_admin->phone ?? ""), $message);
+
+        return back()->with('success', 'Pesan Berhasil Dikirim');
     }
 }

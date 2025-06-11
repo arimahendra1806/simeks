@@ -30,6 +30,12 @@
     <link href="{{ asset('assets/lib/Dewi-1.0.0/') }}/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="{{ asset('assets/lib/Dewi-1.0.0/') }}/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css"
+        href="<?= asset('assets/lib/deskapp-master/') ?>/vendors/styles/icon-font.min.css" />
+
     <!-- Main CSS File -->
     <link href="{{ asset('assets/lib/Dewi-1.0.0/') }}/assets/css/main.css" rel="stylesheet">
 
@@ -144,8 +150,8 @@
                                             ?>
                                             <a href="{{ $is_alamat ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($pengiriman->alamat_mulai) . '&destination=' . urlencode($pengiriman->alamat_selesai) : 'javascript:void(0)' }}"
                                                 {{ $is_alamat ? 'target="_blank"' : '' }}
-                                                class="btn btn-dark btn-sm w-100 mt-1">
-                                                <i class="fa fa-map mr-2"></i> Cek Lokasi
+                                                class="btn btn-dark btn-sm w-25 mt-1">
+                                                <i class="fa fa-map me-2"></i> Cek Lokasi Pengiriman
                                             </a>
                                         </div>
                                     </div>
@@ -153,12 +159,12 @@
                                         class="text-muted mb-3 pb-2 border-bottom border-2 border-primary d-inline-block">
                                         <i class="bi bi-bag me-2"></i> Daftar Produk
                                     </h5>
-
                                     <div class="table-responsive">
                                         <table class="table table-hover align-middle">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>Produk</th>
+                                                    <th class="text-start">Satuan</th>
                                                     <th class="text-end">QTY</th>
                                                 </tr>
                                             </thead>
@@ -168,6 +174,8 @@
                                                         <td>
                                                             {{ $item->produk->nama }}
                                                         </td>
+                                                        <td class="text-start">
+                                                            {{ $item->satuan->nama }}</td>
                                                         <td class="text-end">
                                                             {{ $item->kuantitas }}</td>
                                                     </tr>
@@ -176,10 +184,20 @@
                                         </table>
                                     </div>
 
+                                    @if ($pengiriman->status_pengiriman > 7)
+                                        <textarea class="form-control @error('keterangan_kirim') is-invalid @enderror"
+                                            placeholder="Masukkan keterangan pengiriman..." id="keterangan_kirim" name="keterangan_kirim" cols="1"
+                                            rows="5" required @if ($pengiriman->status_pengiriman == 9) disabled @endif>{{ old('keterangan_kirim', $pengiriman->keterangan_kirim) }}</textarea>
+                                        @error('keterangan_kirim')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    @endif
+
                                     @if ($pengiriman->status_pengiriman != 9)
-                                        <div class="d-grid gap-2 mt-5">
-                                            <a href="javascript:void(0)" class="btn btn-success btn-lg" id="btn-status">
-                                                <i class="fas fa-credit-card me-2">
+                                        <div class="d-grid gap-2 mt-2">
+                                            <a href="javascript:void(0)" class="btn btn-success btn-lg"
+                                                id="btn-status">
+                                                <i class="fa fa-check me-2">
                                                     @php
                                                         $next_status = $pengiriman->status_pengiriman + 1;
                                                         $status = App\Models\Pilihan::where('parameter', $next_status)
@@ -192,12 +210,26 @@
                                             </a>
                                         </div>
                                     @else
-                                        <div class="d-grid gap-2 mt-5">
-                                            <a href="{{ url('/') }}" class="btn btn-primary">Kembali ke Halaman
-                                                Utama</a>
+                                        <div class="d-grid gap-2 mt-2">
+                                            <a href="{{ url('/') }}" class="btn btn-primary">
+                                                <i class="fa fa-home me-2"></i>
+                                                Kembali ke Halaman Utama
+                                            </a>
                                         </div>
                                     @endif
 
+                                    <div class="row">
+                                        <div class="col-md-12 text-md-end mt-3 mt-md-0">
+                                            <?php
+                                            $is_alamat = $pengiriman->alamat_mulai && $pengiriman->alamat_selesai ? true : false;
+                                            ?>
+                                            <a href="javascript:void(0)"
+                                                class="btn btn-danger btn-sm mt-1 btn_darurat">
+                                                <i class="fa fa-warning me-2"></i> Darurat? Beri tahu ke Admin
+                                                Sekarang
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -244,6 +276,91 @@
 
     </footer>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal_darurat" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">DARURAT SEGERA LAPORKAN ADMIN</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @if ($pengiriman->status_pengiriman != 9)
+                            <div class="col-md-12">
+                                <p class="text-muted">Jika Anda mengalami masalah atau situasi darurat terkait
+                                    pengiriman,
+                                    silakan laporkan kepada admin kami dengan mengisi form di bawah ini. Admin akan
+                                    segera
+                                    menghubungi Anda via WhatsApp.</p>
+                                <form id="form_darurat" action="{{ route('pengiriman_darurat') }}" method="POST">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="hidden" name="pengiriman_id" value="{{ $pengiriman->id }}">
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="form-label">Pesan Darurat</label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="4"
+                                            placeholder="Deskripsikan masalah atau situasi darurat Anda" required></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-danger btn_save_darurat"
+                                        onclick="confirm_darurat()">
+                                        <i class="fa fa-send me-2"></i>
+                                        Kirim Laporan Darurat</button>
+                                </form>
+                            </div>
+                        @endif
+
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <p class="text-muted mb-0">Riwayat laporan darurat:</p>
+                                @if ($laporan->isEmpty())
+                                    <p class="text-muted"><small>Belum ada laporan darurat yang dibuat.</small></p>
+                                @else
+                                    <ul style="max-height: 300px; overflow-y: auto;">
+                                        @foreach ($laporan as $item)
+                                            <li>
+                                                <strong>{{ $item->created_at->format('d M Y H:i') }}</strong><br>
+                                                {{ $item->keterangan }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        </div>
+
+                        @if ($pengiriman->status_pengiriman != 9)
+                            @if (!$laporan->isEmpty())
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <p class="text-muted mb-0">Atau Anda dapat menghubungi admin kami melalui
+                                            WhatsApp
+                                            dengan menekan tombol di bawah ini:</p>
+                                        @if ($pengiriman->adminPengiriman->phone == null)
+                                            <p class="text-danger">Admin belum mengisi nomor WhatsApp, silakan hubungi
+                                                admin melalui nomor telepon perusahaan.</p>
+                                            <a href="https://wa.me/6285190000236" target="_blank"
+                                                class="btn btn-success btn-sm">
+                                                <i class="fa fa-whatsapp me-2"></i> Hubungi Perusahaan via WhatsApp
+                                            </a>
+                                        @else
+                                            <a href="https://wa.me/{{ $pengiriman->adminPengiriman->phone }}"
+                                                target="_blank" class="btn btn-success btn-sm">
+                                                <i class="fa fa-whatsapp me-2"></i> Hubungi Admin via WhatsApp
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TUTUP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
@@ -279,6 +396,14 @@
     <script>
         $('#btn-status').click(function(e) {
             e.preventDefault();
+            if ($('#keterangan_kirim').val().trim() === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Keterangan pengiriman tidak boleh kosong!',
+                });
+                return;
+            }
 
             Swal.fire({
                 title: 'Anda yakin ingin mengupdate status pengiriman?',
@@ -297,6 +422,7 @@
                         data: {
                             id: "{{ $pengiriman->id }}",
                             status: "{{ $pengiriman->status_pengiriman + 1 }}",
+                            keterangan_kirim: $('#keterangan_kirim').val(),
                             _token: "{{ csrf_token() }}"
                         },
                         success: function(response) {
@@ -306,6 +432,36 @@
                 }
             })
         });
+
+        $('.btn_darurat').click(function(e) {
+            e.preventDefault();
+            $('#modal_darurat').modal('show');
+        })
+
+        function confirm_darurat() {
+            if ($('#keterangan').val().trim() === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pesan darurat tidak boleh kosong!',
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Pesan akan dikirim ke admin!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Kirim!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#form_darurat').submit();
+                }
+            });
+        }
     </script>
 
 </body>

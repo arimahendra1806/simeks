@@ -86,8 +86,8 @@
                                         <td>{{ $item->ekspedisi }}</td>
                                         <td>{{ date_to_indo($item->tanggal_pengiriman) }}</td>
                                         <td>
-                                            Nama : {{ $item->nama_driver }} <br>
-                                            Telepon : {{ $item->telepon_driver }}
+                                            Nama : <br> {{ $item->nama_driver }} <br>
+                                            Telepon : <br> {{ $item->telepon_driver }}
                                         </td>
                                         <td>{{ $item->statusPengiriman->isi }}</td>
                                         <td>
@@ -95,25 +95,38 @@
                                             <b>Alamat Tujuan</b> : <br> {{ $item->alamat_selesai ?? '-' }}
                                         </td>
                                         <td style="width: 30%">{{ $item->keterangan ?? '-' }}</td>
-                                        @if ($item->transaction_midtrans_status != 9)
-                                            <td>
-                                                <a href="javascript:void(0)"
-                                                    data-url="{{ route('status_shipment', encrypt_64($item->id)) }}"
-                                                    class="btn btn-info btn-sm w-100 mt-1 copy-btn">
-                                                    <i class="fa fa-info mr-2"></i> Copy
-                                                </a>
-                                                <a href="javascript:void(0)"
-                                                    class="btn btn-success btn-sm w-100 mt-1 copy-btn">
-                                                    <i class="fa fa-whatsapp mr-2"></i> Kirim Wa
-                                                </a>
-                                                <?php
-                                                $is_alamat = $item->alamat_mulai && $item->alamat_selesai ? true : false;
-                                                ?>
-                                                <a href="{{ $is_alamat ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($item->alamat_mulai) . '&destination=' . urlencode($item->alamat_selesai) : 'javascript:void(0)' }}"
-                                                    {{ $is_alamat ? 'target="_blank"' : '' }}
-                                                    class="btn btn-dark btn-sm w-100 mt-1">
-                                                    <i class="fa fa-map mr-2"></i> Cek Lokasi
-                                                </a>
+                                        <td>
+                                            <a href="{{ route('status_shipment', encrypt_64($item->id)) }}"
+                                                class="btn btn-warning btn-sm w-100 mt-1" target="_blank">
+                                                <i class="fa fa-link mr-2"></i> Cek Langsung
+                                            </a>
+                                            <a href="javascript:void(0)"
+                                                data-url="{{ route('status_shipment', encrypt_64($item->id)) }}"
+                                                class="btn btn-info btn-sm w-100 mt-1 copy-btn">
+                                                <i class="fa fa-info mr-2"></i> Copy Link
+                                            </a>
+                                            @if ($item->status_pengiriman != 9)
+                                                <form
+                                                    action="{{ route(request()->segment(1) . '.pengiriman.confirm_wa', $item->id) }}"
+                                                    method="POST" style="display:inline;"
+                                                    id="confirm-wa-form-{{ $item->id }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="button" class="btn btn-success btn-sm w-100 mt-1"
+                                                        onclick="confirm_wa({{ $item->id }})">
+                                                        <i class="fa fa-whatsapp mr-2"></i> Kirim Wa
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            <?php
+                                            $is_alamat = $item->alamat_mulai && $item->alamat_selesai ? true : false;
+                                            ?>
+                                            <a href="{{ $is_alamat ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($item->alamat_mulai) . '&destination=' . urlencode($item->alamat_selesai) : 'javascript:void(0)' }}"
+                                                {{ $is_alamat ? 'target="_blank"' : '' }}
+                                                class="btn btn-dark btn-sm w-100 mt-1">
+                                                <i class="fa fa-map mr-2"></i> Cek Lokasi
+                                            </a>
+                                            @if ($item->status_pengiriman != 9)
                                                 <form
                                                     action="{{ route(request()->segment(1) . '.pengiriman.destroy', $item->id) }}"
                                                     method="POST" style="display:inline;"
@@ -125,10 +138,8 @@
                                                         <i class="fa fa-trash mr-2"></i> Hapus
                                                     </button>
                                                 </form>
-                                            </td>
-                                        @else
-                                            <td>-</td>
-                                        @endif
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -217,7 +228,7 @@
                                 <label for="alamat_mulai" class="form-label">Alamat Awal <span
                                         class="text-danger"><small>*</small></span></label>
                                 <textarea class="form-control @error('alamat_mulai') is-invalid @enderror" placeholder="Masukkan alamat awal..."
-                                    id="alamat_mulai" name="alamat_mulai" cols="1" rows="5">{{ old('alamat_mulai') }}</textarea>
+                                    id="alamat_mulai" name="alamat_mulai" cols="1" rows="5">{{ old('alamat_mulai', $data_alamat) }}</textarea>
                                 @error('alamat_mulai')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -320,6 +331,22 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('#delete-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirm_wa(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dikirim sesuai nomor Telepon!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Kirim!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#confirm-wa-form-' + id).submit();
                 }
             });
         }
