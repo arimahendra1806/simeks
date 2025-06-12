@@ -41,8 +41,8 @@
                                     <i class="fa fa-info mr-2"></i> Detail
                                 </a>
                                 @if (session('role_id') != 3)
-                                    <form action="{{ route('admin.pembeli.destroy', $item->id) }}" method="POST"
-                                        style="display:inline;" id="delete-form-{{ $item->id }}">
+                                    <form action="{{ route(request()->segment(1) . '.pembeli.destroy', $item->id) }}"
+                                        method="POST" style="display:inline;" id="delete-form-{{ $item->id }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm"
