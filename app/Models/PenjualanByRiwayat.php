@@ -26,17 +26,17 @@ class PenjualanByRiwayat extends Model
 
     public function penjualan()
     {
-        return $this->belongsTo(Penjualan::class, 'references_id', 'id');
+        return $this->belongsTo(Penjualan::class, 'references_id', 'id')->withTrashed();
     }
 
     public function pengiriman()
     {
-        return $this->belongsTo(PenjualanByPengiriman::class, 'references_id', 'id');
+        return $this->belongsTo(PenjualanByPengiriman::class, 'references_id', 'id')->withTrashed();
     }
 
     public function bayar()
     {
-        return $this->belongsTo(PenjualanByBayar::class, 'references_id', 'id');
+        return $this->belongsTo(PenjualanByBayar::class, 'references_id', 'id')->withTrashed();
     }
 
     public function status_penjualan()

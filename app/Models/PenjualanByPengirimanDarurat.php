@@ -27,6 +27,6 @@ class PenjualanByPengirimanDarurat extends Model
 
     public function pengiriman()
     {
-        return $this->belongsTo(PenjualanByPengiriman::class, 'pengiriman_id', 'id');
+        return $this->belongsTo(PenjualanByPengiriman::class, 'pengiriman_id', 'id')->withTrashed();
     }
 }

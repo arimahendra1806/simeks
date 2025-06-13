@@ -26,11 +26,11 @@ class PenjualanByDokumen extends Model
 
     public function penjualan()
     {
-        return $this->belongsTo(Penjualan::class);
+        return $this->belongsTo(Penjualan::class)->withTrashed();
     }
 
     public function dokumen()
     {
-        return $this->belongsTo(Dokumen::class);
+        return $this->belongsTo(Dokumen::class)->withTrashed();
     }
 }

@@ -190,18 +190,6 @@ class LandingController extends Controller
 
     public function status_shipment_update(Request $request)
     {
-        if ($request->status > 7) {
-            $validator = Validator::make($request->all(), [
-                'keterangan_kirim' => 'required',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->with('error', 'Tidak boleh ada yang kosong!');
-            }
-        }
-
         PenjualanByPengiriman::where('id', $request->id)
             ->update([
                 'status_pengiriman' => $request->status,

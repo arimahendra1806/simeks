@@ -396,13 +396,17 @@
     <script>
         $('#btn-status').click(function(e) {
             e.preventDefault();
-            if ($('#keterangan_kirim').val().trim() === '') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Keterangan pengiriman tidak boleh kosong!',
-                });
-                return;
+            let status = {{ $pengiriman->status_pengiriman }}
+
+            if (status > 7) {
+                if ($('#keterangan_kirim').val() == '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Keterangan pengiriman tidak boleh kosong!',
+                    });
+                    return;
+                }
             }
 
             Swal.fire({

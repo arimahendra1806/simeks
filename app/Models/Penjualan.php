@@ -26,7 +26,7 @@ class Penjualan extends Model
 
     public function pembeli()
     {
-        return $this->belongsTo(Pembeli::class);
+        return $this->belongsTo(Pembeli::class)->withTrashed();
     }
 
     public function penjualanByBayar()
@@ -61,7 +61,7 @@ class Penjualan extends Model
 
     public function statusPenjualan()
     {
-        return $this->belongsTo(Pilihan::class, 'status', 'parameter')->where('nama', 'status');
+        return $this->belongsTo(Pilihan::class, 'status', 'parameter')->where('nama', 'status')->withTrashed();
     }
 
     public function setTotalPembelianAttribute($value)

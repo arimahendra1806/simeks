@@ -26,6 +26,6 @@ class PenjualanByPengembalian extends Model
 
     public function penjualan()
     {
-        return $this->belongsTo(Penjualan::class);
+        return $this->belongsTo(Penjualan::class)->withTrashed();
     }
 }

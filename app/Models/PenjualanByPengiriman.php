@@ -27,16 +27,16 @@ class PenjualanByPengiriman extends Model
 
     public function penjualan()
     {
-        return $this->belongsTo(Penjualan::class);
+        return $this->belongsTo(Penjualan::class)->withTrashed();
     }
 
     public function statusPengiriman()
     {
-        return $this->belongsTo(Pilihan::class, 'status_pengiriman', 'parameter')->where('nama', 'status_pengiriman');
+        return $this->belongsTo(Pilihan::class, 'status_pengiriman', 'parameter')->where('nama', 'status_pengiriman')->withTrashed();
     }
 
     public function adminPengiriman()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id')->withTrashed();
     }
 }

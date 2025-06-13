@@ -26,21 +26,21 @@ class PenjualanByBayar extends Model
 
     public function penjualan()
     {
-        return $this->belongsTo(Penjualan::class);
+        return $this->belongsTo(Penjualan::class)->withTrashed();
     }
 
     public function bank()
     {
-        return $this->belongsTo(Bank::class);
+        return $this->belongsTo(Bank::class)->withTrashed();
     }
 
     public function statusKategori()
     {
-        return $this->belongsTo(Pilihan::class, 'kategori_pembayaran', 'parameter')->where('nama', 'kategori_pembayaran');
+        return $this->belongsTo(Pilihan::class, 'kategori_pembayaran', 'parameter')->where('nama', 'kategori_pembayaran')->withTrashed();
     }
 
     public function tipe()
     {
-        return $this->belongsTo(Pilihan::class, 'tipe_pembayaran', 'parameter')->where('nama', 'tipe_pembayaran');
+        return $this->belongsTo(Pilihan::class, 'tipe_pembayaran', 'parameter')->where('nama', 'tipe_pembayaran')->withTrashed();
     }
 }

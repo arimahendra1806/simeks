@@ -26,12 +26,12 @@ class ProdukBySatuan extends Model
 
     public function produk()
     {
-        return $this->belongsTo(Produk::class);
+        return $this->belongsTo(Produk::class)->withTrashed();
     }
 
     public function satuan()
     {
-        return $this->belongsTo(Satuan::class);
+        return $this->belongsTo(Satuan::class)->withTrashed();
     }
 
     public function setKuantitasAttribute($value)
