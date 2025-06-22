@@ -411,12 +411,13 @@
                                         @foreach ($lokasi as $item)
                                             <li>
                                                 <strong>{{ $item->created_at->format('d M Y H:i') }}</strong><br>
-                                                {{ $item->keterangan }} <br>
+                                                {{ $item->keterangan }}
+                                                {{-- <br>
                                                 <a href="{{ $item->lat && $item->lng ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($item->lat . ',' . $item->lng) . '&destination=' . urlencode($pengiriman->alamat_selesai) : 'javascript:void(0)' }}"
                                                     {{ $item->lat && $item->lng ? 'target="_blank"' : '' }}
                                                     class="btn btn-dark btn-sm mt-1">
                                                     <i class="fa fa-map me-2"></i> Cek Lokasi
-                                                </a>
+                                                </a> --}}
                                             </li>
                                         @endforeach
                                     </ul>
