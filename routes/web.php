@@ -48,6 +48,7 @@ Route::post('/update_status_invoice_pay', [LandingController::class, 'update_sta
 Route::get('/status_shipment/{params}', [LandingController::class, 'status_shipment'])->name('status_shipment');
 Route::post('/status_shipment_update', [LandingController::class, 'status_shipment_update'])->name('status_shipment_update');
 Route::post('/pengiriman_darurat', [LandingController::class, 'pengiriman_darurat'])->name('pengiriman_darurat');
+Route::post('/pengiriman_lokasi', [LandingController::class, 'pengiriman_lokasi'])->name('pengiriman_lokasi');
 
 Route::get('/login', function () {
     if (Auth::check()) {

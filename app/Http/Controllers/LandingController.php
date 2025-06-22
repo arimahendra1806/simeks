@@ -8,6 +8,7 @@ use App\Models\Penjualan;
 use App\Models\PenjualanByBayar;
 use App\Models\PenjualanByPengiriman;
 use App\Models\PenjualanByPengirimanDarurat;
+use App\Models\PenjualanByPengirimanLokasi;
 use App\Models\PenjualanByProduk;
 use App\Models\PenjualanByRiwayat;
 use App\Models\Pilihan;
@@ -184,8 +185,9 @@ class LandingController extends Controller
         $produk = PenjualanByProduk::with('satuan', 'produk')->where('penjualan_id', $data_penjualan->penjualan_id)->get();
         $pengiriman = PenjualanByPengiriman::with('statusPengiriman', 'adminPengiriman')->where('id', $id)->first();
         $laporan = PenjualanByPengirimanDarurat::where('pengiriman_id', $id)->get();
+        $lokasi = PenjualanByPengirimanLokasi::where('pengiriman_id', $id)->get();
 
-        return view('landing.status_shipment', compact('penjualan', 'produk', 'pengiriman', 'laporan'));
+        return view('landing.status_shipment', compact('penjualan', 'produk', 'pengiriman', 'laporan', 'lokasi'));
     }
 
     public function status_shipment_update(Request $request)
@@ -197,12 +199,36 @@ class LandingController extends Controller
             ]);
 
         PenjualanByRiwayat::create([
-            'references_id' => $request->id_penjualan,
+            'references_id' => $request->id,
             'penjualan_id' => 0,
             'tipe' => 2,
             'status' => $request->status,
             'tanggal' => date('Y-m-d'),
         ]);
+
+        $keterangan = 'Mulai pengiriman';
+        if ($request->status > 7) {
+            $keterangan = $request->keterangan_kirim;
+        }
+
+        $data_pengiriman = PenjualanByPengiriman::where('id', $request->id)->first();
+        $message = "Infomari Update Lokasi\n";
+        $message .= "Driver: " . $data_pengiriman->nama_driver . "\n";
+        $message .= "Keterangan: $keterangan \n\n";
+        $message .= "Silakan cek di status pengiriman untuk detail lebih lanjut." . "\n";
+        $message .= route('status_shipment', encrypt_64($request->pengiriman_id)) . "\n\n";
+        $message .= "Terima kasih. @CV ALMEA KAUSA ETERNA";
+
+        $data_token = Pilihan::where('nama', 'token_wa')->first();
+        $data_admin = User::where('id', $data_pengiriman->id_user)->first();
+
+        if (!$data_token) {
+            return back()->with('error', 'Token WhatsApp tidak ditemukan!');
+        }
+        if (!$data_pengiriman) {
+            return back()->with('error', 'Data pengiriman tidak ditemukan!');
+        }
+        $response = send_wa(($data_token->isi ?? ""), ($data_admin->phone ?? ""), $message);
 
         return response()->json(['status' => 'success']);
     }
@@ -233,7 +259,52 @@ class LandingController extends Controller
         $message .= route('status_shipment', encrypt_64($request->pengiriman_id)) . "\n\n";
         $message .= "Terima kasih. @CV ALMEA KAUSA ETERNA";
 
+        $data_token = Pilihan::where('nama', 'token_wa')->first();
+        $data_admin = User::where('id', $data_pengiriman->id_user)->first();
+
+        if (!$data_token) {
+            return back()->with('error', 'Token WhatsApp tidak ditemukan!');
+        }
+
+        if (!$data_pengiriman) {
+            return back()->with('error', 'Data pengiriman tidak ditemukan!');
+        }
+
+        $response = send_wa(($data_token->isi ?? ""), ($data_admin->phone ?? ""), $message);
+
+        return back()->with('success', 'Pesan Berhasil Dikirim');
+    }
+
+    public function pengiriman_lokasi(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'keterangan_lokasi' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->with('error', 'Tidak boleh ada yang kosong!');
+        }
+
+        PenjualanByPengirimanLokasi::create([
+            'pengiriman_id' => $request->pengiriman_id,
+            'lat' => $request->lat,
+            'lng' => $request->lng,
+            'keterangan' => $request->keterangan_lokasi,
+        ]);
+
         $data_pengiriman = PenjualanByPengiriman::where('id', $request->pengiriman_id)->first();
+
+        $message = "Infomari Update Lokasi\n";
+        $message .= "Driver: " . $data_pengiriman->nama_driver . "\n";
+        $message .= "Keterangan: " . $request->keterangan_lokasi . "\n\n";
+        $message .= "Silakan cek di status pengiriman untuk detail lebih lanjut." . "\n";
+        $message .= route('status_shipment', encrypt_64($request->pengiriman_id)) . "\n\n";
+        $message .= "Terima kasih. @CV ALMEA KAUSA ETERNA";
+
         $data_token = Pilihan::where('nama', 'token_wa')->first();
         $data_admin = User::where('id', $data_pengiriman->id_user)->first();
 

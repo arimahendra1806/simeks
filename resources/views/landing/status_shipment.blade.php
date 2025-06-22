@@ -150,7 +150,7 @@
                                             ?>
                                             <a href="{{ $is_alamat ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($pengiriman->alamat_mulai) . '&destination=' . urlencode($pengiriman->alamat_selesai) : 'javascript:void(0)' }}"
                                                 {{ $is_alamat ? 'target="_blank"' : '' }}
-                                                class="btn btn-dark btn-sm w-25 mt-1">
+                                                class="btn btn-dark btn-sm mt-1">
                                                 <i class="fa fa-map me-2"></i> Cek Lokasi Pengiriman
                                             </a>
                                         </div>
@@ -223,6 +223,11 @@
                                             <?php
                                             $is_alamat = $pengiriman->alamat_mulai && $pengiriman->alamat_selesai ? true : false;
                                             ?>
+                                            <a href="javascript:void(0)"
+                                                class="btn btn-primary btn-sm mt-1 btn_lokasi">
+                                                <i class="fa fa-map me-2"></i> Perbarui kondisi dan lokasi Anda
+                                                Sekarang
+                                            </a>
                                             <a href="javascript:void(0)"
                                                 class="btn btn-danger btn-sm mt-1 btn_darurat">
                                                 <i class="fa fa-warning me-2"></i> Darurat? Beri tahu ke Admin
@@ -361,6 +366,72 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal_lokasi" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">PERBARUI KONDISI DAN LOKASI ANDA</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @if ($pengiriman->status_pengiriman != 9)
+                            <div class="col-md-12">
+                                <p class="text-muted">
+                                    Jika Anda ingin memperbarui kondisi dan lokasi Anda saat ini, silakan isi form di
+                                    bawah ini. Admin akan segera menerima informasi terbaru Anda.
+                                </p>
+                                <form id="form_lokasi" action="{{ route('pengiriman_lokasi') }}" method="POST">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="hidden" name="pengiriman_id" value="{{ $pengiriman->id }}">
+                                    <input type="hidden" name="lat">
+                                    <input type="hidden" name="lng">
+                                    <div class="mb-3">
+                                        <label for="keterangan_lokasi" class="form-label">Pesan Kondisi Saat
+                                            Ini</label>
+                                        <textarea class="form-control" id="keterangan_lokasi" name="keterangan_lokasi" rows="4"
+                                            placeholder="Deskripsikan kondisi Anda saat ini" required></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-danger btn_save_lokasi"
+                                        onclick="confirm_lokasi()">
+                                        <i class="fa fa-send me-2"></i>
+                                        Kirim Perbaruan</button>
+                                </form>
+                            </div>
+                        @endif
+
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <p class="text-muted mb-0">Riwayat pembaruan:</p>
+                                @if ($lokasi->isEmpty())
+                                    <p class="text-muted"><small>Belum ada perbaruan kondisi.</small></p>
+                                @else
+                                    <ul style="max-height: 300px; overflow-y: auto;">
+                                        @foreach ($lokasi as $item)
+                                            <li>
+                                                <strong>{{ $item->created_at->format('d M Y H:i') }}</strong><br>
+                                                {{ $item->keterangan }} <br>
+                                                <a href="{{ $item->lat && $item->lng ? 'https://www.google.com/maps/dir/?api=1&origin=' . urlencode($item->lat . ',' . $item->lng) . '&destination=' . urlencode($pengiriman->alamat_selesai) : 'javascript:void(0)' }}"
+                                                    {{ $item->lat && $item->lng ? 'target="_blank"' : '' }}
+                                                    class="btn btn-dark btn-sm mt-1">
+                                                    <i class="fa fa-map me-2"></i> Cek Lokasi
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TUTUP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
@@ -394,9 +465,10 @@
     @endif
 
     <script>
+        let status = {{ $pengiriman->status_pengiriman }};
+
         $('#btn-status').click(function(e) {
             e.preventDefault();
-            let status = {{ $pengiriman->status_pengiriman }}
 
             if (status > 7) {
                 if ($('#keterangan_kirim').val() == '') {
@@ -442,6 +514,11 @@
             $('#modal_darurat').modal('show');
         })
 
+        $('.btn_lokasi').click(function(e) {
+            e.preventDefault();
+            $('#modal_lokasi').modal('show');
+        })
+
         function confirm_darurat() {
             if ($('#keterangan').val().trim() === '') {
                 Swal.fire({
@@ -463,6 +540,55 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('#form_darurat').submit();
+                }
+            });
+        }
+
+        function confirm_lokasi() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    $('[name="lat"]').val(lat);
+                    $('[name="lng"]').val(lng);
+                    console.log("Lokasi disimpan:", lat, lng);
+
+                    // var mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+                    // window.open(mapsUrl, '_blank');
+
+                }, function(error) {
+                    console.error("Gagal ambil lokasi:", error.message);
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            } else {
+                console.warn("Browser tidak mendukung Geolocation.");
+            }
+
+            if ($('#keterangan_lokasi').val().trim() === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pesan perbaruai kondisi dan lokasi tidak boleh kosong!',
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Pesan akan dikirim ke admin!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Kirim!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setTimeout(function() {
+                        $('#form_lokasi').submit();
+                    }, 1000);
                 }
             });
         }
