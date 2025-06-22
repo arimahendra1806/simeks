@@ -83,13 +83,11 @@ class PembeliController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route("$this->prefix.produk.index")->with('success', 'Produk berhasil disimpan!');
+            return redirect()->route("$this->prefix.pembeli.index")->with('success', 'Produk berhasil disimpan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return redirect()->route("$this->prefix.pembeli.index")->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
