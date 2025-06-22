@@ -217,7 +217,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="telepon_driver" class="form-label">Telepon Driver <span
                                         class="text-danger"><small>*</small></span></label>
-                                <input type="text" class="form-control @error('telepon_driver') is-invalid @enderror"
+                                <input type="number" class="form-control @error('telepon_driver') is-invalid @enderror"
                                     placeholder="Masukkan telepon_driver..." id="telepon_driver" name="telepon_driver"
                                     value="{{ old('telepon_driver') }}">
                                 @error('telepon_driver')

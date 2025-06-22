@@ -57,7 +57,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="phone" class="form-label">Telepon <span
                                 class="text-danger"><small>*</small></span></label>
-                        <input type="phone" class="form-control @error('phone') is-invalid @enderror"
+                        <input type="number" class="form-control @error('phone') is-invalid @enderror"
                             placeholder="Masukkan telepon..." id="phone" name="phone"
                             value="{{ old('phone', $user->phone) }}" readonly>
                         @error('phone')

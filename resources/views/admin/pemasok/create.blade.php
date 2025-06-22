@@ -64,7 +64,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="telepon" class="form-label">Nomor WA <span
                                 class="text-danger"><small>*</small></span></label>
-                        <input type="text" class="form-control @error('telepon') is-invalid @enderror"
+                        <input type="number" class="form-control @error('telepon') is-invalid @enderror"
                             placeholder="Masukkan telepon..." id="telepon" name="telepon" value="{{ old('telepon') }}">
                         @error('telepon')
                             <div class="invalid-feedback">{{ $message }}</div>
