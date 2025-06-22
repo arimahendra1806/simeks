@@ -139,6 +139,18 @@ function normalize_phone_number($phone)
 
 function send_wa($token, $phone, $message)
 {
+    // Konversi nomor jika dimulai dengan 0
+    $phone = trim($phone);
+    if (substr($phone, 0, 1) == '0') {
+        // Misal: 08123456789 => 628123456789
+        $phone = '62' . substr($phone, 1);
+    } elseif (substr($phone, 0, 2) == '62') {
+        // Sudah sesuai, tidak perlu diubah
+    } elseif (substr($phone, 0, 3) == '+62') {
+        // Hapus tanda plus jika ada
+        $phone = '62' . substr($phone, 3);
+    }
+
     $curl = curl_init();
 
     curl_setopt_array($curl, array(

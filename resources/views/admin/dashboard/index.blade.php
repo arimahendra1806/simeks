@@ -163,6 +163,11 @@
             },
             options: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        onClick: () => {},
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -192,6 +197,11 @@
             },
             options: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        onClick: () => {},
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
