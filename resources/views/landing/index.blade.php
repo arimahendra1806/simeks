@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -97,6 +96,17 @@
                         </ul>
                     </li> --}}
                     <li><a href="#contact">Kontak Kami</a></li>
+                    <li>
+                        <div class="gtranslate_wrapper"></div>
+                        <script>
+                            window.gtranslateSettings = {
+                                "default_language": "id",
+                                "detect_browser_language": true,
+                                "languages": ["id", "en"],
+                                "wrapper_selector": ".gtranslate_wrapper"
+                            }
+                        </script>
+                    </li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
@@ -1153,6 +1163,8 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('assets/lib/Dewi-1.0.0/') }}/assets/js/main.js"></script>
+
+    <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
 </body>
 
