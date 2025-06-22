@@ -26,7 +26,7 @@ class Produk extends Model
 
     public function pasar()
     {
-        return $this->hasMany(Pasar::class);
+        return $this->hasMany(Pasar::class)->withTrashed();
     }
 
     public function penjualanByProduk()
@@ -36,21 +36,21 @@ class Produk extends Model
 
     public function pemasok()
     {
-        return $this->belongsTo(Pemasok::class);
+        return $this->belongsTo(Pemasok::class)->withTrashed();
     }
 
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class);
+        return $this->belongsTo(Kategori::class)->withTrashed();
     }
 
     public function produkByFoto()
     {
-        return $this->hasMany(ProdukByFoto::class);
+        return $this->hasMany(ProdukByFoto::class)->withTrashed();
     }
 
     public function produkBySatuan()
     {
-        return $this->hasMany(ProdukBySatuan::class);
+        return $this->hasMany(ProdukBySatuan::class)->withTrashed();
     }
 }
