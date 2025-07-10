@@ -9,6 +9,7 @@ use App\Models\Pemasok;
 use App\Models\Pembeli;
 use App\Models\PenjualanByProduk;
 use App\Models\PenjualanByRiwayat;
+use App\Models\Pilihan;
 use App\Models\Produk;
 use App\Models\ProdukByFoto;
 use App\Models\ProdukBySatuan;
@@ -16,6 +17,7 @@ use App\Models\Provinsi;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PenjualanController extends Controller
 {
@@ -48,8 +50,9 @@ class PenjualanController extends Controller
         $option_pembeli = Pembeli::all();
         $option_produk  = Produk::all();
         $option_satuan  = Satuan::all();
+        $option_tipe_pengiriman  = Pilihan::where('nama', 'tipe_pengiriman')->get();
 
-        return view("admin.penjualan.create", compact('title', 'option_pembeli', 'option_produk', 'option_satuan'));
+        return view("admin.penjualan.create", compact('title', 'option_pembeli', 'option_produk', 'option_satuan', 'option_tipe_pengiriman'));
     }
 
     public function get_satuan($produk_id)
@@ -83,6 +86,10 @@ class PenjualanController extends Controller
     {
         $this->validation($request);
 
+        $total_pengiriman = ($request->tipe_pengiriman == 1)
+            ? 0
+            : remove_currency($request->biaya_pengiriman);
+
         DB::beginTransaction();
         try {
             $penjualan = Penjualan::create([
@@ -92,6 +99,8 @@ class PenjualanController extends Controller
                 'tanggal_pembelian' => formate_date($request->tanggal_pembelian),
                 'hasil_negosiasi' => $request->hasil_negosiasi,
                 'permintaan' => $request->permintaan,
+                'tipe_pengiriman' => $request->tipe_pengiriman,
+                'biaya_pengiriman' => $total_pengiriman,
             ]);
 
             $total_all = 0;
@@ -109,10 +118,13 @@ class PenjualanController extends Controller
                     'diskon_nominal' => 0,
                     'diskon_persen' => 0,
                     'total' => $total,
+                    'fee_cv' => $data_satuan->fee_cv ?? 10,
                 ]);
 
                 $total_all += $total;
             }
+
+            $total_all += $total_pengiriman;
 
             Penjualan::where('id', $penjualan->id)->update([
                 'total_pembelian' => $total_all,
@@ -120,7 +132,7 @@ class PenjualanController extends Controller
                 'pph' => 0,
                 'diskon_nominal' => 0,
                 'diskon_persen' => 0,
-                'biaya_pengiriman' => 0,
+                'biaya_pengiriman' => $total_pengiriman,
                 'total_pembayaran' => $total_all,
                 'total_terbayar' => 0,
                 'sisa_pembayaran' => $total_all,
@@ -152,10 +164,11 @@ class PenjualanController extends Controller
         $option_pembeli = Pembeli::all();
         $option_produk  = Produk::all();
         $option_satuan  = Satuan::all();
+        $option_tipe_pengiriman  = Pilihan::where('nama', 'tipe_pengiriman')->get();
 
         $produks = PenjualanByProduk::with('satuan', 'produk')->where('penjualan_id', $penjualan->id)->get();
 
-        return view("admin.penjualan.show", compact('title', 'penjualan', 'option_pembeli', 'option_produk', 'option_satuan', 'produks'));
+        return view("admin.penjualan.show", compact('title', 'penjualan', 'option_pembeli', 'option_produk', 'option_satuan', 'produks', 'option_tipe_pengiriman'));
     }
 
     /**
@@ -173,6 +186,10 @@ class PenjualanController extends Controller
     {
         $this->validation($request, $penjualan->id);
 
+        $total_pengiriman = ($request->tipe_pengiriman == 1)
+            ? 0
+            : remove_currency($request->biaya_pengiriman);
+
         DB::beginTransaction();
         try {
             $penjualan->update([
@@ -181,6 +198,8 @@ class PenjualanController extends Controller
                 'tanggal_pembelian' => formate_date($request->tanggal_pembelian),
                 'hasil_negosiasi' => $request->hasil_negosiasi,
                 'permintaan' => $request->permintaan,
+                'tipe_pengiriman' => $request->tipe_pengiriman,
+                'biaya_pengiriman' => $total_pengiriman,
             ]);
 
             $total_all = 0;
@@ -199,10 +218,13 @@ class PenjualanController extends Controller
                     'diskon_nominal' => 0,
                     'diskon_persen' => 0,
                     'total' => $total,
+                    'fee_cv' => $data_satuan->fee_cv ?? 10,
                 ]);
 
                 $total_all += $total;
             }
+
+            $total_all += $total_pengiriman;
 
             $penjualan->update([
                 'total_pembelian' => $total_all,
@@ -210,7 +232,7 @@ class PenjualanController extends Controller
                 'pph' => 0,
                 'diskon_nominal' => 0,
                 'diskon_persen' => 0,
-                'biaya_pengiriman' => 0,
+                'biaya_pengiriman' => $total_pengiriman,
                 'total_pembayaran' => $total_all,
                 'total_terbayar' => 0,
                 'sisa_pembayaran' => $total_all,

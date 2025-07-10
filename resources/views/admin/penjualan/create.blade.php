@@ -55,6 +55,36 @@
                         @enderror
                     </div>
                     <div class="col-md-12 mb-3">
+                        <label for="tipe_pengiriman" class="form-label">Tipe Pengiriman <span
+                                class="text-danger"><small>*</small></span></label>
+                        <select name="tipe_pengiriman" id="tipe_pengiriman"
+                            class="form-control form-select js-select2 @error('tipe_pengiriman') is-invalid @enderror"
+                            data-placeholder="- Pilih Tipe -">
+                            <option value=""></option>
+                            @foreach ($option_tipe_pengiriman as $item)
+                                <option value="{{ $item->parameter }}"
+                                    {{ old('tipe_pengiriman', 1) == $item->parameter ? 'selected' : '' }}>
+                                    {{ $item->isi }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('pembeli_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div
+                        class="col-md-12 mb-3 container-biaya-pengiriman {{ old('tipe_pengiriman', 1) == 1 ? 'd-none' : '' }}">
+                        <label for="biaya_pengiriman" class="form-label">Biaya Pengiriman<span
+                                class="text-danger"></span></label>
+                        <input type="text"
+                            class="form-control js-currency @error('biaya_pengiriman') is-invalid @enderror"
+                            placeholder="Masukkan biaya pengiriman..." id="biaya_pengiriman" name="biaya_pengiriman"
+                            value="{{ old('biaya_pengiriman', 0) }}">
+                        @error('biaya_pengiriman')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-12 mb-3">
                         <label for="hasil_negosiasi" class="form-label">Hasil Negosiasi</label>
                         <textarea class="form-control @error('hasil_negosiasi') is-invalid @enderror" placeholder="Masukkan hasil_negosiasi..."
                             id="hasil_negosiasi" name="hasil_negosiasi">{{ old('hasil_negosiasi') }}</textarea>
@@ -209,7 +239,7 @@
         let data_satuan = '';
 
         $(document).ready(function() {
-            updateRowNumbers();
+            // updateRowNumbers();
         });
 
         function updateRowNumbers() {
@@ -256,6 +286,16 @@
                     });
                 }
             });
+        });
+
+        $('#tipe_pengiriman').on('change', function(e) {
+            e.preventDefault();
+            let tipe = $(this).val();
+            if (tipe != 1) {
+                $('.container-biaya-pengiriman').removeClass('d-none');
+            } else {
+                $('.container-biaya-pengiriman').addClass('d-none');
+            }
         });
 
         $('#satuan_add').on('change', function() {
@@ -338,12 +378,19 @@
             calculate();
         });
 
+        $('#biaya_pengiriman').on('input', function() {
+            calculate();
+        });
+
         function calculate() {
             let total_all = 0;
             $("#data_table tbody tr").each(function() {
                 let total = remove_currency($(this).find("input[name='total[]']").val());
                 total_all += parseInt(total);
             });
+
+            let pengiriman = remove_currency($('#biaya_pengiriman').val());
+            total_all += parseInt(pengiriman);
 
             $('.total_all').text(format_currency(total_all));
         }
@@ -366,6 +413,14 @@
             e.preventDefault();
 
             let isValid = true;
+            let tipePengiriman = $('#tipe_pengiriman').val();
+            let biayaPengiriman = $('#biaya_pengiriman').val();
+
+            if (tipePengiriman != 1 && (!biayaPengiriman || parseFloat(biayaPengiriman) == 0)) {
+                e.preventDefault();
+                notif_error('Biaya pengiriman tidak boleh kosong!');
+                return;
+            }
 
             $("#data_table tbody tr").each(function() {
                 let produk = $(this).find("input[name='produk_id[]']").val();

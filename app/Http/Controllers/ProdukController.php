@@ -60,6 +60,8 @@ class ProdukController extends Controller
             'kuantitas.*' => 'numeric|min:1',
             'harga' => 'required|array',
             'harga.*' => 'numeric|min:0',
+            'fee_cv' => 'required|array',
+            'fee_cv.' => 'numeric|min:0',
             'file' => 'required',
         ]);
     }
@@ -101,6 +103,7 @@ class ProdukController extends Controller
                     'satuan_id' => $satuan_id,
                     'kuantitas' => $request->kuantitas[$index],
                     'harga' => $request->harga[$index],
+                    'fee_cv' => $request->fee_cv[$index],
                 ]);
             }
 
@@ -174,6 +177,7 @@ class ProdukController extends Controller
                     'satuan_id' => $satuan_id,
                     'kuantitas' => $request->kuantitas[$index],
                     'harga' => $request->harga[$index],
+                    'fee_cv' => $request->fee_cv[$index],
                 ]);
             }
 

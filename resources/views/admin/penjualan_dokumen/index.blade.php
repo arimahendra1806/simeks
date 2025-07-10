@@ -33,7 +33,13 @@
                             </td>
                             <td>{{ format_currency($item->total_pembayaran) }}</td>
                             <td>{{ $item->penjualanByProduk->count() }} Produk</td>
-                            <td>{{ $item->statusPenjualan->isi }}</td>
+                            <td>
+                                {{ $item->statusPenjualan->isi }}
+                                @if ($item->status_dokumen == 2)
+                                    <br>
+                                    <span class="text-danger">TUNDA : {{ $item->note_dokumen }}</span>
+                                @endif
+                            </td>
                             <td>
                                 @if (session('role_id') == 3 && $item->status == 2 && $item->penjualanByDokumen->count() > 0)
                                     <form
@@ -44,6 +50,28 @@
                                         <button type="button" class="btn btn-success btn-sm mt-1"
                                             onclick="confirm_konfirmasi({{ $item->id }})">
                                             <i class="fa fa-check mr-2"></i> Konfirmasi
+                                        </button>
+                                    </form>
+                                    <button type="button" class="btn btn-warning btn-sm mt-1 btn_tunda"
+                                        data-id={{ $item->id }}>
+                                        <i class="fa fa-hourglass mr-2"></i> Tunda Dokumen
+                                        <div class="data-tunda-{{ $item->id }} d-none">
+                                            {{ $item->note_dokumen }}
+                                        </div>
+                                    </button>
+                                @endif
+                                @if (session('role_id') == 3 &&
+                                        $item->status == 2 &&
+                                        $item->status_dokumen == 2 &&
+                                        $item->penjualanByDokumen->count() > 0)
+                                    <form
+                                        action="{{ route(request()->segment(1) . '.dokumen_penjualan.batal', $item->id) }}"
+                                        method="POST" style="display:inline;" id="batal-form-{{ $item->id }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="button" class="btn btn-danger btn-sm mt-1"
+                                            onclick="confirm_batal({{ $item->id }})">
+                                            <i class="fa fa-times mr-2"></i> Batalkan Jual
                                         </button>
                                     </form>
                                 @endif
@@ -58,6 +86,36 @@
             </table>
         </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">CATATAN TUNDA</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route(request()->segment(1) . '.dokumen_penjualan.tunda') }}" method="POST"
+                    style="display:inline;" id="tunda-form">
+                    @csrf
+                    @method('POST')
+                    <div class="modal-body">
+                        <input type="hidden" name="penjualan_id">
+                        <div class="form-group">
+                            <label for="note_dokumen">Catatan</label>
+                            <textarea class="form-control" name="note_dokumen" id="note_dokumen" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
@@ -68,6 +126,15 @@
                     sUrl: "/assets/js/datatable_id.json"
                 }
             })
+        });
+
+        $('.btn_tunda').click(function(e) {
+            e.preventDefault();
+            let id = $(this).data('id');
+            let note = $(this).find('.data-tunda-' + id).text().trim();
+            $('#tunda-form input[name="penjualan_id"]').val(id);
+            $('#tunda-form textarea[name="note_dokumen"]').val(note);
+            $('#exampleModal').modal('show');
         });
 
         function confirm_konfirmasi(id) {
@@ -82,6 +149,22 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('#konfirmasi-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirm_batal(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dibatalkan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Lanjut!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#batal-form-' + id).submit();
                 }
             });
         }

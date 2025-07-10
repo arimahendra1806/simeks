@@ -122,6 +122,7 @@ class PenjualanByDokumenController extends Controller
         try {
             Penjualan::where('id', $id)->update([
                 'status' => 3,
+                'status_dokumen' => 1,
             ]);
 
             PenjualanByRiwayat::create([
@@ -134,6 +135,48 @@ class PenjualanByDokumenController extends Controller
 
             DB::commit();
             return back()->with('success', 'Dokumen penjualan berhasil dikonfirmasi!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function batal($id)
+    {
+        DB::beginTransaction();
+        try {
+            Penjualan::where('id', $id)->update([
+                'status' => 0,
+                'status_dokumen' => 3,
+            ]);
+
+            PenjualanByRiwayat::create([
+                'references_id' => $id,
+                'penjualan_id' => 0,
+                'tipe' => 1,
+                'status' => 0,
+                'tanggal' => date('Y-m-d'),
+            ]);
+
+            DB::commit();
+            return back()->with('success', 'Dokumen penjualan berhasil dikonfirmasi!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function tunda(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Penjualan::where('id', $request->penjualan_id)->update([
+                'status_dokumen' => 2,
+                'note_dokumen' => $request->note_dokumen,
+            ]);
+
+            DB::commit();
+            return back()->with('success', 'Dokumen penjualan ditunda!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

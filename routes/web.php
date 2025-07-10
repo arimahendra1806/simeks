@@ -7,6 +7,7 @@ use App\Http\Controllers\IndustriController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NegaraController;
 use App\Http\Controllers\PasarController;
@@ -153,6 +154,8 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
     Route::put('/penjualan/konfirmasi/{penjualan}', [PenjualanController::class, 'konfirmasi'])->name('penjualan.konfirmasi');
     Route::resource('/penjualan', PenjualanController::class);
     Route::put('/dokumen_penjualan/konfirmasi/{id}', [PenjualanByDokumenController::class, 'konfirmasi'])->name('dokumen_penjualan.konfirmasi');
+    Route::put('/dokumen_penjualan/batal/{id}', [PenjualanByDokumenController::class, 'batal'])->name('dokumen_penjualan.batal');
+    Route::post('/dokumen_penjualan/tunda', [PenjualanByDokumenController::class, 'tunda'])->name('dokumen_penjualan.tunda');
     Route::resource('/dokumen_penjualan', PenjualanByDokumenController::class);
     Route::post('/pembayaran/generate_tagihan', [PenjualanByBayarController::class, 'generate_tagihan'])->name('pembayaran.generate_tagihan');
     Route::resource('/pembayaran', PenjualanByBayarController::class);
@@ -160,6 +163,7 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
     Route::delete('/pengiriman/destroy/{id}', [PenjualanByPengirimanController::class, 'destroy'])->name('pengiriman.destroy');
     Route::put('/pengiriman/confirm_wa/{id}', [PenjualanByPengirimanController::class, 'confirm_wa'])->name('pengiriman.confirm_wa');
     Route::resource('/pengiriman', PenjualanByPengirimanController::class);
+    Route::get('/laporan_penjualan', [LaporanPenjualanController::class, 'index'])->name('laporan_penjualan.index');
     // Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
 });
 

@@ -90,6 +90,7 @@
                                         <th>Satuan</th>
                                         <th>Kuantitas</th>
                                         <th>Harga</th>
+                                        <th>Fee CV (%)</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -99,7 +100,7 @@
                                             <span class="number_input">1</span>
                                         </td>
                                         <td>
-                                            <select name="satuan_id[]" class="form-select js-select2">
+                                            <select name="satuan_id[]" class="js-select2 form-control w-100">
                                                 @foreach ($option_satuan as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                                 @endforeach
@@ -110,6 +111,9 @@
                                         </td>
                                         <td>
                                             <input type="text" class="form-control js-currency" name="harga[]">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control js-currency" name="fee_cv[]">
                                         </td>
                                         <td>
                                             <a href="javascript:void(0)" class="btn btn-danger btn-sm btn_delete">
@@ -163,6 +167,9 @@
                             <input type="text" class="form-control js-currency" name="harga[]">
                         </td>
                         <td>
+                            <input type="text" class="form-control js-currency" name="fee_cv[]">
+                        </td>
+                        <td>
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm btn_delete">
                                 <i class="fa fa-trash mr-2"></i> Hapus
                             </a>
@@ -206,16 +213,18 @@
                     let satuan = $(this).find("select[name='satuan_id[]']").val();
                     let kuantitas = $(this).find("input[name='kuantitas[]']").val().trim();
                     let harga = $(this).find("input[name='harga[]']").val().trim();
+                    let fee_cv = $(this).find("input[name='fee_cv[]']").val().trim();
 
                     $(this).find("select, input").removeClass("is-invalid");
 
-                    if (!satuan || !kuantitas || !harga) {
+                    if (!satuan || !kuantitas || !harga || !fee_cv) {
                         isValid = false;
                         if (!satuan) $(this).find("select[name='satuan_id[]']").addClass(
                             "is-invalid");
                         if (!kuantitas) $(this).find("input[name='kuantitas[]']").addClass(
                             "is-invalid");
                         if (!harga) $(this).find("input[name='harga[]']").addClass("is-invalid");
+                        if (!fee_cv) $(this).find("input[name='fee_cv[]']").addClass("is-invalid");
                     }
                 });
 

@@ -179,6 +179,13 @@
                                 Research</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('direktur.laporan_penjualan.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/laporan_penjualan*') ? 'active' : '' }}">
+                            <span class="micon bi bi-file-earmark-text"></span><span class="mtext">Laporan
+                                Penjualan</span>
+                        </a>
+                    </li>
                 @elseif (session('role_id') == 4)
                     <li>
                         <a href="{{ route('buyer.dashboard.index') }}"

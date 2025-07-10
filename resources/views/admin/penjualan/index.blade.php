@@ -42,34 +42,42 @@
                             <td>{{ format_currency($item->total_pembayaran) }}</td>
                             <td>{{ $item->penjualanByProduk->count() }}</td>
                             <td>{{ $item->statusPenjualan->isi }}</td>
-                            <td>
-                                @if (session('role_id') == 3 && $item->status == 1)
-                                    <form action="{{ route(request()->segment(1) . '.penjualan.konfirmasi', $item->id) }}"
-                                        method="POST" style="display:inline;" id="konfirmasi-form-{{ $item->id }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="button" class="btn btn-success btn-sm mt-1"
-                                            onclick="confirm_konfirmasi({{ $item->id }})">
-                                            <i class="fa fa-check mr-2"></i> Konfirmasi
-                                        </button>
-                                    </form>
-                                @endif
-                                <a href="{{ route(request()->segment(1) . '.penjualan.show', $item->id) }}"
-                                    class="btn btn-info btn-sm mt-1">
-                                    <i class="fa fa-info mr-2"></i> Detail
-                                </a>
-                                @if (session('role_id') != 1)
-                                    <form action="{{ route(request()->segment(1) . '.penjualan.destroy', $item->id) }}"
-                                        method="POST" style="display:inline;" id="delete-form-{{ $item->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm mt-1"
-                                            onclick="confirm_delete({{ $item->id }})">
-                                            <i class="fa fa-trash mr-2"></i> Hapus
-                                        </button>
-                                    </form>
-                                @endif
-                            </td>
+                            @if ($item->status != 0)
+                                <td>
+                                    @if (session('role_id') == 3 && $item->status == 1)
+                                        <form
+                                            action="{{ route(request()->segment(1) . '.penjualan.konfirmasi', $item->id) }}"
+                                            method="POST" style="display:inline;"
+                                            id="konfirmasi-form-{{ $item->id }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="button" class="btn btn-success btn-sm mt-1"
+                                                onclick="confirm_konfirmasi({{ $item->id }})">
+                                                <i class="fa fa-check mr-2"></i> Konfirmasi
+                                            </button>
+                                        </form>
+                                    @endif
+                                    <a href="{{ route(request()->segment(1) . '.penjualan.show', $item->id) }}"
+                                        class="btn btn-info btn-sm mt-1">
+                                        <i class="fa fa-info mr-2"></i> Detail
+                                    </a>
+                                    @if (session('role_id') != 1 && $item->status == 1)
+                                        <form action="{{ route(request()->segment(1) . '.penjualan.destroy', $item->id) }}"
+                                            method="POST" style="display:inline;" id="delete-form-{{ $item->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm mt-1"
+                                                onclick="confirm_delete({{ $item->id }})">
+                                                <i class="fa fa-trash mr-2"></i> Hapus
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
+                            @else
+                                <td>
+                                    <div class="text-danger">DIBATALKAN</div>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

@@ -111,6 +111,7 @@
                                         <th>Satuan</th>
                                         <th>Kuantitas</th>
                                         <th>Harga</th>
+                                        <th>Fee CV (%)</th>
                                         @if (session('role_id') == 1)
                                             <th>Aksi</th>
                                         @endif
@@ -139,6 +140,10 @@
                                             <td>
                                                 <input type="text" class="form-control js-currency" name="harga[]"
                                                     value="{{ number_format($data->harga, 0, '.', '.') }}" readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control js-currency" name="fee_cv[]"
+                                                    value="{{ number_format($data->fee_cv, 0, '.', '.') }}" readonly>
                                             </td>
                                             @if (session('role_id') == 1)
                                                 <td>
@@ -199,6 +204,9 @@
                         </td>
                         <td>
                             <input type="text" class="form-control js-currency" name="harga[]">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control js-currency" name="fee_cv[]">
                         </td>
                         <td>
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm btn_delete">
@@ -268,16 +276,18 @@
                     let satuan = $(this).find("select[name='satuan_id[]']").val();
                     let kuantitas = $(this).find("input[name='kuantitas[]']").val().trim();
                     let harga = $(this).find("input[name='harga[]']").val().trim();
+                    let fee_cv = $(this).find("input[name='fee_cv[]']").val().trim();
 
                     $(this).find("select, input").removeClass("is-invalid");
 
-                    if (!satuan || !kuantitas || !harga) {
+                    if (!satuan || !kuantitas || !harga || !fee_cv) {
                         isValid = false;
                         if (!satuan) $(this).find("select[name='satuan_id[]']").addClass(
                             "is-invalid");
                         if (!kuantitas) $(this).find("input[name='kuantitas[]']").addClass(
                             "is-invalid");
                         if (!harga) $(this).find("input[name='harga[]']").addClass("is-invalid");
+                        if (!fee_cv) $(this).find("input[name='fee_cv[]']").addClass("is-invalid");
                     }
                 });
 

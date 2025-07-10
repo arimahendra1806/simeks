@@ -141,10 +141,70 @@
     <div class="pd-20 card-box mb-30 {{ session('role_id') != '3' ? 'd-none' : '' }}">
         <canvas id="grafikJumlah" width="400" height="200"></canvas>
     </div>
+    <div class="pd-20 card-box mb-30">
+        <canvas id="grafikProduk" width="400" height="200"></canvas>
+    </div>
+    <div class="pd-20 card-box mb-30">
+        <h3>Pembeli Paling Sering Beli</h3>
+        <div class="table-responsive">
+            <table id="data_pembeli" class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pembeli</th>
+                        <th>Total Pembelian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($pembelian as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->pembeli->nama . ' (' . $item->pembeli->perusahaan . ')' }}</td>
+                            <td>{{ $item->total ?: '0' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection
 
 @push('js')
     <script>
+        let labelJumlahProduk = {!! json_encode($dataLabelProduk) !!};
+        let dataJumlahProduk = {!! json_encode($dataJumlahProduk) !!};
+
+        let ctxJumlahProduk = document.getElementById('grafikProduk').getContext('2d');
+        let chartJumlahProduk = new Chart(ctxJumlahProduk, {
+            type: 'bar',
+            data: {
+                labels: labelJumlahProduk,
+                datasets: [{
+                    label: '5 Produk Terlaris (Jumlah Tahun ' + new Date().getFullYear() + ')',
+                    data: dataJumlahProduk,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        onClick: () => {},
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                        }
+                    }
+                }
+            }
+        });
+
         let labelJumlah = {!! json_encode($labelJumlah) !!};
         let dataJumlah = {!! json_encode($dataJumlah) !!};
 
@@ -220,6 +280,11 @@
                 },
             });
             var table2 = $('#data_penjualan').DataTable({
+                oLanguage: {
+                    sUrl: "/assets/js/datatable_id.json"
+                },
+            });
+            var table3 = $('#data_pembeli').DataTable({
                 oLanguage: {
                     sUrl: "/assets/js/datatable_id.json"
                 },
