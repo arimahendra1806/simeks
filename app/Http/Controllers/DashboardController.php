@@ -77,8 +77,8 @@ class DashboardController extends Controller
 
             $totalBulanIni = 0;
 
-            foreach ($penjualanBulanIni as $penjualan) {
-                $totalBulanIni += $penjualan->penjualanByProduk->sum(function ($produk) {
+            foreach ($penjualanBulanIni as $item) {
+                $totalBulanIni += $item->penjualanByProduk->sum(function ($produk) {
                     return $produk->total * (1 - $produk->fee_cv / 100);
                 });
             }
