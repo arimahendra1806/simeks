@@ -16,7 +16,7 @@
                             @csrf
                             <div class="select-role">
                                 <div class="btn-group row">
-                                    <div class="col-md-6" onclick="location.href='{{ route('marketing_login') }}'">
+                                    <div class="col-md-4" onclick="location.href='{{ route('marketing_login') }}'">
                                         <label class="btn active w-100">
                                             <div class="icon">
                                                 <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/briefcase.svg"
@@ -26,7 +26,7 @@
                                             Marketing
                                         </label>
                                     </div>
-                                    <div class="col-md-6" onclick="location.href='{{ route('direktur_login') }}'">
+                                    <div class="col-md-4" onclick="location.href='{{ route('direktur_login') }}'">
                                         <label class="btn active w-100">
                                             <div class="icon">
                                                 <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/briefcase.svg"
@@ -46,6 +46,16 @@
                                             Buyer
                                         </label>
                                     </div> --}}
+                                    <div class="col-md-4" onclick="location.href='{{ route('supplier_login') }}'">
+                                        <label class="btn active w-100">
+                                            <div class="icon">
+                                                <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/person.svg"
+                                                    class="svg" alt="" />
+                                            </div>
+                                            <span>Saya</span>
+                                            Supplier
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="input-group">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Negara;
 use App\Models\Pemasok;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -36,8 +37,11 @@ class PemasokController extends Controller
     {
         $title = $this->title;
         $option_negara = Negara::all();
+        $option_users  = User::where('role_id', 5)
+            ->whereDoesntHave('pemasok')
+            ->get();
 
-        return view('admin.pemasok.create', compact('title', 'option_negara'));
+        return view('admin.pemasok.create', compact('title', 'option_negara', 'option_users'));
     }
 
     private function validation(Request $request, $pemasok = 0)
@@ -70,7 +74,14 @@ class PemasokController extends Controller
     {
         $title = $this->title;
         $option_negara = Negara::all();
-        return view('admin.pemasok.show', compact('title', 'pemasok', 'option_negara'));
+        $option_users = User::where('role_id', 5)
+            ->where(function ($query) use ($pemasok) {
+                $query->whereDoesntHave('pemasok')
+                    ->orWhere('id', $pemasok->users_id);
+            })
+            ->get();
+
+        return view('admin.pemasok.show', compact('title', 'pemasok', 'option_negara', 'option_users'));
     }
 
     /**

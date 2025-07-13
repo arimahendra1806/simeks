@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pemasok;
 use App\Models\Pembeli;
 use App\Models\Penjualan;
+use App\Models\PenjualanByBayar;
 use App\Models\PenjualanByProduk;
 use App\Models\Produk;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class DashboardController extends Controller
 {
     public function dashboard_admin()
     {
-        $title = 'Dashboard Admin';
+        $title = 'Dashboard';
 
         $total_produk = Produk::count();
         $total_pemasok = Pemasok::count();
@@ -65,7 +66,30 @@ class DashboardController extends Controller
         $dataLabelProduk = $arrProduk;
         $dataJumlahProduk = $arrTotalTerjual;
 
-        return view('admin.dashboard.index', compact('title', 'total_produk', 'total_pemasok', 'total_pembeli', 'total_transaksi', 'labelJumlah', 'dataJumlah', 'dataNominal', 'produk', 'penjualan', 'pembelian', 'dataLabelProduk', 'dataJumlahProduk'));
+        $arrDataPendapatanSupplier = [];
+        foreach ($labelJumlah as $key => $value) {
+            $penjualanBulanIni = Penjualan::with('penjualanByProduk')
+                ->whereMonth('tanggal_pembelian', $key + 1)
+                ->whereYear('tanggal_pembelian', date('Y'))
+                ->where('status', '<>', 0)
+                ->where('status', '>', 2)
+                ->get();
+
+            $totalBulanIni = 0;
+
+            foreach ($penjualanBulanIni as $penjualan) {
+                $totalBulanIni += $penjualan->penjualanByProduk->sum(function ($produk) {
+                    return $produk->total * (1 - $produk->fee_cv / 100);
+                });
+            }
+
+            $arrDataPendapatanSupplier[] = $totalBulanIni;
+        }
+        $dataPendapatanSupplier = $arrDataPendapatanSupplier;
+
+        $tabelPendapatanSupplier = Penjualan::with('pembeli', 'statusPenjualan')->where('status', '<>', 0)->where('status', '>', 2)->orderBy('id', 'desc')->get();
+
+        return view('admin.dashboard.index', compact('title', 'total_produk', 'total_pemasok', 'total_pembeli', 'total_transaksi', 'labelJumlah', 'dataJumlah', 'dataNominal', 'produk', 'penjualan', 'pembelian', 'dataLabelProduk', 'dataJumlahProduk', 'dataPendapatanSupplier', 'tabelPendapatanSupplier'));
     }
 
     public function dashboard_direktur()
@@ -78,5 +102,34 @@ class DashboardController extends Controller
     {
         $title = 'Dashboard Marketing';
         return view('marketing.dashboard.index', compact('title'));
+    }
+
+    public function show_supplier($id)
+    {
+
+        $title = 'Pesanan';
+
+        $penjualan = Penjualan::with('pembeli')->where('id', $id)->first();
+        $bayar     = PenjualanByBayar::with('statusKategori')->where('penjualan_id', $id)->where('tipe_pembayaran', 2)->orderBy('id', 'desc')->get();
+        $produk    = PenjualanByProduk::with('produk', 'satuan')->where('penjualan_id', $id)->get();
+
+        return view("admin.dashboard.show_supplier", compact('title', 'penjualan', 'bayar', 'produk'));
+    }
+
+    public function konfirmasi_supplier(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            PenjualanByBayar::where('id', $request->id)->update([
+                'transaction_midtrans_status' => 'settlement',
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pembayaran berhasil dikonfirmasi!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

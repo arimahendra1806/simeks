@@ -180,6 +180,13 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('direktur.pay_supplier.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('direktur/pay_supplier*') ? 'active' : '' }}">
+                            <span class="micon bi bi-file-earmark-text"></span><span class="mtext">Pembayaran
+                                Supplier</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('direktur.laporan_penjualan.index') }}"
                             class="dropdown-toggle no-arrow {{ Request::is('direktur/laporan_penjualan*') ? 'active' : '' }}">
                             <span class="micon bi bi-file-earmark-text"></span><span class="mtext">Laporan
@@ -203,6 +210,14 @@
                         <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
                             <span class="micon bi bi-cash"></span><span class="mtext">Upload
                                 Pembayaran</span>
+                        </a>
+                    </li>
+                @endif
+                @if (session('role_id') == 5)
+                    <li>
+                        <a href="{{ route('supplier.dashboard.index') }}"
+                            class="dropdown-toggle no-arrow {{ Request::is('supplier/dashboard*') ? 'active' : '' }}">
+                            <span class="micon bi bi-speedometer2"></span><span class="mtext">Dashboard</span>
                         </a>
                     </li>
                 @endif

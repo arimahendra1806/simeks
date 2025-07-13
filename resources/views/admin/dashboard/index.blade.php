@@ -135,46 +135,138 @@
             </div>
         </div>
     @endif
-    <div class="pd-20 card-box mb-30 {{ session('role_id') == '1' ? 'd-none' : '' }}">
-        <canvas id="grafikNominal" width="400" height="200"></canvas>
-    </div>
-    <div class="pd-20 card-box mb-30 {{ session('role_id') != '3' ? 'd-none' : '' }}">
-        <canvas id="grafikJumlah" width="400" height="200"></canvas>
-    </div>
-    <div class="pd-20 card-box mb-30">
-        <canvas id="grafikProduk" width="400" height="200"></canvas>
-    </div>
-    <div class="pd-20 card-box mb-30">
-        <h3>Pembeli Paling Sering Beli</h3>
-        <div class="table-responsive">
-            <table id="data_pembeli" class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Pembeli</th>
-                        <th>Total Pembelian</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pembelian as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->pembeli->nama . ' (' . $item->pembeli->perusahaan . ')' }}</td>
-                            <td>{{ $item->total ?: '0' }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    @if (session('role_id') != '5')
+        <div class="pd-20 card-box mb-30 {{ session('role_id') == '1' ? 'd-none' : '' }}">
+            <canvas id="grafikNominal" width="400" height="200"></canvas>
         </div>
-    </div>
+        <div class="pd-20 card-box mb-30 {{ session('role_id') != '3' ? 'd-none' : '' }}">
+            <canvas id="grafikJumlah" width="400" height="200"></canvas>
+        </div>
+        <div class="pd-20 card-box mb-30">
+            <canvas id="grafikProduk" width="400" height="200"></canvas>
+        </div>
+        <div class="pd-20 card-box mb-30">
+            <h3>Pembeli Paling Sering Beli</h3>
+            <div class="table-responsive">
+                <table id="data_pembeli" class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Pembeli</th>
+                            <th>Total Pembelian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pembelian as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->pembeli->nama . ' (' . $item->pembeli->perusahaan . ')' }}</td>
+                                <td>{{ $item->total ?: '0' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @else
+        <div class="pd-20 card-box mb-30">
+            <canvas id="grafikPendapatanSupplier" width="400" height="200"></canvas>
+        </div>
+        <div class="pd-20 card-box mb-30">
+            <h3>Daftar Pesanan</h3>
+            <div class="table-responsive">
+                <table id="data_table_pendapatan_supplier" class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode Transaksi</th>
+                            <th>Nama Pembeli</th>
+                            <th>Tanggal</th>
+                            <th>Total Produk</th>
+                            <th>Total Pendapatan</th>
+                            <th>Sisa Pendapatan <br> (BELUM BAYAR)</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tabelPendapatanSupplier as $item)
+                            @php
+                                $pendapatan = $item->penjualanByProduk->sum(function ($produk) {
+                                    return $produk->total * (1 - $produk->fee_cv / 100);
+                                });
+
+                                $total_pendapatan = $item->penjualanByBayar
+                                    ->where('tipe_pembayaran', 2)
+                                    ->where('transaction_midtrans_status', 'settlement')
+                                    ->sum('nominal');
+
+                                $sisa_pendapatan = $pendapatan - $total_pendapatan;
+                            @endphp
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->kode_transaksi }}</td>
+                                <td>{{ $item->pembeli->nama . ' (' . $item->pembeli->perusahaan . ')' }}</td>
+                                <td>
+                                    {{ date_to_indo($item->tanggal_pembelian) }}
+                                </td>
+                                <td>{{ $item->penjualanByProduk->count() }}</td>
+                                <td>{{ format_currency($pendapatan) }}</td>
+                                <td>{{ format_currency($sisa_pendapatan) }}</td>
+                                <td>{{ $item->statusPenjualan->isi }}</td>
+                                <td>
+                                    <a href="{{ route(request()->segment(1) . '.dashboard.show_supplier', $item->id) }}"
+                                        class="btn btn-primary btn-sm">Detail</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @push('js')
     <script>
+        let labelPendapatanSupplier = {!! json_encode($labelJumlah) !!};
+        let dataPendapatanSupplier = {!! json_encode($dataPendapatanSupplier) !!};
+
+        let ctxJPendapantaSupplier = document.getElementById('grafikPendapatanSupplier')?.getContext('2d');
+        let chartPendapatanSupplier = new Chart(ctxJPendapantaSupplier, {
+            type: 'bar',
+            data: {
+                labels: labelPendapatanSupplier,
+                datasets: [{
+                    label: 'Total Pendapatan Supplier (Jumlah Tahun ' + new Date().getFullYear() + ')',
+                    data: dataPendapatanSupplier,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        onClick: () => {},
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                        }
+                    }
+                }
+            }
+        });
+
         let labelJumlahProduk = {!! json_encode($dataLabelProduk) !!};
         let dataJumlahProduk = {!! json_encode($dataJumlahProduk) !!};
 
-        let ctxJumlahProduk = document.getElementById('grafikProduk').getContext('2d');
+        let ctxJumlahProduk = document.getElementById('grafikProduk')?.getContext('2d');
         let chartJumlahProduk = new Chart(ctxJumlahProduk, {
             type: 'bar',
             data: {
@@ -208,7 +300,7 @@
         let labelJumlah = {!! json_encode($labelJumlah) !!};
         let dataJumlah = {!! json_encode($dataJumlah) !!};
 
-        let ctxJumlah = document.getElementById('grafikJumlah').getContext('2d');
+        let ctxJumlah = document.getElementById('grafikJumlah')?.getContext('2d');
         let chartJumlah = new Chart(ctxJumlah, {
             type: 'bar',
             data: {
@@ -242,7 +334,7 @@
         let labelNominal = {!! json_encode($labelJumlah) !!};
         let dataNominal = {!! json_encode($dataNominal) !!};
 
-        let ctxNominal = document.getElementById('grafikNominal').getContext('2d');
+        let ctxNominal = document.getElementById('grafikNominal')?.getContext('2d');
         let chartNominal = new Chart(ctxNominal, {
             type: 'bar',
             data: {
@@ -285,6 +377,11 @@
                 },
             });
             var table3 = $('#data_pembeli').DataTable({
+                oLanguage: {
+                    sUrl: "/assets/js/datatable_id.json"
+                },
+            });
+            var table4 = $('#data_table_pendapatan_supplier').DataTable({
                 oLanguage: {
                     sUrl: "/assets/js/datatable_id.json"
                 },

@@ -23,6 +23,7 @@ use App\Http\Controllers\ProvinsiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PenjualanByBayarSupplierController;
 use App\Models\PenjualanByBayar;
 use App\Models\PenjualanByPengembalian;
 use App\Models\PenjualanByPengiriman;
@@ -83,6 +84,14 @@ Route::get('/direktur', function () {
     return redirect()->route('direktur_login');
 });
 
+Route::get('/supplier', function () {
+    if (Auth::check()) {
+        return redirect()->route('supplier.dashboard.index');
+    }
+
+    return redirect()->route('supplier_login');
+});
+
 Route::middleware('guest')->group(function () {
     Route::get('admin/login', [LoginController::class, 'admin_login'])->name('admin_login');
     Route::post('admin/do_log', [LoginController::class, 'do_log_admin'])->name('do_log_admin');
@@ -90,6 +99,8 @@ Route::middleware('guest')->group(function () {
     Route::post('marketing/do_log', [LoginController::class, 'do_log_marketing'])->name('do_log_marketing');
     Route::get('direktur/login', [LoginController::class, 'direktur_login'])->name('direktur_login');
     Route::post('direktur/do_log', [LoginController::class, 'do_log_direktur'])->name('do_log_direktur');
+    Route::get('supplier/login', [LoginController::class, 'supplier_login'])->name('supplier_login');
+    Route::post('supplier/do_log', [LoginController::class, 'do_log_supplier'])->name('do_log_supplier');
     // Route::get('buyer/login', [LoginController::class, 'buyer_login'])->name('buyer_login');
     // Route::post('buyer/do_log', [LoginController::class, 'do_log_buyer'])->name('do_log_buyer');
 });
@@ -165,6 +176,8 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
     Route::resource('/pengiriman', PenjualanByPengirimanController::class);
     Route::get('/laporan_penjualan', [LaporanPenjualanController::class, 'index'])->name('laporan_penjualan.index');
     // Route::resource('/penjualan/pengembalian', PenjualanByPengembalian::class);
+    Route::post('/pay_supplier/generate_tagihan', [PenjualanByBayarSupplierController::class, 'generate_tagihan'])->name('pay_supplier.generate_tagihan');
+    Route::resource('/pay_supplier', PenjualanByBayarSupplierController::class);
 });
 
 // Route::middleware('buyer')->name('buyer.')->prefix('buyer')->group(function () {
@@ -174,3 +187,12 @@ Route::middleware(['auth', 'direktur'])->name('direktur.')->prefix('direktur')->
 //     });
 //     Route::resource('/pembayaran', PenjualanByBayar::class);
 // });
+
+Route::middleware('supplier')->name('supplier.')->prefix('supplier')->group(function () {
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', [DashboardController::class, 'dashboard_admin'])->name('index');
+        Route::get('/show_supplier/{id}', [DashboardController::class, 'show_supplier'])->name('show_supplier');
+        Route::put('/konfirmasi_supplier/{id}', [DashboardController::class, 'konfirmasi_supplier'])->name('konfirmasi_supplier');
+    });
+});

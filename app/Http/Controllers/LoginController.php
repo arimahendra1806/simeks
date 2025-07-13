@@ -116,6 +116,31 @@ class LoginController extends Controller
         ]);
     }
 
+    public function supplier_login()
+    {
+        $title = 'Login';
+        return view('supplier.login.index', compact('title'));
+    }
+
+    public function do_log_supplier(Request $request)
+    {
+        $this->validation($request);
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role_id' => 5])) {
+            $request->session()->regenerate();
+
+            session(['user_name' => Auth::user()->name]);
+            session(['role_id' => Auth::user()->role_id]);
+            session()->flash('success', 'Login berhasil!');
+
+            return redirect()->route('supplier.dashboard.index');
+        }
+
+        return back()->with([
+            'error' => 'Username atau Password anda salah'
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $logout_url = $this->url_logout(Auth::user()->role_id);
@@ -138,6 +163,8 @@ class LoginController extends Controller
                 return 'direktur_login';
             case 4:
                 return 'buyer_login';
+            case 5:
+                return 'supplier_login';
         }
 
         return '/';

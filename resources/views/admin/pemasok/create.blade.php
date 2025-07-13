@@ -78,6 +78,22 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="users_id" class="form-label">Akun User</label>
+                        <select name="users_id" id="users_id"
+                            class="form-control form-select js-select2 @error('users_id') is-invalid @enderror"
+                            data-placeholder="- Pilih Akun User -">
+                            <option value=""></option>
+                            @foreach ($option_users as $item)
+                                <option value="{{ $item->id }}" {{ old('users_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('users_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-primary float-right"><i
                                 class="fa fa-save mr-2"></i>Simpan</button>

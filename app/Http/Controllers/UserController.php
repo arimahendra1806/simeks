@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         $title = $this->title;
-        $data = User::with('role')->where('role_id', '<', 4)->orderBy('id', 'desc')->get();
+        $data = User::with('role')->where('role_id', '<>', 4)->orderBy('id', 'desc')->get();
 
         return view('admin.user.index', compact('title', 'data'));
     }
@@ -33,7 +33,7 @@ class UserController extends Controller
     public function create()
     {
         $title = $this->title;
-        $option_role = Role::where('id', '<', 4)->get();
+        $option_role = Role::where('id', '<>', 4)->get();
         return view('admin.user.create', compact('title', 'option_role'));
     }
 
@@ -80,7 +80,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $title = $this->title;
-        $option_role = Role::where('id', '<', 4)->get();;
+        $option_role = Role::where('id', '<>', 4)->get();
         return view('admin.user.show', compact('title', 'user', 'option_role'));
     }
 

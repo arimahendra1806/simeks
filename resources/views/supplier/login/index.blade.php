@@ -12,7 +12,7 @@
                         <div class="login-title">
                             <h2 class="text-center text-primary">Masuk Sebagai Direktur</h2>
                         </div>
-                        <form action="{{ route('do_log_direktur') }}" method="POST">
+                        <form action="{{ route('do_log_supplier') }}" method="POST">
                             @csrf
                             <div class="select-role">
                                 <div class="btn-group row">
@@ -36,6 +36,16 @@
                                             Marketing
                                         </label>
                                     </div>
+                                    <div class="col-md-4" onclick="location.href='{{ route('direktur_login') }}'">
+                                        <label class="btn active w-100">
+                                            <div class="icon">
+                                                <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/briefcase.svg"
+                                                    class="svg" alt="" />
+                                            </div>
+                                            <span>Saya</span>
+                                            Manager
+                                        </label>
+                                    </div>
                                     {{-- <div class="col-md-4" onclick="location.href='{{ route('buyer_login') }}'">
                                         <label class="btn active w-100">
                                             <div class="icon">
@@ -46,16 +56,6 @@
                                             Buyer
                                         </label>
                                     </div> --}}
-                                    <div class="col-md-4" onclick="location.href='{{ route('supplier_login') }}'">
-                                        <label class="btn active w-100">
-                                            <div class="icon">
-                                                <img src="<?= asset('assets/lib/deskapp-master/') ?>/vendors/images/person.svg"
-                                                    class="svg" alt="" />
-                                            </div>
-                                            <span>Saya</span>
-                                            Supplier
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                             <div class="input-group">

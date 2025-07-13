@@ -127,6 +127,12 @@
                             <button type="submit" class="btn btn-danger dropdown-item"><i class="dw dw-logout"></i>
                                 Logout</button>
                         </form>
+                    @elseif (session('role_id') == 5)
+                        <form action="{{ route('supplier.logout') }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-danger dropdown-item"><i class="dw dw-logout"></i>
+                                Logout</button>
+                        </form>
                     @endif
                 </div>
             </div>

@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Pembeli::class);
     }
+
+    public function pemasok()
+    {
+        return $this->hasOne(Pemasok::class, 'users_id', 'id');
+    }
 }

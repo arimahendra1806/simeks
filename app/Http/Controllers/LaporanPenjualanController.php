@@ -36,7 +36,7 @@ class LaporanPenjualanController extends Controller
     public function index()
     {
         $title = $this->title;
-        $data = Penjualan::with('pembeli', 'statusPenjualan')->orderBy('id', 'desc')->get();
+        $data = Penjualan::with('pembeli', 'statusPenjualan')->where('status', '<>', 0)->orderBy('id', 'desc')->get();
 
         return view("admin.laporan_penjualan.index", compact('title', 'data'));
     }
