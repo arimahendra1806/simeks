@@ -101,10 +101,6 @@
                         <button class="btn btn-danger float-right d-none btn_cancel mr-2"><i
                                 class="bi bi-arrow-bar-left mr-2"></i>Tutup</button>
                         <button class="btn btn-warning float-right btn_edit"><i class="fa fa-edit mr-2"></i>Edit</button>
-                        <button class="btn btn-primary float-right btn_edit mr-2"><i class="fa fa-edit mr-2"></i>Finalisasi
-                            Dokumen</button>
-                        <button class="btn btn-danger float-right btn_edit mr-2"><i class="fa fa-edit mr-2"></i>Dokumen
-                            Tertahan</button>
                     </div>
                 @endif
             </div>
