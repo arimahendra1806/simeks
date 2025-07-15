@@ -9,6 +9,7 @@ use App\Models\PenjualanByBayar;
 use App\Models\PenjualanByProduk;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -66,9 +67,10 @@ class DashboardController extends Controller
         $dataLabelProduk = $arrProduk;
         $dataJumlahProduk = $arrTotalTerjual;
 
+        $pemasokId = session('pemasok_id') ?? 0;
         $arrDataPendapatanSupplier = [];
         foreach ($labelJumlah as $key => $value) {
-            $penjualanBulanIni = Penjualan::with('penjualanByProduk')
+            $penjualanBulanIni = Penjualan::with('penjualanByProduk.produk.pemasok') // pastikan relasi sampai ke pemasok
                 ->whereMonth('tanggal_pembelian', $key + 1)
                 ->whereYear('tanggal_pembelian', date('Y'))
                 ->where('status', '<>', 0)
@@ -78,16 +80,27 @@ class DashboardController extends Controller
             $totalBulanIni = 0;
 
             foreach ($penjualanBulanIni as $item) {
-                $totalBulanIni += $item->penjualanByProduk->sum(function ($produk) {
-                    return $produk->total * (1 - $produk->fee_cv / 100);
-                });
+                $totalBulanIni += $item->penjualanByProduk
+                    ->filter(function ($produk) use ($pemasokId) {
+                        return optional($produk->produk->pemasok)->id == $pemasokId;
+                    })
+                    ->sum(function ($produk) {
+                        return $produk->total * (1 - $produk->fee_cv / 100);
+                    });
             }
 
             $arrDataPendapatanSupplier[] = $totalBulanIni;
         }
         $dataPendapatanSupplier = $arrDataPendapatanSupplier;
 
-        $tabelPendapatanSupplier = Penjualan::with('pembeli', 'statusPenjualan')->where('status', '<>', 0)->where('status', '>', 2)->orderBy('id', 'desc')->get();
+        $tabelPendapatanSupplier = Penjualan::with('pembeli', 'statusPenjualan')
+            ->where('status', '<>', 0)
+            ->where('status', '>', 2)
+            ->whereHas('penjualanByProduk.produk.pemasok', function ($query) use ($pemasokId) {
+                $query->where('id', $pemasokId);
+            })
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('admin.dashboard.index', compact('title', 'total_produk', 'total_pemasok', 'total_pembeli', 'total_transaksi', 'labelJumlah', 'dataJumlah', 'dataNominal', 'produk', 'penjualan', 'pembelian', 'dataLabelProduk', 'dataJumlahProduk', 'dataPendapatanSupplier', 'tabelPendapatanSupplier'));
     }
@@ -108,10 +121,16 @@ class DashboardController extends Controller
     {
 
         $title = 'Pesanan';
+        $pemasokId = session('pemasok_id') ?? 0;
 
         $penjualan = Penjualan::with('pembeli')->where('id', $id)->first();
-        $bayar     = PenjualanByBayar::with('statusKategori')->where('penjualan_id', $id)->where('tipe_pembayaran', 2)->orderBy('id', 'desc')->get();
-        $produk    = PenjualanByProduk::with('produk', 'satuan')->where('penjualan_id', $id)->get();
+        $bayar     = PenjualanByBayar::with('statusKategori')->where('penjualan_id', $id)->where('pemasok_id', $pemasokId)->where('tipe_pembayaran', 2)->orderBy('id', 'desc')->get();
+        $produk = PenjualanByProduk::with('produk.pemasok', 'satuan')
+            ->where('penjualan_id', $id)
+            ->get()
+            ->filter(function ($item) use ($pemasokId) {
+                return optional($item->produk->pemasok)->id == $pemasokId;
+            });
 
         return view("admin.dashboard.show_supplier", compact('title', 'penjualan', 'bayar', 'produk'));
     }

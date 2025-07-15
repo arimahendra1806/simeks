@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pemasok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -129,8 +130,17 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role_id' => 5])) {
             $request->session()->regenerate();
 
+            $data_pemasok = Pemasok::where('users_id', Auth::user()->id)->first();
+
+            if (!$data_pemasok) {
+                return back()->with([
+                    'error' => 'Username atau Password anda salah'
+                ]);
+            }
+
             session(['user_name' => Auth::user()->name]);
             session(['role_id' => Auth::user()->role_id]);
+            session(['pemasok_id' => $data_pemasok->id]);
             session()->flash('success', 'Login berhasil!');
 
             return redirect()->route('supplier.dashboard.index');

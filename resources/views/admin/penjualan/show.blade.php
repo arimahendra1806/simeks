@@ -10,8 +10,11 @@
             cursor: not-allowed;
             /* Mengubah cursor menjadi tanda larangan */
         }
-    </style>
 
+        textarea.form-control.custom {
+            height: auto !important;
+        }
+    </style>
     <div class="pd-20 card-box mb-30">
         <div class="clearfix mb-4">
             <div class="pull-left">
@@ -69,8 +72,28 @@
                         @error('tanggal_pembelian')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                    </div>  
+                    <div class="col-md-4 mb-3">
+                        <label for="termin" class="form-label">Termin<span
+                                class="text-danger"><small>*</small></span></label>
+                        <input type="number" class="form-control edit-input @error('termin') is-invalid @enderror"
+                            placeholder="Masukkan termin..." id="termin" name="termin"
+                            value="{{ old('termin', $penjualan->termin) }}" min="1" readonly>
+                        @error('termin')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label for="jasa_pengirim" class="form-label">Jasa Pengirim<span
+                                class="text-danger"><small>*</small></span></label>
+                        <input type="text" class="form-control edit-input @error('jasa_pengirim') is-invalid @enderror"
+                            placeholder="Masukkan jasa pengirim..." id="jasa_pengirim" name="jasa_pengirim"
+                            value="{{ old('jasa_pengirim', $penjualan->jasa_pengirim) }}" readonly>
+                        @error('jasa_pengirim')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label for="tipe_pengiriman" class="form-label">Tipe Pengiriman <span
                                 class="text-danger"><small>*</small></span></label>
                         <select name="tipe_pengiriman" id="tipe_pengiriman"
@@ -88,17 +111,54 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div
-                        class="col-md-12 mb-3 container-biaya-pengiriman {{ $penjualan->tipe_pengiriman == 1 ? 'd-none' : '' }}">
-                        <label for="biaya_pengiriman" class="form-label">Biaya Pengiriman<span
-                                class="text-danger"></span></label>
-                        <input type="text"
+                    <div class="col-md-12 mb-3">
+                        {{-- <label for="biaya_pengiriman" class="form-label">Biaya Pengiriman<span
+                                class="text-danger"></span></label> --}}
+                        <input type="hidden"
                             class="form-control js-currency edit-input @error('biaya_pengiriman') is-invalid @enderror"
                             placeholder="Masukkan biaya pengiriman..." id="biaya_pengiriman" name="biaya_pengiriman"
                             value="{{ old('biaya_pengiriman', format_currency($penjualan->biaya_pengiriman)) }}" readonly>
                         @error('biaya_pengiriman')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                    </div>
+                    <div
+                        class="col-md-12 mb-3 container-biaya-pengiriman {{ old('tipe_pengiriman', $penjualan->tipe_pengiriman) == 1 ? 'd-none' : '' }}">
+                        <label class="form-label">Rincian Biaya Pengiriman</label>
+                        <div id="biaya-dinamis-wrapper">
+                            @php
+                                $detail_kirim = json_decode($penjualan->detail_kirim);
+                                is_array($detail_kirim) || ($detail_kirim = []);
+                                $total_detail_kirim = count($detail_kirim);
+                            @endphp
+                            @foreach ($detail_kirim as $key => $value)
+                                <div class="row mb-2 biaya-item">
+                                    <div class="col-md-3">
+                                        <input type="text" name="biaya_detail[{{ $key }}][nama]"
+                                            class="form-control edit-input" placeholder="Nama Biaya (mis. Ongkir Lokal)"
+                                            value="{{ $value->nama }}" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" name="biaya_detail[{{ $key }}][nominal]"
+                                            class="form-control js-currency nominal-biaya edit-input" placeholder="Nominal"
+                                            value="{{ $value->nominal }}" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <textarea name="biaya_detail[{{ $key }}][keterangan]" class="form-control custom edit-input" cols="1"
+                                            rows="2" placeholder="Keterangan" disabled>{{ $value->keterangan }}</textarea>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger remove-biaya mt-1 disabled_btn"><i
+                                                class="fa fa-trash"></i>
+                                            Hapus</button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <button type="button" class="btn btn-secondary mb-2 disabled_btn" id="tambah-biaya"><i
+                                class="fa fa-plus"></i>
+                            Tambah Biaya</button>
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="hasil_negosiasi" class="form-label">Hasil Negosiasi</label>
@@ -110,8 +170,8 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="permintaan" class="form-label">Permintaan</label>
-                        <textarea class="form-control edit-input @error('permintaan') is-invalid @enderror" placeholder="Masukkan permintaan..."
-                            id="permintaan" name="permintaan" disabled>{{ old('permintaan', $penjualan->permintaan) }}</textarea>
+                        <textarea class="form-control edit-input @error('permintaan') is-invalid @enderror"
+                            placeholder="Masukkan permintaan..." id="permintaan" name="permintaan" disabled>{{ old('permintaan', $penjualan->permintaan) }}</textarea>
                         @error('permintaan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -155,8 +215,8 @@
                                                             {{ $produk->produk_id == $item->id ? 'selected' : '' }}>
                                                             {{ $item->nama }}</option>
                                                     @endforeach
-                                                    <input type="hidden" class="form-control" name="produk_id[]" readonly
-                                                        value="{{ $produk->produk_id }}">
+                                                    <input type="hidden" class="form-control" name="produk_id[]"
+                                                        readonly value="{{ $produk->produk_id }}">
                                                 </select>
                                             </td>
                                             <td>
@@ -311,6 +371,48 @@
     <script>
         const baseSegment = '{{ request()->segment(1) }}';
         let data_satuan = '';
+
+        let index = {{ $total_detail_kirim }};
+
+        $('#tambah-biaya').on('click', function() {
+            const html = `
+                    <div class="row mb-2 biaya-item">
+                        <div class="col-md-3">
+                            <input type="text" name="biaya_detail[${index}][nama]" class="form-control edit-input" placeholder="Nama Biaya">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="biaya_detail[${index}][nominal]" class="form-control js-currency edit-input nominal-biaya" placeholder="Nominal">
+                        </div>
+                        <div class="col-md-4">
+                            <textarea name="biaya_detail[${index}][keterangan]" class="form-control edit-input custom" cols="1" rows="2"
+                                        placeholder="Keterangan"></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger remove-biaya mt-1"><i class="fa fa-trash"></i> Hapus</button>
+                        </div>
+                    </div>
+                `;
+            $('#biaya-dinamis-wrapper').append(html);
+            index++;
+            reInitCurrency();
+        });
+
+        $(document).on('click', '.remove-biaya', function() {
+            $(this).closest('.biaya-item').remove();
+            hitungTotalBiaya();
+        });
+
+        $(document).on('input', '.nominal-biaya', function() {
+            hitungTotalBiaya();
+        });
+
+        function hitungTotalBiaya() {
+            let total = 0;
+            $('.nominal-biaya').each(function() {
+                total += (parseInt(remove_currency($(this).val())) || 0);
+            });
+            $('#biaya_pengiriman').val(format_currency(total)).trigger('input');
+        }
 
         $(document).ready(function() {
             updateRowNumbers();
@@ -480,10 +582,23 @@
             let tipePengiriman = $('#tipe_pengiriman').val();
             let biayaPengiriman = $('#biaya_pengiriman').val();
 
-            if (tipePengiriman != 1 && (!biayaPengiriman || parseFloat(biayaPengiriman) == 0)) {
-                e.preventDefault();
-                notif_error('Biaya pengiriman tidak boleh kosong!');
-                return;
+            if (tipePengiriman != 1) {
+                $('input[name^="biaya_detail"]').each(function() {
+                    const $namaInput = $(this).closest('.row').find('input[name*="[nama]"]');
+                    const $nominalInput = $(this).closest('.row').find('input[name*="[nominal]"]');
+                    const namaBiaya = $namaInput.val().trim();
+                    const nominalBiaya = $nominalInput.val().trim();
+
+                    if (namaBiaya === '' || nominalBiaya === '') {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    notif_error('Mohon isi semua kolom rincian biaya pengiriman tidak boleh kosong');
+                    return;
+                }
             }
 
             $("#data_table tbody tr").each(function() {
@@ -526,6 +641,13 @@
             }
         });
 
+        function reInitCurrency() {
+            $('.js-currency').on('input', function() {
+                var input_val = $(this).val();
+                $(this).val(format_currency(input_val));
+            });
+        }
+
         $('.btn_edit').on('click', function(e) {
             e.preventDefault();
             $(this).addClass('d-none');
@@ -533,6 +655,8 @@
             $('.btn_cancel').removeClass('d-none');
             $('.btn_delete').removeClass('disabled_btn');
             $('.btn_add').removeClass('disabled_btn');
+            $('#tambah-biaya').removeClass('disabled_btn');
+            $('.remove-biaya').removeClass('disabled_btn');
             $('.edit-input').attr('readonly', false);
             $('.edit-input').attr('disabled', false);
             $('.input-date').attr('disabled', false);
@@ -545,6 +669,8 @@
             $('.btn_save').addClass('d-none');
             $('.btn_delete').addClass('disabled_btn');
             $('.btn_add').addClass('disabled_btn');
+            $('#tambah-biaya').addClass('disabled_btn');
+            $('.remove-biaya').addClass('disabled_btn');
             $('.edit-input').attr('readonly', true);
             $('.edit-input').attr('disabled', true);
             $('.input-date').attr('disabled', true);

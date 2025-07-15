@@ -70,6 +70,8 @@ class PenjualanController extends Controller
             'tanggal_pembelian' => 'required',
             'hasil_negosiasi' => 'required',
             'permintaan' => 'required',
+            'jasa_pengirim' => 'required',
+            'termin' => 'required',
             'produk_id' => 'required|array',
             'satuan_id' => 'required|array',
             'kuantitas' => 'required|array',
@@ -100,7 +102,10 @@ class PenjualanController extends Controller
                 'hasil_negosiasi' => $request->hasil_negosiasi,
                 'permintaan' => $request->permintaan,
                 'tipe_pengiriman' => $request->tipe_pengiriman,
+                'termin' => $request->termin,
+                'jasa_pengirim' => $request->jasa_pengirim,
                 'biaya_pengiriman' => $total_pengiriman,
+                'detail_kirim' => json_encode(array_values($request->biaya_detail)),
             ]);
 
             $total_all = 0;
@@ -200,6 +205,9 @@ class PenjualanController extends Controller
                 'permintaan' => $request->permintaan,
                 'tipe_pengiriman' => $request->tipe_pengiriman,
                 'biaya_pengiriman' => $total_pengiriman,
+                'termin' => $request->termin,
+                'jasa_pengirim' => $request->jasa_pengirim,
+                'detail_kirim' => json_encode(array_values($request->biaya_detail)),
             ]);
 
             $total_all = 0;

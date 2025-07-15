@@ -192,9 +192,15 @@
                     <tbody>
                         @foreach ($tabelPendapatanSupplier as $item)
                             @php
-                                $pendapatan = $item->penjualanByProduk->sum(function ($produk) {
-                                    return $produk->total * (1 - $produk->fee_cv / 100);
-                                });
+                                $pemasokId = session('pemasok_id');
+
+                                $pendapatan = $item->penjualanByProduk
+                                    ->filter(function ($produk) use ($pemasokId) {
+                                        return optional($produk->produk->pemasok)->id === $pemasokId;
+                                    })
+                                    ->sum(function ($produk) {
+                                        return $produk->total * (1 - $produk->fee_cv / 100);
+                                    });
 
                                 $total_pendapatan = $item->penjualanByBayar
                                     ->where('tipe_pembayaran', 2)

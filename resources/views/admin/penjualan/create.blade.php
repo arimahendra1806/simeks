@@ -1,6 +1,11 @@
 @extends('template.admin')
 
 @section('content')
+    <style>
+        textarea.form-control.custom {
+            height: auto !important;
+        }
+    </style>
     <div class="pd-20 card-box mb-30">
         <div class="clearfix mb-4">
             <div class="pull-left">
@@ -54,7 +59,27 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label for="termin" class="form-label">Termin<span
+                                class="text-danger"><small>*</small></span></label>
+                        <input type="number" class="form-control @error('termin') is-invalid @enderror"
+                            placeholder="Masukkan termin..." id="termin" name="termin" value="{{ old('termin') }}"
+                            min="1">
+                        @error('termin')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="jasa_pengirim" class="form-label">Jasa Pengirim<span
+                                class="text-danger"><small>*</small></span></label>
+                        <input type="text" class="form-control @error('jasa_pengirim') is-invalid @enderror"
+                            placeholder="Masukkan jasa pengirim..." id="jasa_pengirim" name="jasa_pengirim"
+                            value="{{ old('jasa_pengirim') }}">
+                        @error('jasa_pengirim')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label for="tipe_pengiriman" class="form-label">Tipe Pengiriman <span
                                 class="text-danger"><small>*</small></span></label>
                         <select name="tipe_pengiriman" id="tipe_pengiriman"
@@ -72,22 +97,51 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div
-                        class="col-md-12 mb-3 container-biaya-pengiriman {{ old('tipe_pengiriman', 1) == 1 ? 'd-none' : '' }}">
-                        <label for="biaya_pengiriman" class="form-label">Biaya Pengiriman<span
-                                class="text-danger"></span></label>
-                        <input type="text"
+                    <div class="col-md-12 mb-3">
+                        {{-- <label for="biaya_pengiriman" class="form-label">Biaya Pengiriman<span
+                                class="text-danger"></span></label> --}}
+                        <input type="hidden"
                             class="form-control js-currency @error('biaya_pengiriman') is-invalid @enderror"
                             placeholder="Masukkan biaya pengiriman..." id="biaya_pengiriman" name="biaya_pengiriman"
-                            value="{{ old('biaya_pengiriman', 0) }}">
+                            value="0">
                         @error('biaya_pengiriman')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div
+                        class="col-md-12 mb-3 container-biaya-pengiriman {{ old('tipe_pengiriman', 1) == 1 ? 'd-none' : '' }}">
+                        <label class="form-label">Rincian Biaya Pengiriman</label>
+
+                        <div id="biaya-dinamis-wrapper">
+                            <div class="row mb-2 biaya-item">
+                                <div class="col-md-3">
+                                    <input type="text" name="biaya_detail[0][nama]" class="form-control"
+                                        placeholder="Nama Biaya (mis. Ongkir Lokal)">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="biaya_detail[0][nominal]"
+                                        class="form-control js-currency nominal-biaya" placeholder="Nominal">
+                                </div>
+                                <div class="col-md-4">
+                                    <textarea name="biaya_detail[0][keterangan]" class="form-control custom" cols="1" rows="2"
+                                        placeholder="Keterangan"></textarea>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger remove-biaya mt-1"><i
+                                            class="fa fa-trash"></i>
+                                        Hapus</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-secondary mb-2" id="tambah-biaya"><i
+                                class="fa fa-plus"></i>
+                            Tambah Biaya</button>
+                    </div>
                     <div class="col-md-12 mb-3">
                         <label for="hasil_negosiasi" class="form-label">Hasil Negosiasi</label>
-                        <textarea class="form-control @error('hasil_negosiasi') is-invalid @enderror" placeholder="Masukkan hasil_negosiasi..."
-                            id="hasil_negosiasi" name="hasil_negosiasi">{{ old('hasil_negosiasi') }}</textarea>
+                        <textarea class="form-control @error('hasil_negosiasi') is-invalid @enderror"
+                            placeholder="Masukkan hasil_negosiasi..." id="hasil_negosiasi" name="hasil_negosiasi">{{ old('hasil_negosiasi') }}</textarea>
                         @error('hasil_negosiasi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -237,6 +291,48 @@
     <script>
         const baseSegment = '{{ request()->segment(1) }}';
         let data_satuan = '';
+
+        let index = 1;
+
+        $('#tambah-biaya').on('click', function() {
+            const html = `
+                    <div class="row mb-2 biaya-item">
+                        <div class="col-md-3">
+                            <input type="text" name="biaya_detail[${index}][nama]" class="form-control" placeholder="Nama Biaya">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="biaya_detail[${index}][nominal]" class="form-control js-currency nominal-biaya" placeholder="Nominal">
+                        </div>
+                        <div class="col-md-4">
+                            <textarea name="biaya_detail[${index}][keterangan]" class="form-control custom" cols="1" rows="2"
+                                        placeholder="Keterangan"></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger remove-biaya mt-1"><i class="fa fa-trash"></i> Hapus</button>
+                        </div>
+                    </div>
+                `;
+            $('#biaya-dinamis-wrapper').append(html);
+            index++;
+            reInitCurrency();
+        });
+
+        $(document).on('click', '.remove-biaya', function() {
+            $(this).closest('.biaya-item').remove();
+            hitungTotalBiaya();
+        });
+
+        $(document).on('input', '.nominal-biaya', function() {
+            hitungTotalBiaya();
+        });
+
+        function hitungTotalBiaya() {
+            let total = 0;
+            $('.nominal-biaya').each(function() {
+                total += (parseInt(remove_currency($(this).val())) || 0);
+            });
+            $('#biaya_pengiriman').val(format_currency(total)).trigger('input');
+        }
 
         $(document).ready(function() {
             // updateRowNumbers();
@@ -416,10 +512,23 @@
             let tipePengiriman = $('#tipe_pengiriman').val();
             let biayaPengiriman = $('#biaya_pengiriman').val();
 
-            if (tipePengiriman != 1 && (!biayaPengiriman || parseFloat(biayaPengiriman) == 0)) {
-                e.preventDefault();
-                notif_error('Biaya pengiriman tidak boleh kosong!');
-                return;
+            if (tipePengiriman != 1) {
+                $('input[name^="biaya_detail"]').each(function() {
+                    const $namaInput = $(this).closest('.row').find('input[name*="[nama]"]');
+                    const $nominalInput = $(this).closest('.row').find('input[name*="[nominal]"]');
+                    const namaBiaya = $namaInput.val().trim();
+                    const nominalBiaya = $nominalInput.val().trim();
+
+                    if (namaBiaya === '' || nominalBiaya === '') {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    notif_error('Mohon isi semua kolom rincian biaya pengiriman tidak boleh kosong');
+                    return;
+                }
             }
 
             $("#data_table tbody tr").each(function() {
@@ -451,5 +560,12 @@
                 $(this).off("submit").submit();
             }
         });
+
+        function reInitCurrency() {
+            $('.js-currency').on('input', function() {
+                var input_val = $(this).val();
+                $(this).val(format_currency(input_val));
+            });
+        }
     </script>
 @endpush

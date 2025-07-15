@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PenjualanByBayar;
 use App\Models\Penjualan;
+use App\Models\PenjualanByProduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -57,9 +58,10 @@ class PenjualanByBayarSupplierController extends Controller
         $title = $this->title;
 
         $penjualan = Penjualan::with('pembeli')->where('id', $id)->first();
-        $bayar = PenjualanByBayar::with('statusKategori')->where('penjualan_id', $id)->where('tipe_pembayaran', 2)->orderBy('id', 'desc')->get();
+        $bayar     = PenjualanByBayar::with('statusKategori', 'pemasok')->where('penjualan_id', $id)->where('tipe_pembayaran', 2)->orderBy('id', 'desc')->get();
+        $produk    = PenjualanByProduk::with('produk.pemasok', 'satuan')->where('penjualan_id', $id)->get();
 
-        return view("admin.penjualan_bayar_supplier.show", compact('title', 'penjualan', 'bayar'));
+        return view("admin.penjualan_bayar_supplier.show", compact('title', 'penjualan', 'bayar', 'produk'));
     }
 
     /**
@@ -96,17 +98,22 @@ class PenjualanByBayarSupplierController extends Controller
         $id_penjualan = $request->id_penjualan;
         $nominal = remove_currency($request->nominal);
 
-        $totalPendapatan = Penjualan::with('penjualanByProduk')
+        $pemasokId = $request->id_pemasok;
+        $totalPendapatan = Penjualan::with('penjualanByProduk.produk')
             ->where('id', $id_penjualan)
             ->get()
-            ->sum(function ($penjualan) {
-                return $penjualan->penjualanByProduk->sum(function ($produk) {
-                    return $produk->total * (1 - $produk->fee_cv / 100);
-                });
+            ->sum(function ($penjualan) use ($pemasokId) {
+                return $penjualan->penjualanByProduk
+                    ->filter(function ($produk) use ($pemasokId) {
+                        return optional($produk->produk)->pemasok_id == $pemasokId;
+                    })
+                    ->sum(function ($produk) {
+                        return $produk->total * (1 - $produk->fee_cv / 100);
+                    });
             });
-
         $totalPembayaran = Penjualan::with('penjualanByBayar')
             ->where('id', $id_penjualan)
+            ->where('pemasok_id', $pemasokId)
             ->get()
             ->sum(function ($penjualan) {
                 return $penjualan->penjualanByBayar
@@ -154,6 +161,7 @@ class PenjualanByBayarSupplierController extends Controller
                 'nominal' => $nominal,
                 'tipe_pembayaran' => 2,
                 'foto' => $filename,
+                'pemasok_id' => $pemasokId
             ]);
 
             DB::commit();

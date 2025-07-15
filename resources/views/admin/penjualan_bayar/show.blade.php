@@ -10,6 +10,10 @@
             cursor: not-allowed;
             /* Mengubah cursor menjadi tanda larangan */
         }
+
+        textarea.form-control.custom {
+            height: auto !important;
+        }
     </style>
 
     <div class="pd-20 card-box mb-30">
@@ -56,6 +60,65 @@
                     <input type="text" class="form-control" value="{{ format_currency($penjualan->sisa_pembayaran) }}"
                         disabled>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <label for="termin" class="form-label">Termin</label>
+                    <input type="number" class="form-control" value="{{ old('termin', $penjualan->termin) }}" disabled>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="jasa_pengirim" class="form-label">Jasa Pengirim</label>
+                    <input type="text" class="form-control"
+                        value="{{ old('jasa_pengirim', $penjualan->jasa_pengirim) }}" disabled>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="tipe_pengiriman" class="form-label">Tipe Pengiriman</label>
+                    <select name="tipe_pengiriman" id="tipe_pengiriman"
+                        class="form-control form-select edit-input js-select2" disabled>
+                        <option value=""></option>
+                        @foreach ($option_tipe_pengiriman as $item)
+                            <option value="{{ $item->parameter }}"
+                                {{ old('tipe_pengiriman', $penjualan->tipe_pengiriman) == $item->parameter ? 'selected' : '' }}>
+                                {{ $item->isi }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label for="biaya_pengiriman" class="form-label">Biaya Pengiriman<span
+                            class="text-danger"></span></label>
+                    <input type="text" class="form-control js-currency edit-input"
+                        value="{{ old('biaya_pengiriman', format_currency($penjualan->biaya_pengiriman)) }}" disabled>
+                    @error('biaya_pengiriman')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div
+                    class="col-md-12 mb-3 container-biaya-pengiriman {{ old('tipe_pengiriman', $penjualan->tipe_pengiriman) == 1 ? 'd-none' : '' }}">
+                    <label class="form-label">Rincian Biaya Pengiriman</label>
+                    <div id="biaya-dinamis-wrapper">
+                        @php
+                            $detail_kirim = json_decode($penjualan->detail_kirim);
+                            is_array($detail_kirim) || ($detail_kirim = []);
+                        @endphp
+                        @foreach ($detail_kirim as $key => $value)
+                            <div class="row mb-2 biaya-item">
+                                <div class="col-md-3">
+                                    <input type="text" name="biaya_detail[{{ $key }}][nama]"
+                                        class="form-control edit-input" placeholder="Nama Biaya (mis. Ongkir Lokal)"
+                                        value="{{ $value->nama }}" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="biaya_detail[{{ $key }}][nominal]"
+                                        class="form-control js-currency nominal-biaya edit-input" placeholder="Nominal"
+                                        value="{{ $value->nominal }}" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea name="biaya_detail[{{ $key }}][keterangan]" class="form-control custom edit-input" cols="1"
+                                        rows="2" disabled>{{ $value->keterangan ?? '-' }}</textarea>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
                 <div class="col-md-12 mb-3">
                     <div class="d-flex justify-content-between mb-2">
                         <label for="deskripsi" class="form-label">Riwayat Pembayaran</label>
@@ -78,11 +141,27 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $counter_termin = 0;
+                                @endphp
                                 @foreach ($bayar as $item)
                                     <tr>
                                         <td>{{ $item->kode_bayar }}</td>
                                         <td>{{ date('d-m-Y H:i', strtotime($item->created_at)) }}</td>
-                                        <td>{{ $item->statusKategori->isi }}</td>
+                                        <td>
+                                            @php
+                                                $status_now = $item->transaction_midtrans_status ?? '-';
+                                                if ($status_now == 'settlement') {
+                                                    $counter_termin++;
+                                                }
+
+                                                echo $item->statusKategori->isi . ' ' . $counter_termin;
+
+                                                if ($status_now == 'settlement') {
+                                                    $counter_termin++;
+                                                }
+                                            @endphp
+                                        </td>
                                         <td>{{ format_currency($item->nominal) }}</td>
                                         <td>{{ $item->transaction_midtrans_status ?? '-' }}</td>
                                         @if ($item->transaction_midtrans_status == '')
@@ -139,6 +218,16 @@
                     <div class="modal-body">
                         <input type="hidden" id="id_penjualan" name="id_penjualan" value="{{ $penjualan->id }}">
                         <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="termin" class="form-label">Termin</label>
+                                <input type="text" class="form-control" value="{{ $penjualan->termin }}" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="sisa_termin" class="form-label">Sisa Termin</label>
+                                <input type="text" class="form-control"
+                                    value="{{ $penjualan->termin - $bayar->where('transaction_midtrans_status', 'settlement')->count() }}"
+                                    readonly>
+                            </div>
                             <div class="col-md-12 mb-3">
                                 <label for="sisa_pembayaran" class="form-label">Sisa Pembayaran <span
                                         class="text-danger"><small>*</small></span></label>
@@ -151,13 +240,20 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            @php
+                                $must_termin = 0;
+                                if ($bayar->where('transaction_midtrans_status', 'settlement')->count() == 1) {
+                                    $must_termin = format_currency($penjualan->sisa_pembayaran);
+                                }
+                            @endphp
                             <div class="col-md-12 mb-3">
                                 <label for="nominal" class="form-label">Nominal <span
                                         class="text-danger"><small>*</small></span></label>
                                 <input type="text"
                                     class="form-control js-currency @error('nominal') is-invalid @enderror"
                                     placeholder="Masukkan nominal..." id="nominal" name="nominal"
-                                    value="{{ old('nominal') }}" required>
+                                    value="{{ old('nominal', $must_termin) }}"
+                                    {{ $must_termin != 0 ? 'readonly' : 'required' }}>
                                 @error('nominal')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

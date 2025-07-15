@@ -13,9 +13,15 @@
     </style>
 
     @php
-        $pendapatan = $penjualan->penjualanByProduk->sum(function ($produk) {
-            return $produk->total * (1 - $produk->fee_cv / 100);
-        });
+        $pemasokId = session('pemasok_id');
+
+        $pendapatan = $penjualan->penjualanByProduk
+            ->filter(function ($produk) use ($pemasokId) {
+                return optional($produk->produk->pemasok)->id === $pemasokId;
+            })
+            ->sum(function ($produk) {
+                return $produk->total * (1 - $produk->fee_cv / 100);
+            });
 
         $total_pendapatan = $penjualan->penjualanByBayar
             ->where('tipe_pembayaran', 2)

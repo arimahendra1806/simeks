@@ -16,13 +16,39 @@
         $pendapatan = $penjualan->penjualanByProduk->sum(function ($produk) {
             return $produk->total * (1 - $produk->fee_cv / 100);
         });
-
         $total_pendapatan = $penjualan->penjualanByBayar
             ->where('tipe_pembayaran', 2)
             ->where('transaction_midtrans_status', 'settlement')
             ->sum('nominal');
-
         $sisa_pendapatan = $pendapatan - $total_pendapatan;
+
+        $dataPerPemasok = [];
+        $groupedByPemasok = $produk->groupBy(function ($item) {
+            return $item->produk->pemasok->id ?? 'tanpa_pemasok';
+        });
+        foreach ($groupedByPemasok as $pemasokId => $items) {
+            $pemasokId = optional($items->first()->produk->pemasok)->id ?? 0;
+            $pemasokNama = optional($items->first()->produk->pemasok)->perusahaan ?? 'Tanpa Pemasok';
+
+            $totalPendapatan = $items->sum(function ($item) {
+                return $item->total * (1 - $item->fee_cv / 100);
+            });
+
+            // Ambil pembayaran yang relevan (tipe 2 dan settlement)
+            $bayarPemasok = $bayar->whereIn('penjualan_by_produk_id', $items->pluck('id'));
+
+            $totalBayar = $bayarPemasok->where('transaction_midtrans_status', 'settlement')->sum('nominal');
+
+            $sisaBayar = $totalPendapatan - $totalBayar;
+
+            $dataPerPemasok[] = [
+                'id' => $pemasokId,
+                'pemasok' => $pemasokNama,
+                'total_pendapatan' => $totalPendapatan,
+                'total_bayar' => $totalBayar,
+                'sisa_bayar' => $sisaBayar,
+            ];
+        }
     @endphp
 
     <div class="pd-20 card-box mb-30">
@@ -82,19 +108,62 @@
                     <input type="text" class="form-control" value="{{ format_currency($sisa_pendapatan) }}" disabled>
                 </div>
                 <div class="col-md-12 mb-3">
+                    <label class="form-label">Pendapatan Supplier</label>
+                    <div class="table-responsive">
+                        <table id="data_table" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Pemasok</th>
+                                    <th>Total Pendapatan</th>
+                                    <th>Total Bayar</th>
+                                    <th>Sisa Bayar</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dataPerPemasok as $data)
+                                    <tr>
+                                        <td>{{ $data['pemasok'] }}</td>
+                                        <td>Rp {{ number_format($data['total_pendapatan'], 0, ',', '.') }}</td>
+                                        <td>Rp {{ number_format($data['total_bayar'], 0, ',', '.') }}</td>
+                                        <td>Rp {{ number_format($data['sisa_bayar'], 0, ',', '.') }}</td>
+                                        <td>
+                                            {{-- Tambahkan tombol aksi jika perlu --}}
+                                            <a href="#" class="btn btn-primary btn_add btn-sm"
+                                                data-id="{{ $data['id'] }}" data-pemasok="{{ $data['pemasok'] }}"
+                                                data-sisa="{{ format_currency($data['sisa_bayar']) }}"><i
+                                                    class="fa fa-money mr-2"></i>
+                                                Transfer</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                @if ($produk->count() == 0)
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <h2>Belum ada data</h2>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
                     <div class="d-flex justify-content-between mb-2">
                         <label for="deskripsi" class="form-label">Riwayat Pembayaran</label>
-                        @if ($penjualan->sisa_pembayaran > 0)
+                        {{-- @if ($penjualan->sisa_pembayaran > 0)
                             <a href="javascript:void(0)" class="btn btn-info btn-sm btn_add disabled_btn">
                                 <i class="fa fa-plus mr-2"></i> Tambah
                             </a>
-                        @endif
+                        @endif --}}
                     </div>
                     <div class="table-responsive">
                         <table id="data_table" class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Kode Bayar</th>
+                                    <th>Pemasok</th>
                                     <th>Tanggal</th>
                                     <th>Kategori</th>
                                     <th>Nominal</th>
@@ -106,6 +175,7 @@
                                 @foreach ($bayar as $item)
                                     <tr>
                                         <td>{{ $item->kode_bayar }}</td>
+                                        <td>{{ $item->pemasok->perusahaan }}</td>
                                         <td>{{ date('d-m-Y H:i', strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->statusKategori->isi }}</td>
                                         <td>{{ format_currency($item->nominal) }}</td>
@@ -135,7 +205,7 @@
 
                                 @if ($bayar->count() == 0)
                                     <tr>
-                                        <td colspan="6" rowspan="2" class="text-center">
+                                        <td colspan="7" rowspan="2" class="text-center">
                                             <h2>Belum ada data</h2>
                                         </td>
                                     </tr>
@@ -146,11 +216,11 @@
                 </div>
 
                 @if (session('role_id') == 3)
-                    <div class="col-md-12">
+                    {{-- <div class="col-md-12">
                         <button class="btn btn-danger float-right d-none btn_cancel mr-2"><i
                                 class="bi bi-arrow-bar-left mr-2"></i>Tutup</button>
                         <button class="btn btn-warning float-right btn_edit"><i class="fa fa-edit mr-2"></i>Edit</button>
-                    </div>
+                    </div> --}}
                 @endif
             </div>
         </div>
@@ -172,7 +242,14 @@
                     @method('POST')
                     <div class="modal-body">
                         <input type="hidden" id="id_penjualan" name="id_penjualan" value="{{ $penjualan->id }}">
+                        <input type="hidden" id="id_pemasok" name="id_pemasok" value="0">
                         <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="nama_pemasok" class="form-label">Pemasok <span
+                                        class="text-danger"><small>*</small></span></label>
+                                <input type="text" class="form-control" placeholder="Masukkan nama..."
+                                    id="nama_pemasok" readonly>
+                            </div>
                             <div class="col-md-12 mb-3">
                                 <label for="sisa_pembayaran" class="form-label">Sisa Pembayaran <span
                                         class="text-danger"><small>*</small></span></label>
@@ -237,7 +314,17 @@
             });
         });
 
-        $('.btn_add').click(function() {
+        $('.btn_add').click(function(e) {
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            let pemasok = $(this).data('pemasok');
+            let sisa = $(this).data('sisa');
+
+            $('#id_pemasok').val(id);
+            $('#nama_pemasok').val(pemasok);
+            $('#sisa_pembayaran').val(sisa);
+
             $('#modal_generate').modal('show');
         });
 

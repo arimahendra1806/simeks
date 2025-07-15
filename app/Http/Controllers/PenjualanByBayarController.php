@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PenjualanByBayar;
 use App\Models\Penjualan;
+use App\Models\Pilihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -56,6 +57,8 @@ class PenjualanByBayarController extends Controller
 
         $title = $this->title;
 
+        $option_tipe_pengiriman  = Pilihan::where('nama', 'tipe_pengiriman')->get();
+
         // UPDATE CANCEL PEMBAYARAN SEBELUMNYA
         PenjualanByBayar::where('penjualan_id', $id)
             ->where('transaction_midtrans_status', null)
@@ -65,9 +68,9 @@ class PenjualanByBayarController extends Controller
             ]);
 
         $penjualan = Penjualan::with('pembeli')->where('id', $id)->first();
-        $bayar = PenjualanByBayar::with('statusKategori')->where('penjualan_id', $id)->orderBy('id', 'desc')->get();
+        $bayar = PenjualanByBayar::with('statusKategori')->where('penjualan_id', $id)->orderBy('id', 'asc')->get();
 
-        return view("admin.penjualan_bayar.show", compact('title', 'penjualan', 'bayar'));
+        return view("admin.penjualan_bayar.show", compact('title', 'penjualan', 'bayar', 'option_tipe_pengiriman'));
     }
 
     /**

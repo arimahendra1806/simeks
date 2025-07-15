@@ -43,4 +43,9 @@ class PenjualanByBayar extends Model
     {
         return $this->belongsTo(Pilihan::class, 'tipe_pembayaran', 'parameter')->where('nama', 'tipe_pembayaran')->withTrashed();
     }
+
+    public function pemasok()
+    {
+        return $this->belongsTo(Pemasok::class)->withTrashed();
+    }
 }
