@@ -35,7 +35,7 @@
             });
 
             // Ambil pembayaran yang relevan (tipe 2 dan settlement)
-            $bayarPemasok = $bayar->whereIn('penjualan_by_produk_id', $items->pluck('id'));
+            $bayarPemasok = $bayar->whereIn('pemasok_id', $pemasokId);
 
             $totalBayar = $bayarPemasok->where('transaction_midtrans_status', 'settlement')->sum('nominal');
 
